@@ -417,9 +417,11 @@ const renderPyramidView = (container, contextInfo) => {
         </div>
       </div>
 
-      <div class="pyramid-wrapper">
-        <div class="pyramid-bg"></div>
-        ${tiersHTML}
+      <div class="pyramid-viewport" id="pyramid-viewport">
+        <div class="pyramid-wrapper">
+          <div class="pyramid-bg"></div>
+          ${tiersHTML}
+        </div>
       </div>
       
     </div>
@@ -497,6 +499,53 @@ const renderPyramidView = (container, contextInfo) => {
       profileModal.classList.add('active');
     });
   });
+
+  // Attach Drag-to-Pan logic for viewport
+  const viewport = document.getElementById('pyramid-viewport');
+  if (viewport) {
+    let isDown = false;
+    let startX, startY, scrollLeft, scrollTop;
+
+    const onDown = (e) => {
+      // Allow dragging but don't block clicks on nodes/buttons
+      if (e.target.closest('.user-node') || e.target.closest('button')) return;
+      isDown = true;
+      const pageX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+      const pageY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
+      startX = pageX - viewport.offsetLeft;
+      startY = pageY - viewport.offsetTop;
+      scrollLeft = viewport.scrollLeft;
+      scrollTop = viewport.scrollTop;
+    };
+
+    const onLeaveOrUp = () => isDown = false;
+
+    const onMove = (e) => {
+      if (!isDown) return;
+      e.preventDefault(); // prevents highlighting text while dragging
+      const pageX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+      const pageY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
+      const walkX = (pageX - viewport.offsetLeft - startX) * 1.5;
+      const walkY = (pageY - viewport.offsetTop - startY) * 1.5;
+      viewport.scrollLeft = scrollLeft - walkX;
+      viewport.scrollTop = scrollTop - walkY;
+    };
+
+    viewport.addEventListener('mousedown', onDown);
+    viewport.addEventListener('mouseleave', onLeaveOrUp);
+    viewport.addEventListener('mouseup', onLeaveOrUp);
+    viewport.addEventListener('mousemove', onMove);
+
+    viewport.addEventListener('touchstart', onDown, { passive: true });
+    viewport.addEventListener('touchend', onLeaveOrUp);
+    viewport.addEventListener('touchmove', onMove, { passive: false });
+
+    // Subtly auto-center the pyramid on initial load
+    setTimeout(() => {
+      viewport.scrollLeft = (viewport.scrollWidth - viewport.clientWidth) / 2;
+      viewport.scrollTop = viewport.scrollHeight;
+    }, 50);
+  }
 };
 
 const voteAction = (node, contextId) => {

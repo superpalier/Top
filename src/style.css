@@ -42,6 +42,18 @@ body {
     radial-gradient(circle at 10% 90%, var(--glow-magenta), transparent 30%);
 }
 
+/* Globally Hide Scrollbars for App-like feel */
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
 #app {
   width: 100%;
   max-width: 1200px;
@@ -391,19 +403,43 @@ main {
 }
 
 /* 3D-Like Pyramid Container */
-.pyramid-wrapper {
-  position: relative;
+.pyramid-viewport {
   width: 100%;
   height: 60vh;
-  /* Taller height for better proportions */
   min-height: 450px;
   max-height: 700px;
+  overflow: auto;
+  cursor: grab;
+  position: relative;
+  background: transparent;
+  border-radius: 12px;
+  /* Soft fade at the edges of the viewport to imply more content */
+  mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent),
+    linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 5%, black 95%, transparent),
+    linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.pyramid-viewport:active {
+  cursor: grabbing;
+}
+
+.pyramid-wrapper {
+  position: relative;
+  width: max-content;
+  /* Allow it to grow horizontally infinitely */
+  min-width: 100%;
+  height: max-content;
+  /* Allow it to grow vertically infinitely */
+  min-height: 100%;
+  padding: 80px 100px;
+  /* Space around the edges to pan into */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  padding-bottom: 20px;
-  margin-top: 40px;
   perspective: 1000px;
 }
 
