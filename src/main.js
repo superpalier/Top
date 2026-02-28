@@ -457,7 +457,7 @@ const renderPyramidView = (container, contextInfo) => {
     const usersHTML = tier.map(user => `
       <div class="user-node ${hasVoted && hasVoted === user.id ? 'voted' : ''}" 
            data-id="${user.id}" 
-           data-votes="${user.votes} ${t.votes}" 
+           data-votes="${user.votes} ${t.votesCount}" 
            data-voted-text="&#x2713; ${t.voted}">
         <img src="${user.img}" alt="${user.name}">
       </div>
@@ -498,7 +498,6 @@ const renderPyramidView = (container, contextInfo) => {
           ${tiersHTML}
         </div>
       </div>
-      
     </div>
   `;
 
