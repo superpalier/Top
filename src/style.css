@@ -364,9 +364,9 @@ main {
   justify-content: center;
   flex-wrap: wrap;
   /* Fixes layout breaking on small screens or high node counts */
-  gap: 12px;
-  margin-top: -24px;
-  /* Pull tiers closer together to save vertical space */
+  gap: 16px;
+  margin-top: -12px;
+  /* Slightly less overlap for better distinction */
   /* Overlap tiers slightly */
   position: relative;
   z-index: var(--z-index);
@@ -514,34 +514,34 @@ main {
 
 /* Special styling for top tier (The Apex) */
 .tier-0 .user-node {
-  --node-size: 80px;
+  --node-size: 84px;
   --tier-color: var(--accent-cyan);
 }
 
 .tier-1 .user-node {
-  --node-size: 65px;
+  --node-size: 68px;
   --tier-color: var(--accent-magenta);
 }
 
 .tier-2 .user-node {
-  --node-size: 50px;
+  --node-size: 52px;
   --tier-color: var(--accent-violet);
 }
 
 .tier-3 .user-node {
-  --node-size: 40px;
+  --node-size: 42px;
   --tier-color: rgba(255, 255, 255, 0.6);
   opacity: 0.9;
 }
 
 .tier-4 .user-node {
-  --node-size: 32px;
+  --node-size: 34px;
   --tier-color: rgba(255, 255, 255, 0.4);
   opacity: 0.8;
 }
 
 .tier-5 .user-node {
-  --node-size: 24px;
+  --node-size: 26px;
   --tier-color: rgba(255, 255, 255, 0.2);
   opacity: 0.7;
 }
