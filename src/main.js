@@ -205,9 +205,9 @@ const generatePyramidData = (contextId) => {
     return { ...u, votes };
   }).sort((a, b) => b.votes - a.votes);
 
-  // Group into tiers based on descending logic (Expanding pyramid sizes for larger dataset)
-  // 1 at apex, 2 in tier 1, 4 in tier 2, 8 in tier 3, 16 in tier 4, 32 in tier 5
-  const tiersCount = [1, 2, 4, 8, 16, 32];
+  // Group into tiers based on descending logic (Strict visual pyramid)
+  // 1 at apex, 2 in tier 1, 3 in tier 2, 5 in tier 3, etc.
+  const tiersCount = [1, 2, 3, 5, 7, 9];
   const data = [];
   let userIndex = 0;
 

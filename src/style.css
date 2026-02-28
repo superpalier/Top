@@ -346,27 +346,27 @@ main {
 .pyramid-wrapper {
   position: relative;
   width: 100%;
-  height: 50vh;
-  /* Dynamic height based on viewport */
-  min-height: 400px;
-  max-height: 600px;
+  height: 60vh;
+  /* Taller height for better proportions */
+  min-height: 450px;
+  max-height: 700px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
   padding-bottom: 20px;
-  margin-top: 20px;
+  margin-top: 40px;
   perspective: 1000px;
 }
 
 .pyramid-tier {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
-  /* Fixes layout breaking on small screens or high node counts */
+  flex-wrap: nowrap;
+  /* Strictly enforce one row per tier */
   gap: 16px;
-  margin-top: -12px;
-  /* Slightly less overlap for better distinction */
+  margin-top: -4px;
+  /* Less overlap makes the pyramid taller */
   /* Overlap tiers slightly */
   position: relative;
   z-index: var(--z-index);
