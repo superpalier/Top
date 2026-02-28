@@ -2,7 +2,7 @@ import './style.css'
 
 import './style.css';
 import { db } from './firebase.js';
-import { doc, onSnapshot, setDoc, increment } from 'firebase/firestore';
+import { doc, onSnapshot, setDoc, deleteDoc, increment, collection } from 'firebase/firestore';
 
 // i18n Dictionary
 const i18n = {
@@ -169,22 +169,17 @@ const defaultContextNames = [
   { en: 'Tech Visionary', es: 'Visionario Tech', fr: 'Visionnaire Tech', de: 'Tech-Visionär' }
 ];
 
-const contexts = Array.from({ length: 1000 }).map((_, i) => {
-  const isDefault = i < defaultContextNames.length;
-  const icon = baseIcons[i % baseIcons.length];
-  const participants = Math.floor(Math.random() * 800) + 100; // 100 to 900 users per context
+let contexts = [];
 
-  return {
-    id: `${i + 1}`,
-    icon,
-    participants,
-    titles: isDefault ? defaultContextNames[i] : {
-      en: `Arena Context #${i + 1}`,
-      es: `Arena Contexto #${i + 1}`,
-      fr: `Arène Contexte #${i + 1}`,
-      de: `Kontext Arena #${i + 1}`
-    }
-  };
+// Listen to Firestore for real-time Contexts updates (Created by Admin)
+onSnapshot(collection(db, 'base_contexts'), (snapshot) => {
+  contexts = snapshot.docs.map(doc => doc.data());
+  // Sort by id or createdAt if needed, here we just keep db order.
+
+  // Re-render the app to show new contexts (especially in sidebar/home)
+  if (document.getElementById('main-content')) {
+    render();
+  }
 });
 
 // Base Users pool (1000+ users simulated)
@@ -224,7 +219,14 @@ const baseUsers = Array.from({ length: 3000 }).map((_, i) => {
 
 // Generate deterministic fake votes per context for the users to simulate them being in multiple contexts
 const generatePyramidData = (contextId) => {
-  const seed = parseInt(contextId);
+  // Hash the string contextId to generate a predictable seed
+  let seed = 0;
+  for (let i = 0; i < contextId.length; i++) {
+    seed = (seed << 5) - seed + contextId.charCodeAt(i);
+    seed |= 0;
+  }
+  seed = Math.abs(seed) || 1;
+
   const usersWithVotes = baseUsers.map((u, i) => {
     // Generate a pseudo-random vote count based on user index and context ID
     const randomFactor = Math.sin(seed * (i + 1)) * 10000;
@@ -260,6 +262,7 @@ let currentLang = 'en';
 let currentView = 'home';
 let previousView = '';
 let loggedInUser = null;
+let searchQuery = ''; // Global search state
 const MAX_DAILY_VOTES = 3;
 let globalVotes = { count: 0, byContext: {} }; // Tracks user's session votes { byContext: { ctxId: userId } }
 
@@ -335,15 +338,23 @@ const render = () => {
     </header>
     <div class="app-container">
       <nav class="lateral-sidebar" id="sidebar">
-        <div class="sidebar-title">${t.allContexts}</div>
+        <div class="sidebar-title" style="display:flex; justify-content:space-between; align-items:center;">
+          ${t.allContexts}
+          <div class="search-container-small" style="position:relative; width: 60%;">
+            <i class="ph ph-magnifying-glass" style="position:absolute; left:8px; top:50%; transform:translateY(-50%); color:var(--text-secondary); font-size:0.8rem;"></i>
+            <input type="text" id="sidebar-search" autocomplete="off" placeholder="Search..." value="${searchQuery}" style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:4px; padding:4px 8px 4px 24px; color:var(--text-primary); font-size:0.75rem; outline:none;">
+          </div>
+        </div>
         <a class="sidebar-item ${currentView === 'home' ? 'active' : ''}" data-target="home">
           <i class="ph ph-squares-four"></i> ${t.dashboard}
         </a>
-        ${contexts.map(ctx => `
-          <a class="sidebar-item ${currentView === `pyramid-${ctx.id}` ? 'active' : ''}" data-target="pyramid-${ctx.id}">
-            <i class="${ctx.icon}"></i> ${ctx.titles[currentLang]}
-          </a>
-        `).join('')}
+        <div id="sidebar-contexts-list" style="overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:4px;">
+          ${contexts.filter(ctx => ctx.titles[currentLang].toLowerCase().includes(searchQuery.toLowerCase())).map(ctx => `
+            <a class="sidebar-item ${currentView === `pyramid-${ctx.id}` ? 'active' : ''}" data-target="pyramid-${ctx.id}">
+              <i class="${ctx.icon}"></i> ${ctx.titles[currentLang]}
+            </a>
+          `).join('')}
+        </div>
       </nav>
       <main id="main-content"></main>
     </div>
@@ -403,21 +414,21 @@ const render = () => {
 const renderHomeView = (container) => {
   const t = i18n[currentLang];
 
-  // Only render the first 40 on the home page dashboard to avoid DOM lag, sidebar has all 1000
-  const trendingContexts = contexts.slice(0, 40);
+  // Filter based on search
+  const filteredContexts = contexts.filter(ctx => ctx.titles[currentLang].toLowerCase().includes(searchQuery.toLowerCase()));
 
-  let contextHTML = trendingContexts.map(ctx => `
-    <div class="context-card" data-id="${ctx.id}">
+  let contextHTML = filteredContexts.length === 0 ? `<div style="color:var(--text-secondary); padding: 20px;">No contexts found.</div>` : filteredContexts.map(ctx => `
+    <div class="context-card" data-id="${ctx.id}" ${ctx.imageUrl ? `style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(10,0,15,0.9)), url('${ctx.imageUrl}'); background-size: cover; background-position: center;"` : ''}>
       <i class="${ctx.icon} context-icon"></i>
       <div class="context-title">${ctx.titles[currentLang]}</div>
-      <div class="context-stats">${ctx.participants} ${t.users}</div>
+      <div class="context-stats"><i class="ph ph-users"></i> ${ctx.participants} ${t.users}</div>
     </div>
   `).join('');
 
   container.innerHTML = `
     <div class="view-container">
       ${loggedInUser ? `
-        <div class="user-stats-bar">
+        <div class="user-stats-bar" style="margin-bottom:24px;">
           <div class="stat-item">
             <div class="stat-value">5</div>
             <div class="stat-label">${t.contexts}</div>
@@ -696,71 +707,162 @@ const renderRegisterView = (container) => {
   });
 };
 
+let editingContextId = null;
+
 const renderAdminView = (container) => {
   const t = i18n[currentLang];
-  container.innerHTML = `
-    <div class="view-container" style="max-width: 600px; margin: 20px auto; width: 100%;">
-      <div class="pyramid-header">
-        <button class="back-btn" id="admin-back-btn"><i class="ph ph-arrow-left"></i></button>
-        <div class="pyramid-context-title" style="color: var(--accent-magenta);">${t.adminPanel}</div>
-      </div>
-      
-      <div class="modal-content" style="transform: none; position: relative; width: 100%; max-width: 100%;">
-        <h3 style="margin-bottom: 20px; font-family: var(--font-display);">${t.addNewContext}</h3>
-        
-        <div class="form-group">
-          <label>${t.contextId} (e.g. 9)</label>
-          <input type="text" class="form-input" id="new-ctx-id">
-        </div>
-        
-        <div class="form-group">
-          <label>${t.iconClass}</label>
-          <input type="text" class="form-input" id="new-ctx-icon" value="ph-star">
-        </div>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-          <div class="form-group">
-            <label>${t.titleEn}</label>
-            <input type="text" class="form-input" id="new-ctx-en">
-          </div>
-          <div class="form-group">
-            <label>${t.titleEs}</label>
-            <input type="text" class="form-input" id="new-ctx-es">
-          </div>
-          <div class="form-group">
-            <label>${t.titleFr}</label>
-            <input type="text" class="form-input" id="new-ctx-fr">
-          </div>
-          <div class="form-group">
-            <label>${t.titleDe}</label>
-            <input type="text" class="form-input" id="new-ctx-de">
-          </div>
-        </div>
 
-        <button class="btn-primary" id="create-ctx-btn" style="margin-top: 10px;">${t.createContext}</button>
-      </div>
+  const contextsListHTML = contexts.map(ctx => `
+    <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:10px; border-radius:6px; margin-bottom:8px; border:1px solid rgba(255,255,255,0.05);">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <i class="${ctx.icon} text-cyan"></i>
+            <div>
+                <div style="font-size:0.9rem; font-weight:600;">${ctx.titles.en}</div>
+                <div style="font-size:0.75rem; color:var(--text-secondary);">ID: ${ctx.id}</div>
+            </div>
+        </div>
+        <div style="display:flex; gap:8px;">
+            <button class="btn-edit-ctx" data-id="${ctx.id}" style="background:transparent; color:var(--accent-cyan); border:1px solid var(--accent-cyan); padding:4px 8px; border-radius:4px; font-size:0.75rem; cursor:pointer;"><i class="ph ph-pencil-simple"></i> Edit</button>
+            <button class="btn-del-ctx" data-id="${ctx.id}" style="background:transparent; color:#ff4444; border:1px solid #ff4444; padding:4px 8px; border-radius:4px; font-size:0.75rem; cursor:pointer;"><i class="ph ph-trash"></i> Delete</button>
+        </div>
+    </div>
+  `).join('');
+
+  container.innerHTML = `
+    <div class="view-container" style="max-width: 800px; margin: 20px auto; width: 100%; display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      
+      <!-- Left side: Form -->
+      <div>
+          <div class="pyramid-header" style="margin-bottom: 20px;">
+            <button class="back-btn" id="admin-back-btn"><i class="ph ph-arrow-left"></i></button>
+            <div class="pyramid-context-title" style="color: var(--accent-magenta);">${t.adminPanel}</div>
+          </div>
+          
+          <div class="modal-content" style="transform: none; position: relative; width: 100%; max-width: 100%; padding:20px;">
+            <h3 style="margin-bottom: 20px; font-family: var(--font-display);" id="admin-form-title">${editingContextId ? 'Edit Context' : t.addNewContext}</h3>
+            
+            <div class="form-group">
+              <label>${t.contextId} (e.g. unique_string)</label>
+              <input type="text" class="form-input" id="new-ctx-id" ${editingContextId ? 'disabled' : ''}>
+            </div>
+            
+            <div class="form-group">
+              <label>${t.iconClass} (e.g. ph-star)</label>
+              <input type="text" class="form-input" id="new-ctx-icon" value="ph-star">
+            </div>
+
+            <div class="form-group">
+              <label>Image URL (Optional)</label>
+              <input type="text" class="form-input" id="new-ctx-image" placeholder="https://example.com/image.jpg">
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div class="form-group"><label>${t.titleEn}</label><input type="text" class="form-input" id="new-ctx-en"></div>
+              <div class="form-group"><label>${t.titleEs}</label><input type="text" class="form-input" id="new-ctx-es"></div>
+              <div class="form-group"><label>${t.titleFr}</label><input type="text" class="form-input" id="new-ctx-fr"></div>
+              <div class="form-group"><label>${t.titleDe}</label><input type="text" class="form-input" id="new-ctx-de"></div>
+            </div>
+
+            <button class="btn-primary" id="save-ctx-btn" style="margin-top: 10px; padding:10px;">${editingContextId ? 'Update Context' : t.createContext}</button>
+            ${editingContextId ? '<button class="btn-secondary" id="cancel-edit-btn" style="padding:10px;">Cancel Edit</button>' : ''}
+          </div>
+       </div>
+
+       <!-- Right side: List -->
+       <div class="modal-content" style="transform: none; position: relative; width: 100%; max-width: 100%; padding:20px; max-height: 80vh; overflow-y:auto;">
+           <h3 style="margin-bottom: 20px; font-family: var(--font-display);">Active Contexts (${contexts.length})</h3>
+           ${contextsListHTML}
+       </div>
     </div>
   `;
 
-  document.getElementById('admin-back-btn').addEventListener('click', () => { currentView = 'home'; render(); });
-  document.getElementById('create-ctx-btn').addEventListener('click', () => {
+  document.getElementById('admin-back-btn').addEventListener('click', () => {
+    editingContextId = null;
+    currentView = 'home';
+    render();
+  });
+
+  // Handle Edit Cancel
+  const cancelBtn = document.getElementById('cancel-edit-btn');
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', () => {
+      editingContextId = null;
+      renderAdminView(container);
+    });
+  }
+
+  // Handle Save (Create/Update)
+  document.getElementById('save-ctx-btn').addEventListener('click', async () => {
     const id = document.getElementById('new-ctx-id').value.trim();
     if (!id) return showToast('Context ID is required', 'ph-warning');
 
-    contexts.push({
+    const ctxData = {
       id,
       icon: document.getElementById('new-ctx-icon').value.trim() || 'ph-star',
-      participants: 0,
+      imageUrl: document.getElementById('new-ctx-image').value.trim() || '',
       titles: {
         en: document.getElementById('new-ctx-en').value.trim() || 'New Context',
         es: document.getElementById('new-ctx-es').value.trim() || 'Nuevo Contexto',
         fr: document.getElementById('new-ctx-fr').value.trim() || 'Nouveau Contexte',
         de: document.getElementById('new-ctx-de').value.trim() || 'Neuer Kontext'
       }
-    });
+    };
 
-    currentView = 'home';
-    render();
+    if (!editingContextId) {
+      ctxData.participants = 0;
+      ctxData.createdAt = new Date().toISOString();
+    }
+
+    try {
+      await setDoc(doc(db, 'base_contexts', id), ctxData, { merge: true });
+      showToast(`Context ${editingContextId ? 'updated' : 'created'} successfully!`, 'ph-check-circle');
+      editingContextId = null;
+      // The onSnapshot listener will catch the change and re-render automatically, 
+      // but if we are in admin view, we want to just re-render the admin view.
+      // Wait briefly for snapshot to catch up.
+      setTimeout(() => renderAdminView(container), 200);
+    } catch (e) {
+      console.error(e);
+      showToast('Error saving context', 'ph-warning');
+    }
+  });
+
+  // Handle Edits
+  document.querySelectorAll('.btn-edit-ctx').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-id');
+      const ctx = contexts.find(c => c.id === id);
+      if (ctx) {
+        editingContextId = id;
+        renderAdminView(container); // Re-render to show edit mode
+        // Populate inputs
+        setTimeout(() => {
+          document.getElementById('new-ctx-id').value = ctx.id;
+          document.getElementById('new-ctx-icon').value = ctx.icon || '';
+          document.getElementById('new-ctx-image').value = ctx.imageUrl || '';
+          document.getElementById('new-ctx-en').value = ctx.titles.en || '';
+          document.getElementById('new-ctx-es').value = ctx.titles.es || '';
+          document.getElementById('new-ctx-fr').value = ctx.titles.fr || '';
+          document.getElementById('new-ctx-de').value = ctx.titles.de || '';
+        }, 50);
+      }
+    });
+  });
+
+  // Handle Deletes
+  document.querySelectorAll('.btn-del-ctx').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.getAttribute('data-id');
+      if (confirm('Are you sure you want to delete this context? This cannot be undone.')) {
+        try {
+          await deleteDoc(doc(db, 'base_contexts', id));
+          showToast('Context deleted.', 'ph-trash');
+          setTimeout(() => renderAdminView(container), 200);
+        } catch (e) {
+          showToast('Error deleting context.', 'ph-warning');
+        }
+      }
+    });
   });
 };
 
@@ -845,6 +947,26 @@ const attachGlobalEvents = () => {
     profileBtn.addEventListener('click', () => {
       currentView = 'register';
       render();
+    });
+  }
+
+  // Sidebar live search listener
+  const sidebarSearch = document.getElementById('sidebar-search');
+  if (sidebarSearch) {
+    sidebarSearch.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      // Quickly update just the lists to avoid resetting scroll position globally, or do a fast re-render.
+      // Fast re-render is safest to maintain sync.
+      render();
+      // Restore focus to search bar since re-render steals it
+      const newSearch = document.getElementById('sidebar-search');
+      if (newSearch) {
+        newSearch.focus();
+        // Move cursor to end
+        const val = newSearch.value;
+        newSearch.value = '';
+        newSearch.value = val;
+      }
     });
   }
 };
