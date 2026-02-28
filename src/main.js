@@ -12,16 +12,17 @@ const i18n = {
     trendingContexts: 'Trending Contexts',
     users: 'Users',
     voted: 'Voted',
-    voteRule: 'Unregistered users can cast <strong>1 vote</strong> per category.',
-    votedInCat: 'Voted in this category',
-    expiresIn: 'Expires 7d',
-    votesAvail: '1 Vote Available',
+    voteRule: 'Each person can cast <strong>3 votes</strong> per day (1 per context).',
+    votedInCat: 'Voted in this context',
+    expiresIn: 'Expires 24h',
+    votesAvail: (rem) => `${rem} Votes Left Today`,
     joinPyramida: 'Join Pyramida',
     chooseUser: 'Choose a Username',
     placeholderUser: 'e.g. capcris',
     enterPyramid: 'Enter the Pyramid',
     tapToVote: 'Tap on any user to cast a vote and alter the pyramid structure.',
-    alreadyVotedAlert: 'You have already used your 1 vote for this category! Register to vote freely.',
+    alreadyVotedAlert: 'You have already voted in this context!',
+    limitReachedAlert: 'Daily limit of 3 votes reached. Come back tomorrow!',
     adminPanel: 'Admin Panel',
     addNewContext: 'Add New Context',
     contextId: 'Context ID',
@@ -48,16 +49,17 @@ const i18n = {
     trendingContexts: 'Contextos Populares',
     users: 'Usuarios',
     voted: 'Votado',
-    voteRule: 'Usuarios no registrados tienen <strong>1 voto</strong> por categoría.',
-    votedInCat: 'Votaste en esta categoría',
-    expiresIn: 'Expira 7d',
-    votesAvail: '1 Voto Disponible',
+    voteRule: 'Cada persona tiene <strong>3 votos</strong> por día (1 por contexto).',
+    votedInCat: 'Votaste en este contexto',
+    expiresIn: 'Expira en 24h',
+    votesAvail: (rem) => `${rem} Votos Restantes`,
     joinPyramida: 'Únete a Pyramida',
     chooseUser: 'Ingresa un Username',
     placeholderUser: 'ej. capcris',
     enterPyramid: 'Entrar a la Pirámide',
     tapToVote: 'Toca a cualquier usuario para votar y alterar la estructura.',
-    alreadyVotedAlert: '¡Ya usaste tu único voto en esta categoría! Regístrate para votar libremente.',
+    alreadyVotedAlert: '¡Ya votaste en este contexto!',
+    limitReachedAlert: 'Límite de 3 votos diarios alcanzado. ¡Vuelve mañana!',
     adminPanel: 'Panel de Admin',
     addNewContext: 'Añadir Nuevo Contexto',
     contextId: 'ID del Contexto',
@@ -84,16 +86,17 @@ const i18n = {
     trendingContexts: 'Contextes Tendances',
     users: 'Utilisateurs',
     voted: 'Voté',
-    voteRule: 'Les invités peuvent voter <strong>1 fois</strong> par catégorie.',
-    votedInCat: 'Voté dans cette catégorie',
-    expiresIn: 'Expire 7j',
-    votesAvail: '1 Vote Dispo',
+    voteRule: '<strong>3 votes</strong> par jour maximum (1 par contexte).',
+    votedInCat: 'Voté dans ce contexte',
+    expiresIn: 'Expire 24h',
+    votesAvail: (rem) => `${rem} Votes Restants`,
     joinPyramida: 'Rejoindre Pyramida',
     chooseUser: 'Choisir un Pseudo',
     placeholderUser: 'ex. capcris',
     enterPyramid: 'Entrer dans la Pyramide',
     tapToVote: 'Appuyez sur un utilisateur pour voter.',
-    alreadyVotedAlert: 'Vous avez déjà utilisé votre seul vote ! Inscrivez-vous pour voter librement.',
+    alreadyVotedAlert: 'Vous avez déjà voté ici !',
+    limitReachedAlert: 'Limite quotidienne de 3 votes atteinte.',
     adminPanel: 'Panneau d\'Admin',
     addNewContext: 'Ajouter un Contexte',
     contextId: 'ID du Contexte',
@@ -120,16 +123,17 @@ const i18n = {
     trendingContexts: 'Angesagte Kontexte',
     users: 'Benutzer',
     voted: 'Gevotet',
-    voteRule: 'Gäste haben <strong>1 Stimme</strong> pro Kategorie.',
-    votedInCat: 'In dieser Kategorie abgestimmt',
-    expiresIn: 'Ablauf 7t',
-    votesAvail: '1 Stimme Verfügbar',
+    voteRule: '<strong>3 Stimmen</strong> pro Tag maximal (1 pro Kontext).',
+    votedInCat: 'In diesem Kontext abgestimmt',
+    expiresIn: 'Ablauf 24h',
+    votesAvail: (rem) => `${rem} Stimmen Übrig`,
     joinPyramida: 'Pyramida Beitreten',
     chooseUser: 'Wählen Sie einen Namen',
     placeholderUser: 'z.B. capcris',
     enterPyramid: 'Die Pyramide Betreten',
     tapToVote: 'Tippen Sie auf einen Benutzer, um abzustimmen.',
-    alreadyVotedAlert: 'Sie haben Ihre Stimme bereits verwendet! Bitte registrieren Sie sich.',
+    alreadyVotedAlert: 'Sie haben hier bereits abgestimmt!',
+    limitReachedAlert: 'Tageslimit von 3 Stimmen erreicht.',
     adminPanel: 'Admin-Bereich',
     addNewContext: 'Neuen Kontext Hinzufügen',
     contextId: 'Kontext-ID',
@@ -148,17 +152,36 @@ const i18n = {
   }
 };
 
-// Mock Data
-const contexts = [
-  { id: '1', titles: { en: 'Top Developer', es: 'Mejor Desarrollador', fr: 'Meilleur Développeur', de: 'Top-Entwickler' }, icon: 'ph-code', participants: 142 },
-  { id: '2', titles: { en: 'Most Innovative', es: 'Más Innovador', fr: 'Plus Innovant', de: 'Am innovativsten' }, icon: 'ph-lightbulb', participants: 89 },
-  { id: '3', titles: { en: 'Design Guru', es: 'Gurú del Diseño', fr: 'Gourou du Design', de: 'Design-Guru' }, icon: 'ph-palette', participants: 210 },
-  { id: '4', titles: { en: 'Community Leader', es: 'Líder Comunitario', fr: 'Leader Communautaire', de: 'Community-Leader' }, icon: 'ph-users-three', participants: 56 },
-  { id: '5', titles: { en: 'Funniest Member', es: 'El Más Divertido', fr: 'Membre le plus Drôle', de: 'Lustigstes Mitglied' }, icon: 'ph-smiley', participants: 305 },
-  { id: '6', titles: { en: 'Best Manager', es: 'Mejor Gerente', fr: 'Meilleur Manager', de: 'Bester Manager' }, icon: 'ph-briefcase', participants: 42 },
-  { id: '7', titles: { en: 'Rising Star', es: 'Estrella en Ascenso', fr: 'Étoile Montante', de: 'Aufgehender Stern' }, icon: 'ph-star', participants: 180 },
-  { id: '8', titles: { en: 'Tech Visionary', es: 'Visionario Tech', fr: 'Visionnaire Tech', de: 'Tech-Visionär' }, icon: 'ph-rocket-launch', participants: 92 }
+// Dynamically Generate 1000 Contexts
+const baseIcons = ['ph-code', 'ph-lightbulb', 'ph-palette', 'ph-users-three', 'ph-smiley', 'ph-briefcase', 'ph-star', 'ph-rocket-launch', 'ph-planet', 'ph-cpu', 'ph-leaf', 'ph-drop'];
+const defaultContextNames = [
+  { en: 'Top Developer', es: 'Mejor Desarrollador', fr: 'Meilleur Développeur', de: 'Top-Entwickler' },
+  { en: 'Most Innovative', es: 'Más Innovador', fr: 'Plus Innovant', de: 'Am innovativsten' },
+  { en: 'Design Guru', es: 'Gurú del Diseño', fr: 'Gourou du Design', de: 'Design-Guru' },
+  { en: 'Community Leader', es: 'Líder Comunitario', fr: 'Leader Communautaire', de: 'Community-Leader' },
+  { en: 'Funniest Member', es: 'El Más Divertido', fr: 'Membre le plus Drôle', de: 'Lustigstes Mitglied' },
+  { en: 'Best Manager', es: 'Mejor Gerente', fr: 'Meilleur Manager', de: 'Bester Manager' },
+  { en: 'Rising Star', es: 'Estrella en Ascenso', fr: 'Étoile Montante', de: 'Aufgehender Stern' },
+  { en: 'Tech Visionary', es: 'Visionario Tech', fr: 'Visionnaire Tech', de: 'Tech-Visionär' }
 ];
+
+const contexts = Array.from({ length: 1000 }).map((_, i) => {
+  const isDefault = i < defaultContextNames.length;
+  const icon = baseIcons[i % baseIcons.length];
+  const participants = Math.floor(Math.random() * 800) + 100; // 100 to 900 users per context
+
+  return {
+    id: `${i + 1}`,
+    icon,
+    participants,
+    titles: isDefault ? defaultContextNames[i] : {
+      en: `Arena Context #${i + 1}`,
+      es: `Arena Contexto #${i + 1}`,
+      fr: `Arène Contexte #${i + 1}`,
+      de: `Kontext Arena #${i + 1}`
+    }
+  };
+});
 
 // Base Users pool (1000+ users simulated)
 const baseNames = ['Alex', 'Jordan', 'Sam', 'Taylor', 'Casey', 'Morgan', 'Riley', 'Avery', 'Quinn', 'Reese', 'Drew', 'Blake', 'Devin', 'Harper', 'Finley', 'Robin', 'Kelly', 'Jamie', 'Skyler', 'Ash', 'Rowan'];
@@ -172,8 +195,8 @@ const baseBios = [
   "Optimist, problem solver, and team player."
 ];
 
-// Generate 1200 users dynamically
-const baseUsers = Array.from({ length: 1200 }).map((_, i) => {
+// Generate 3000 base users dynamically to simulate massive crowds
+const baseUsers = Array.from({ length: 3000 }).map((_, i) => {
   const name = baseNames[i % baseNames.length] + (i > baseNames.length ? ` ${i}` : '');
   const rDay = Math.floor(Math.random() * 28) + 1;
   const rMonth = Math.floor(Math.random() * 12) + 1;
@@ -206,8 +229,8 @@ const generatePyramidData = (contextId) => {
   }).sort((a, b) => b.votes - a.votes);
 
   // Group into tiers based on descending logic (Strict visual pyramid)
-  // 1 at apex, 2 in tier 1, 3 in tier 2, 5 in tier 3, etc.
-  const tiersCount = [1, 2, 3, 5, 7, 9];
+  // Scaling up to hold hundreds of users:
+  const tiersCount = [1, 2, 3, 5, 7, 9, 12, 16, 21, 28, 38, 50, 65, 85];
   const data = [];
   let userIndex = 0;
 
@@ -231,7 +254,8 @@ const generatePyramidData = (contextId) => {
 let currentLang = 'en';
 let currentView = 'home';
 let loggedInUser = null;
-let guestVotes = {}; // track votes per category for guest: { contextId: true }
+const MAX_DAILY_VOTES = 3;
+let globalVotes = { count: 0, byContext: {} }; // Tracks user's session votes { byContext: { ctxId: userId } }
 
 const app = document.querySelector('#app');
 
@@ -333,7 +357,11 @@ const render = () => {
 
 const renderHomeView = (container) => {
   const t = i18n[currentLang];
-  let contextHTML = contexts.map(ctx => `
+
+  // Only render the first 40 on the home page dashboard to avoid DOM lag, sidebar has all 1000
+  const trendingContexts = contexts.slice(0, 40);
+
+  let contextHTML = trendingContexts.map(ctx => `
     <div class="context-card" data-id="${ctx.id}">
       <i class="${ctx.icon} context-icon"></i>
       <div class="context-title">${ctx.titles[currentLang]}</div>
@@ -378,7 +406,7 @@ const renderHomeView = (container) => {
 const renderPyramidView = (container, contextInfo) => {
   const t = i18n[currentLang];
   const pyramidData = generatePyramidData(contextInfo.id);
-  const hasVoted = guestVotes[contextInfo.id];
+  const hasVoted = globalVotes.byContext[contextInfo.id];
 
   // Generating tiers HTML
   let tiersHTML = pyramidData.map((tier, tIndex) => {
@@ -412,12 +440,12 @@ const renderPyramidView = (container, contextInfo) => {
       
       <div class="voting-info">
         <div class="voting-rule">${t.voteRule}</div>
-        <div class="voting-status ${hasVoted ? 'voted' : ''}">
-          ${hasVoted ? `
+        <div class="voting-status ${globalVotes.byContext[contextInfo.id] ? 'voted' : ''}">
+          ${globalVotes.byContext[contextInfo.id] ? `
             <i class="ph-fill ph-check-circle"></i> ${t.votedInCat}
             <div class="expiring-tag">${t.expiresIn}</div>
           ` : `
-            <i class="ph-fill ph-plus-circle"></i> ${t.votesAvail}
+            <i class="ph-fill ph-plus-circle"></i> ${t.votesAvail(MAX_DAILY_VOTES - globalVotes.count)}
           `}
         </div>
       </div>
@@ -485,17 +513,18 @@ const renderPyramidView = (container, contextInfo) => {
       // Setup VOTE button in modal
       const vBtn = document.getElementById('pm-vote-btn');
 
-      if (hasVoted) {
-        vBtn.innerText = hasVoted === userId ? t.votedInCat : t.close;
+      if (globalVotes.byContext[contextInfo.id]) {
+        vBtn.innerText = globalVotes.byContext[contextInfo.id] === userId ? t.votedInCat : t.close;
         vBtn.className = 'btn-vote disabled';
         vBtn.onclick = (e) => profileModal.classList.remove('active'); // dismiss
+      } else if (globalVotes.count >= MAX_DAILY_VOTES) {
+        vBtn.innerText = 'Daily Limit Reached';
+        vBtn.className = 'btn-vote disabled';
+        vBtn.onclick = (e) => showToast(t.limitReachedAlert, 'ph-prohibit');
       } else {
         vBtn.innerText = t.vote;
         vBtn.className = 'btn-vote';
         vBtn.onclick = (e) => {
-          if (!loggedInUser) {
-            guestVotes[contextInfo.id] = userId;
-          }
           voteAction(this, contextInfo.id);
           profileModal.classList.remove('active');
         };
@@ -557,27 +586,29 @@ const voteAction = (node, contextId) => {
   const userId = node.getAttribute('data-id');
   const t = i18n[currentLang];
 
-  if (!loggedInUser) {
-    if (guestVotes[contextId]) {
-      const isVoteForThisUser = guestVotes[contextId] === userId;
-      if (!isVoteForThisUser) {
-        showToast(t.alreadyVotedAlert, 'ph-warning-circle');
-        setTimeout(() => {
-          currentView = 'register';
-          render();
-        }, 2000);
-      }
-      return;
-    }
+  // Restrict to 1 vote per context
+  if (globalVotes.byContext[contextId]) {
+    showToast(t.alreadyVotedAlert, 'ph-warning-circle');
+    return;
+  }
+
+  // Restrict to global daily limit of 3 across all contexts
+  if (globalVotes.count >= MAX_DAILY_VOTES) {
+    showToast(t.limitReachedAlert, 'ph-prohibit');
+    return;
   }
 
   // Register the vote
-  guestVotes[contextId] = userId;
+  globalVotes.byContext[contextId] = userId;
+  globalVotes.count++;
 
-  // Add votes visually (extract number first)
+  // Add votes visually
   const currentSpan = node.getAttribute('data-votes');
-  const votes = parseInt(currentSpan) + 1;
-  node.setAttribute('data-votes', `${votes} ${t.votes}`);
+  const ext = currentSpan.split(' '); // e.g. "3082 Votes"
+  const votes = parseInt(ext[0]) + 1;
+  node.setAttribute('data-votes', `${votes} ${t.votesCount}`);
+
+  showToast('Vote successfully cast!', 'ph-check-circle');
 
   // Re-render to show voted state
   render();
