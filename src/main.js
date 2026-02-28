@@ -1,5 +1,9 @@
 import './style.css'
 
+import './style.css';
+import { db } from './firebase.js';
+import { doc, onSnapshot, setDoc, increment } from 'firebase/firestore';
+
 // i18n Dictionary
 const i18n = {
   en: {
@@ -224,8 +228,9 @@ const generatePyramidData = (contextId) => {
   const usersWithVotes = baseUsers.map((u, i) => {
     // Generate a pseudo-random vote count based on user index and context ID
     const randomFactor = Math.sin(seed * (i + 1)) * 10000;
-    const votes = Math.floor(Math.abs(randomFactor - Math.floor(randomFactor)) * 5000);
-    return { ...u, votes };
+    const baseVotes = Math.floor(Math.abs(randomFactor - Math.floor(randomFactor)) * 5000);
+    const realVotes = firebaseVotesCache[u.id] || 0;
+    return { ...u, votes: baseVotes + realVotes };
   }).sort((a, b) => b.votes - a.votes);
 
   // Group into tiers based on descending logic (Strict visual pyramid)
@@ -253,15 +258,45 @@ const generatePyramidData = (contextId) => {
 // State
 let currentLang = 'en';
 let currentView = 'home';
+let previousView = '';
 let loggedInUser = null;
 const MAX_DAILY_VOTES = 3;
 let globalVotes = { count: 0, byContext: {} }; // Tracks user's session votes { byContext: { ctxId: userId } }
+
+// Firebase syncing state
+let firebaseVotesCache = {};
+let activeSnapshotUnsubscribe = null;
 
 const app = document.querySelector('#app');
 
 // Render App
 const render = () => {
   const t = i18n[currentLang];
+
+  // Capture current scroll to prevent jumpiness on realtime updates
+  let lastScrollX = null, lastScrollY = null;
+  const vp = document.getElementById('pyramid-viewport');
+  if (vp) { lastScrollX = vp.scrollLeft; lastScrollY = vp.scrollTop; }
+
+  // Manage Realtime subscriptions
+  if (currentView !== previousView) {
+    if (activeSnapshotUnsubscribe) {
+      activeSnapshotUnsubscribe();
+      activeSnapshotUnsubscribe = null;
+    }
+    if (currentView.startsWith('pyramid-')) {
+      const ctxId = currentView.split('-')[1];
+      activeSnapshotUnsubscribe = onSnapshot(doc(db, 'contexts', ctxId), (snap) => {
+        if (snap.exists()) {
+          firebaseVotesCache = snap.data().votes || {};
+          render(); // Trigger re-render with new data
+        } else {
+          firebaseVotesCache = {}; // No votes yet
+        }
+      });
+    }
+    previousView = currentView;
+  }
 
   app.innerHTML = `
     <header>
@@ -353,6 +388,13 @@ const render = () => {
   }
 
   attachGlobalEvents();
+
+  // Restore scroll position after DOM rebuild
+  const newVp = document.getElementById('pyramid-viewport');
+  if (newVp && lastScrollX !== null) {
+    newVp.scrollLeft = lastScrollX;
+    newVp.scrollTop = lastScrollY;
+  }
 };
 
 const renderHomeView = (container) => {
@@ -582,7 +624,7 @@ const renderPyramidView = (container, contextInfo) => {
   }
 };
 
-const voteAction = (node, contextId) => {
+const voteAction = async (node, contextId) => {
   const userId = node.getAttribute('data-id');
   const t = i18n[currentLang];
 
@@ -598,19 +640,23 @@ const voteAction = (node, contextId) => {
     return;
   }
 
-  // Register the vote
+  // Register user's global limit locally
   globalVotes.byContext[contextId] = userId;
   globalVotes.count++;
 
-  // Add votes visually
-  const currentSpan = node.getAttribute('data-votes');
-  const ext = currentSpan.split(' '); // e.g. "3082 Votes"
-  const votes = parseInt(ext[0]) + 1;
-  node.setAttribute('data-votes', `${votes} ${t.votesCount}`);
+  // Sync to Firestore Realtime DB immediately
+  const contextRef = doc(db, 'contexts', contextId);
+  try {
+    await setDoc(contextRef, {
+      votes: { [userId]: increment(1) }
+    }, { merge: true });
+    showToast('Vote successfully cast and synced to cloud!', 'ph-cloud-check');
+  } catch (err) {
+    console.error("Firebase write error: ", err);
+    showToast('Offline mode: Vote simulated.', 'ph-warning');
+  }
 
-  showToast('Vote successfully cast!', 'ph-check-circle');
-
-  // Re-render to show voted state
+  // UI updates automatically via the onSnapshot listener, but we ensure one immediate local render
   render();
 };
 
