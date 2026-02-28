@@ -234,7 +234,10 @@ const render = () => {
 
   app.innerHTML = `
     <header>
-      <div class="logo">PYRAMIDA</div>
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <button class="hamburger-btn" id="mobile-menu-btn"><i class="ph ph-list"></i></button>
+        <div class="logo">Pyramida</div>
+      </div>
       <div class="header-controls">
         <select class="lang-select" id="lang-switcher">
           <option value="en" ${currentLang === 'en' ? 'selected' : ''}>EN</option>
@@ -243,11 +246,7 @@ const render = () => {
           <option value="de" ${currentLang === 'de' ? 'selected' : ''}>DE</option>
         </select>
         <div class="user-profile" id="profile-btn" style="cursor: pointer;">
-          ${loggedInUser ? `
-            <div class="avatar">${loggedInUser.name.charAt(0)}</div>
-          ` : `
-            <button class="btn-primary" style="padding: 6px 16px; font-size: 0.8rem; width: auto; border-radius: 20px;">${t.join}</button>
-          `}
+          <div class="avatar">${loggedInUser ? loggedInUser.name.substring(0, 2).toUpperCase() : '<i class="ph ph-user"></i>'}</div>
         </div>
       </div>
     </header>
@@ -625,6 +624,22 @@ const attachGlobalEvents = () => {
     langSwitcher.addEventListener('change', (e) => {
       currentLang = e.target.value;
       render(); // re-render entire app in new language
+    });
+  }
+
+  // Mobile menu logic
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const sidebar = document.getElementById('sidebar');
+  if (mobileMenuBtn && sidebar) {
+    mobileMenuBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+    });
+
+    // Auto-close sidebar on mobile when an item is clicked
+    sidebar.addEventListener('click', (e) => {
+      if (e.target.closest('.sidebar-item') && window.innerWidth < 768) {
+        sidebar.classList.remove('active');
+      }
     });
   }
 
