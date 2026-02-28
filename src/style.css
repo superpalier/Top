@@ -1,23 +1,23 @@
 :root {
-  --bg-dark: #09090b;
-  /* Royal Obsidian */
-  --bg-card: rgba(30, 30, 35, 0.4);
-  /* Solid deep grey instead of pure glass */
-  --border-light: rgba(255, 255, 255, 0.08);
+  --bg-dark: #05000a;
+  /* Deep Void / Black-Purple */
+  --bg-card: rgba(15, 5, 25, 0.4);
+  /* Dark purple glass */
+  --border-light: rgba(209, 0, 255, 0.15);
   --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  /* Platinum / Slate */
+  --text-secondary: #a992bc;
+  /* Muted violet */
 
   /* Power Accent Colors */
-  --accent-cyan: #D4AF37;
-  /* Apex Gold */
-  --accent-magenta: #E63946;
-  /* Royal Crimson */
-  --accent-violet: #457B9D;
-  /* Imperial Blue */
+  --accent-cyan: #d100ff;
+  /* Neon Purple (Top level) */
+  --accent-magenta: #7b00ff;
+  /* Deep Indigo */
+  --accent-violet: #ff00ea;
+  /* Hot Pink for minor accents */
 
-  --glow-cyan: rgba(212, 175, 55, 0.4);
-  --glow-magenta: rgba(230, 57, 70, 0.4);
+  --glow-cyan: rgba(209, 0, 255, 0.4);
+  --glow-magenta: rgba(123, 0, 255, 0.4);
 
   /* Typography conveying authority */
   --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -88,9 +88,9 @@ header {
   font-weight: 700;
   /* Bolder logo for authority */
   color: var(--accent-cyan);
-  /* Gold Logo */
+  /* Neon Logo */
   letter-spacing: -0.5px;
-  text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+  text-shadow: 0 0 15px rgba(209, 0, 255, 0.5);
 }
 
 .header-controls {
@@ -174,8 +174,8 @@ header {
 }
 
 .btn-outline-gold:hover {
-  background: rgba(212, 175, 55, 0.1);
-  box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+  background: rgba(209, 0, 255, 0.1);
+  box-shadow: 0 0 15px rgba(209, 0, 255, 0.4);
 }
 
 .user-profile {
@@ -190,7 +190,7 @@ header {
   border-radius: 50%;
   background: #1e1e24;
   border: 2px solid var(--accent-magenta);
-  /* Crimson border for user */
+  /* Indigo border for user */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -198,13 +198,13 @@ header {
   font-size: 0.95rem;
   color: var(--text-primary);
   transition: all 0.3s ease;
-  box-shadow: 0 0 12px rgba(230, 57, 70, 0.4);
+  box-shadow: 0 0 12px rgba(123, 0, 255, 0.4);
 }
 
 .user-profile:hover .avatar {
   border-color: var(--accent-cyan);
-  /* Shifts to gold on hover */
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+  /* Shifts to neon purple on hover */
+  box-shadow: 0 0 20px rgba(209, 0, 255, 0.6);
 }
 
 /* Main Content Area */
@@ -281,9 +281,9 @@ header {
 }
 
 .sidebar-item.active {
-  background: rgba(212, 175, 55, 0.15);
+  background: rgba(209, 0, 255, 0.15);
   color: var(--accent-cyan);
-  /* Gold active states */
+  /* Neon active states */
   border-left-color: var(--accent-cyan);
 }
 
@@ -347,8 +347,8 @@ main {
 .context-card:active {
   transform: translateY(-6px);
   border-color: var(--accent-cyan);
-  /* Borders turn gold on interaction */
-  box-shadow: 0 15px 50px rgba(212, 175, 55, 0.25);
+  /* Borders turn neon purple on interaction */
+  box-shadow: 0 15px 50px rgba(209, 0, 255, 0.25);
 }
 
 .context-card::after {
@@ -382,8 +382,8 @@ main {
 .context-card:hover .context-icon {
   color: var(--accent-cyan);
   border-color: var(--accent-cyan);
-  background: rgba(212, 175, 55, 0.1);
-  box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+  background: rgba(209, 0, 255, 0.1);
+  box-shadow: 0 0 15px rgba(209, 0, 255, 0.4);
 }
 
 .context-title {
@@ -647,9 +647,9 @@ main {
   --node-size: 120px;
   /* Colossal Apex */
   --tier-color: var(--accent-cyan);
-  /* Gold */
+  /* Neon Purple */
   border: 4px solid var(--accent-cyan);
-  box-shadow: 0 0 40px var(--glow-cyan), inset 0 0 25px rgba(212, 175, 55, 0.6);
+  box-shadow: 0 0 40px var(--glow-cyan), inset 0 0 25px rgba(209, 0, 255, 0.6);
   z-index: 50;
 }
 
@@ -754,7 +754,7 @@ main {
   background: var(--bg-card);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-top: 2px solid var(--accent-cyan);
-  /* Gold accent line */
+  /* Neon purple accent line */
   border-radius: 12px;
   /* Sharper */
   width: 90%;
@@ -778,12 +778,12 @@ main {
 }
 
 .profile-card-avatar {
-  width: 120px;
-  height: 120px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   border: 4px solid var(--bg-dark);
   position: absolute;
-  bottom: -60px;
+  bottom: -90px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--bg-card);
@@ -802,6 +802,7 @@ main {
   font-weight: 600;
   color: var(--text-primary);
   letter-spacing: -0.5px;
+  margin-top: 30px;
   margin-bottom: 6px;
 }
 
@@ -925,9 +926,9 @@ main {
 .btn-vote {
   width: 100%;
   background: var(--accent-cyan);
-  /* Gold Action Buttons */
+  /* Neon Purple Action Buttons */
   color: var(--bg-dark);
-  /* Obsidian text on gold */
+  /* Obsidian text on neon */
   border: none;
   padding: 16px;
   /* Larger hit area */
@@ -945,16 +946,16 @@ main {
 .btn-primary:hover,
 .btn-vote:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
-  background: #E8C14A;
-  /* Brighter gold on hover */
+  box-shadow: 0 8px 25px rgba(209, 0, 255, 0.6);
+  background: #e44dff;
+  /* Brighter neon on hover */
 }
 
-.btn-primary.disabled,
+.btn-primary:disabled,
 .btn-vote.disabled {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-secondary);
-  box-shadow: none;
+  background: #2a2a35;
+  color: #555566;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
   cursor: not-allowed;
   transform: none;
 }
@@ -962,10 +963,10 @@ main {
 .btn-secondary,
 .btn-close {
   width: 100%;
-  background: rgba(230, 57, 70, 0.05);
-  /* Very faint crimson */
+  background: rgba(123, 0, 255, 0.05);
+  /* Very faint indigo */
   color: var(--accent-magenta);
-  /* Crimson text */
+  /* Indigo text */
   border: 1px solid var(--accent-magenta);
   padding: 14px;
   border-radius: 6px;
@@ -982,7 +983,7 @@ main {
 .btn-secondary:hover,
 .btn-close:hover {
   background: var(--accent-magenta);
-  /* Fills with crimson */
+  /* Fills with indigo */
   color: var(--text-primary);
   box-shadow: 0 4px 15px var(--glow-magenta);
 }

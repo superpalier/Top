@@ -233,9 +233,9 @@ const generatePyramidData = (contextId) => {
     return { ...u, votes: baseVotes + realVotes };
   }).sort((a, b) => b.votes - a.votes);
 
-  // Group into tiers based on descending logic (Strict visual pyramid)
-  // Scaling up to hold hundreds of users:
-  const tiersCount = [1, 2, 3, 5, 7, 9, 12, 16, 21, 28, 38, 50, 65, 85];
+  // Group into exactly 10 visible tiers based on descending logic (Strict visual pyramid constraint)
+  // Max visible users = 104 (1 + 2 + 3 + 5 + 7 + 9 + 12 + 16 + 21 + 28)
+  const tiersCount = [1, 2, 3, 5, 7, 9, 12, 16, 21, 28];
   const data = [];
   let userIndex = 0;
 
@@ -302,7 +302,10 @@ const render = () => {
     <header>
       <div style="display: flex; align-items: center; gap: 15px;">
         <button class="hamburger-btn" id="mobile-menu-btn"><i class="ph ph-list"></i></button>
-        <div class="logo">Pyramida</div>
+        <div style="display: flex; flex-direction: column;">
+          <div class="logo">Pyramida</div>
+          <div style="font-size: 0.65rem; color: var(--text-secondary); font-weight: 600; letter-spacing: 1px; margin-top: -4px;">v1.1.0-neon</div>
+        </div>
       </div>
       <div class="header-controls">
         <div class="custom-lang-dropdown" id="lang-dropdown">
@@ -555,18 +558,21 @@ const renderPyramidView = (container, contextInfo) => {
       const vBtn = document.getElementById('pm-vote-btn');
 
       if (globalVotes.byContext[contextInfo.id]) {
-        vBtn.innerText = globalVotes.byContext[contextInfo.id] === userId ? t.votedInCat : t.close;
+        vBtn.innerText = globalVotes.byContext[contextInfo.id] === userId ? t.voted : t.votedInCat;
         vBtn.className = 'btn-vote disabled';
-        vBtn.onclick = (e) => profileModal.classList.remove('active'); // dismiss
+        vBtn.disabled = true;
+        vBtn.onclick = null; // Do nothing or dismiss
       } else if (globalVotes.count >= MAX_DAILY_VOTES) {
         vBtn.innerText = 'Daily Limit Reached';
         vBtn.className = 'btn-vote disabled';
-        vBtn.onclick = (e) => showToast(t.limitReachedAlert, 'ph-prohibit');
+        vBtn.disabled = true;
+        vBtn.onclick = null;
       } else {
         vBtn.innerText = t.vote;
         vBtn.className = 'btn-vote';
-        vBtn.onclick = (e) => {
-          voteAction(this, contextInfo.id);
+        vBtn.disabled = false;
+        vBtn.onclick = () => {
+          voteAction(node, contextInfo.id);
           profileModal.classList.remove('active');
         };
       }
