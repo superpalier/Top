@@ -1,9 +1,10 @@
 :root {
-  --bg-dark: #05000a;
-  /* Deep Void / Black-Purple */
-  --bg-card: rgba(15, 5, 25, 0.4);
-  /* Dark purple glass */
-  --border-light: rgba(209, 0, 255, 0.15);
+  --bg-dark: #000000;
+  /* Pure Black Void */
+  --bg-card: rgba(10, 0, 15, 0.6);
+  /* Deeper purple glass */
+  --border-light: rgba(209, 0, 255, 0.2);
+  /* Slightly more visible thin line */
   --text-primary: #f8fafc;
   --text-secondary: #a992bc;
   /* Muted violet */
@@ -16,8 +17,9 @@
   --accent-violet: #ff00ea;
   /* Hot Pink for minor accents */
 
-  --glow-cyan: rgba(209, 0, 255, 0.4);
-  --glow-magenta: rgba(123, 0, 255, 0.4);
+  --glow-cyan: rgba(209, 0, 255, 0.15);
+  /* Reduced glow for subtle effect */
+  --glow-magenta: rgba(123, 0, 255, 0.15);
 
   /* Typography conveying authority */
   --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -37,9 +39,10 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
+  /* Removed heavy radial gradients, using pure dark background with extremely subtle glow */
   background-image:
-    radial-gradient(circle at 50% 0%, var(--glow-cyan), transparent 40%),
-    radial-gradient(circle at 10% 90%, var(--glow-magenta), transparent 30%);
+    radial-gradient(circle at 50% 0%, rgba(209, 0, 255, 0.05), transparent 30%),
+    radial-gradient(circle at 10% 90%, rgba(123, 0, 255, 0.05), transparent 20%);
 }
 
 /* Globally Hide Scrollbars for App-like feel */
@@ -75,11 +78,11 @@ header {
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 1px solid var(--border-light);
-  background: rgba(9, 9, 11, 0.95);
-  /* Darker, more solid obsidian */
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.7);
-  /* Stronger shadow */
+  border-bottom: 1px solid rgba(209, 0, 255, 0.3);
+  /* Subtle neon purple line */
+  background: rgba(0, 0, 0, 0.95);
+  /* Pure black obsidian */
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.9);
 }
 
 .logo {
@@ -281,10 +284,11 @@ header {
 }
 
 .sidebar-item.active {
-  background: rgba(209, 0, 255, 0.15);
+  background: rgba(0, 0, 0, 0.5);
   color: var(--accent-cyan);
   /* Neon active states */
   border-left-color: var(--accent-cyan);
+  box-shadow: inset 2px 0 10px rgba(209, 0, 255, 0.1);
 }
 
 .sidebar-item i {
@@ -348,7 +352,8 @@ main {
   transform: translateY(-6px);
   border-color: var(--accent-cyan);
   /* Borders turn neon purple on interaction */
-  box-shadow: 0 15px 50px rgba(209, 0, 255, 0.25);
+  box-shadow: 0 5px 20px rgba(209, 0, 255, 0.15);
+  background: rgba(10, 0, 15, 0.8);
 }
 
 .context-card::after {
@@ -590,7 +595,8 @@ main {
 
 .user-node:hover {
   transform: scale(1.15) translateY(-5px);
-  box-shadow: inset 0 0 0 1px var(--tier-color), 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 0 1px var(--tier-color), 0 5px 15px rgba(0, 0, 0, 0.8);
+  /* Replaced heavy tier color shadow with dark shadow to emphasize thin border */
   z-index: 10;
 }
 
@@ -615,7 +621,7 @@ main {
 }
 
 .user-node.voted {
-  box-shadow: inset 0 0 0 2px var(--accent-magenta), 0 0 20px rgba(167, 139, 250, 0.2) !important;
+  box-shadow: inset 0 0 0 1px var(--accent-magenta), 0 0 10px rgba(167, 139, 250, 0.1) !important;
 }
 
 .user-node.voted::before {
@@ -648,8 +654,10 @@ main {
   /* Colossal Apex */
   --tier-color: var(--accent-cyan);
   /* Neon Purple */
-  border: 4px solid var(--accent-cyan);
-  box-shadow: 0 0 40px var(--glow-cyan), inset 0 0 25px rgba(209, 0, 255, 0.6);
+  border: 2px solid var(--accent-cyan);
+  /* Thinner border */
+  box-shadow: 0 0 15px var(--glow-cyan), inset 0 0 10px rgba(209, 0, 255, 0.2);
+  /* Noticeably reduced glow */
   z-index: 50;
 }
 
@@ -751,15 +759,17 @@ main {
 }
 
 .profile-card {
-  background: var(--bg-card);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #020005;
+  /* Pure deep black for modals */
+  border: 1px solid rgba(209, 0, 255, 0.2);
+  /* Thin neon border all around */
   border-top: 2px solid var(--accent-cyan);
   /* Neon purple accent line */
   border-radius: 12px;
   /* Sharper */
   width: 90%;
   max-width: 420px;
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95);
   transform: translateY(20px) scale(0.95);
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
@@ -772,9 +782,11 @@ main {
 
 .profile-card-header {
   height: 140px;
-  background: linear-gradient(135deg, var(--glow-cyan), var(--glow-magenta));
+  background: #000000;
+  /* Pure black instead of gradient */
   position: relative;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(209, 0, 255, 0.15);
+  /* Thin purple line */
 }
 
 .profile-card-avatar {
@@ -982,10 +994,10 @@ main {
 
 .btn-secondary:hover,
 .btn-close:hover {
-  background: var(--accent-magenta);
-  /* Fills with indigo */
+  background: rgba(123, 0, 255, 0.15);
+  /* Darker indigo fill */
   color: var(--text-primary);
-  box-shadow: 0 4px 15px var(--glow-magenta);
+  box-shadow: 0 0 10px rgba(123, 0, 255, 0.2);
 }
 
 .profile-actions {
