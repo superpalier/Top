@@ -179,12 +179,19 @@ const baseUsers = Array.from({ length: 1200 }).map((_, i) => {
   const rMonth = Math.floor(Math.random() * 12) + 1;
   const rYear = Math.floor(Math.random() * (2005 - 1980 + 1)) + 1980;
 
+  const generateHandle = (base) => base.toLowerCase().replace(/\s/g, '') + Math.floor(Math.random() * 999);
+
   return {
     id: `u${i}`,
     name: name,
     img: `https://i.pravatar.cc/150?u=${i}`,
     dob: `${rYear}-${String(rMonth).padStart(2, '0')}-${String(rDay).padStart(2, '0')}`,
-    bio: baseBios[i % baseBios.length]
+    bio: baseBios[i % baseBios.length],
+    socials: {
+      linkedin: Math.random() > 0.3 ? `https://linkedin.com/in/${generateHandle(name)}` : null,
+      instagram: Math.random() > 0.2 ? `https://instagram.com/${generateHandle(name)}` : null,
+      tiktok: Math.random() > 0.4 ? `https://tiktok.com/@${generateHandle(name)}` : null
+    }
   };
 });
 
@@ -275,6 +282,11 @@ const render = () => {
           <div class="profile-name" id="pm-name">Name</div>
           <div class="profile-dob"><i class="ph ph-calendar-blank"></i> <span id="pm-dob">Date</span></div>
           <div class="profile-description" id="pm-bio">Bio description...</div>
+          
+          <div class="profile-socials" id="pm-socials">
+             <!-- Social links injected dynamically here -->
+          </div>
+
           <div class="profile-actions">
             <button class="btn-vote" id="pm-vote-btn"></button>
             <button class="btn-close" id="pm-close-btn"></button>
@@ -446,6 +458,22 @@ const renderPyramidView = (container, contextInfo) => {
       document.getElementById('pm-name').innerText = userObj.name;
       document.getElementById('pm-dob').innerText = `${t.bornOn} ${userObj.dob}`;
       document.getElementById('pm-bio').innerText = userObj.bio;
+
+      // Populate Socials
+      const socialsContainer = document.getElementById('pm-socials');
+      socialsContainer.innerHTML = ''; // clear previous
+
+      if (userObj.socials) {
+        if (userObj.socials.linkedin) {
+          socialsContainer.innerHTML += `<a href="${userObj.socials.linkedin}" target="_blank" class="social-link" title="LinkedIn"><i class="ph ph-linkedin-logo"></i></a>`;
+        }
+        if (userObj.socials.instagram) {
+          socialsContainer.innerHTML += `<a href="${userObj.socials.instagram}" target="_blank" class="social-link instagram" title="Instagram"><i class="ph ph-instagram-logo"></i></a>`;
+        }
+        if (userObj.socials.tiktok) {
+          socialsContainer.innerHTML += `<a href="${userObj.socials.tiktok}" target="_blank" class="social-link" title="TikTok"><i class="ph ph-tiktok-logo"></i></a>`;
+        }
+      }
 
       // Setup VOTE button in modal
       const vBtn = document.getElementById('pm-vote-btn');

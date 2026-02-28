@@ -687,6 +687,42 @@ main {
   margin-bottom: 30px;
 }
 
+.profile-socials {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.social-link {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  text-decoration: none;
+  border: 1px solid var(--border-light);
+  transition: all 0.3s;
+}
+
+.social-link:hover {
+  background: var(--bg-card);
+  transform: translateY(-3px);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  box-shadow: 0 5px 15px rgba(0, 243, 255, 0.2);
+}
+
+.social-link.instagram:hover {
+  border-color: var(--accent-magenta);
+  color: var(--accent-magenta);
+  box-shadow: 0 5px 15px rgba(255, 0, 234, 0.2);
+}
+
 .profile-actions {
   display: flex;
   gap: 15px;
