@@ -1,17 +1,25 @@
 :root {
-  --bg-dark: #0a0a0c;
-  --bg-card: rgba(255, 255, 255, 0.02);
-  --border-light: rgba(255, 255, 255, 0.05);
+  --bg-dark: #09090b;
+  /* Royal Obsidian */
+  --bg-card: rgba(30, 30, 35, 0.4);
+  /* Solid deep grey instead of pure glass */
+  --border-light: rgba(255, 255, 255, 0.08);
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
-  --accent-cyan: #818cf8;
-  /* Soft Indigo */
-  --accent-magenta: #a78bfa;
-  /* Soft Violet */
-  --accent-violet: #c084fc;
-  /* Soft Purple */
-  --glow-cyan: rgba(129, 140, 248, 0.2);
-  --glow-magenta: rgba(167, 139, 250, 0.2);
+  /* Platinum / Slate */
+
+  /* Power Accent Colors */
+  --accent-cyan: #D4AF37;
+  /* Apex Gold */
+  --accent-magenta: #E63946;
+  /* Royal Crimson */
+  --accent-violet: #457B9D;
+  /* Imperial Blue */
+
+  --glow-cyan: rgba(212, 175, 55, 0.4);
+  --glow-magenta: rgba(230, 57, 70, 0.4);
+
+  /* Typography conveying authority */
   --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-display: 'Space Grotesk', -apple-system, sans-serif;
 }
@@ -30,8 +38,8 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background-image:
-    radial-gradient(circle at 10% 40%, rgba(167, 139, 250, 0.03), transparent 30%),
-    radial-gradient(circle at 90% 60%, rgba(129, 140, 248, 0.03), transparent 30%);
+    radial-gradient(circle at 50% 0%, var(--glow-cyan), transparent 40%),
+    radial-gradient(circle at 10% 90%, var(--glow-magenta), transparent 30%);
 }
 
 #app {
@@ -50,21 +58,27 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   position: sticky;
   top: 0;
   z-index: 100;
   border-bottom: 1px solid var(--border-light);
-  background: rgba(10, 10, 12, 0.6);
+  background: rgba(9, 9, 11, 0.95);
+  /* Darker, more solid obsidian */
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.7);
+  /* Stronger shadow */
 }
 
 .logo {
   font-family: var(--font-display);
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-size: 1.6rem;
+  font-weight: 700;
+  /* Bolder logo for authority */
+  color: var(--accent-cyan);
+  /* Gold Logo */
   letter-spacing: -0.5px;
+  text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
 }
 
 .header-controls {
@@ -76,18 +90,20 @@ header {
 }
 
 .lang-select {
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  /* Sharper corners */
   padding: 8px 14px;
   font-family: var(--font-main);
+  font-weight: 600;
   font-size: 0.85rem;
   outline: none;
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
-  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2394a3b8%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23f8fafc%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 8px auto;
@@ -96,13 +112,12 @@ header {
 }
 
 .lang-select:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .lang-select:focus {
   border-color: var(--accent-cyan);
-  box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.1);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.3);
 }
 
 .user-profile {
@@ -112,23 +127,26 @@ header {
 }
 
 .avatar {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: var(--bg-card);
-  border: 1px solid var(--border-light);
+  background: #1e1e24;
+  border: 2px solid var(--accent-magenta);
+  /* Crimson border for user */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 500;
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  transition: all 0.2s ease;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  box-shadow: 0 0 12px rgba(230, 57, 70, 0.4);
 }
 
 .user-profile:hover .avatar {
-  border-color: var(--accent-magenta);
-  color: var(--text-primary);
+  border-color: var(--accent-cyan);
+  /* Shifts to gold on hover */
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
 }
 
 /* Main Content Area */
@@ -184,27 +202,31 @@ header {
 }
 
 .sidebar-item {
-  padding: 10px 12px;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
   gap: 12px;
   color: var(--text-secondary);
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border-radius: 8px;
-  font-weight: 500;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  /* Sharper corners for serious tone */
+  font-weight: 600;
   font-size: 0.95rem;
+  border-left: 3px solid transparent;
 }
 
 .sidebar-item:hover {
-  background: var(--bg-card);
+  background: rgba(255, 255, 255, 0.05);
   color: var(--text-primary);
 }
 
 .sidebar-item.active {
-  background: rgba(167, 139, 250, 0.08);
-  color: var(--accent-magenta);
+  background: rgba(212, 175, 55, 0.15);
+  color: var(--accent-cyan);
+  /* Gold active states */
+  border-left-color: var(--accent-cyan);
 }
 
 .sidebar-item i {
@@ -246,9 +268,10 @@ main {
 }
 
 .context-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border-light);
-  border-radius: 20px;
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  /* Sharper edges */
   padding: 24px 20px;
   display: flex;
   flex-direction: column;
@@ -259,25 +282,50 @@ main {
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
 }
 
 .context-card:hover,
 .context-card:active {
-  transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-6px);
+  border-color: var(--accent-cyan);
+  /* Borders turn gold on interaction */
+  box-shadow: 0 15px 50px rgba(212, 175, 55, 0.25);
+}
+
+.context-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.context-card:hover::after {
+  opacity: 1;
 }
 
 .context-icon {
-  font-size: 2rem;
+  font-size: 2.2rem;
   color: var(--text-primary);
-  opacity: 0.8;
+  /* Starts neutral */
+  opacity: 0.9;
   padding: 12px;
-  background: var(--bg-card);
-  border-radius: 14px;
-  border: 1px solid var(--border-light);
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s;
+}
+
+.context-card:hover .context-icon {
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  background: rgba(212, 175, 55, 0.1);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
 }
 
 .context-title {
@@ -514,35 +562,47 @@ main {
 
 /* Special styling for top tier (The Apex) */
 .tier-0 .user-node {
-  --node-size: 84px;
+  --node-size: 120px;
+  /* Colossal Apex */
   --tier-color: var(--accent-cyan);
+  /* Gold */
+  border: 4px solid var(--accent-cyan);
+  box-shadow: 0 0 40px var(--glow-cyan), inset 0 0 25px rgba(212, 175, 55, 0.6);
+  z-index: 50;
 }
 
 .tier-1 .user-node {
-  --node-size: 68px;
+  --node-size: 85px;
   --tier-color: var(--accent-magenta);
+  /* Crimson */
+  border: 3px solid var(--accent-magenta);
 }
 
 .tier-2 .user-node {
-  --node-size: 52px;
+  --node-size: 65px;
   --tier-color: var(--accent-violet);
+  /* Imperial Blue */
+  border: 2px solid var(--accent-violet);
 }
 
 .tier-3 .user-node {
-  --node-size: 42px;
-  --tier-color: rgba(255, 255, 255, 0.6);
+  --node-size: 50px;
+  --tier-color: rgba(255, 255, 255, 0.7);
+  /* Platinum */
+  border: 1px solid rgba(255, 255, 255, 0.3);
   opacity: 0.9;
 }
 
 .tier-4 .user-node {
-  --node-size: 34px;
-  --tier-color: rgba(255, 255, 255, 0.4);
+  --node-size: 40px;
+  --tier-color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   opacity: 0.8;
 }
 
 .tier-5 .user-node {
-  --node-size: 26px;
-  --tier-color: rgba(255, 255, 255, 0.2);
+  --node-size: 30px;
+  --tier-color: rgba(255, 255, 255, 0.3);
   opacity: 0.7;
 }
 
@@ -590,9 +650,10 @@ main {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(10, 10, 12, 0.8);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.85);
+  /* Darker backdrop */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -608,18 +669,19 @@ main {
 }
 
 .profile-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 2px solid var(--accent-cyan);
+  /* Gold accent line */
+  border-radius: 12px;
+  /* Sharper */
   width: 90%;
   max-width: 420px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 30px 60px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9);
   transform: translateY(20px) scale(0.95);
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
   position: relative;
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
 }
 
 .profile-modal.active .profile-card {
@@ -628,22 +690,22 @@ main {
 
 .profile-card-header {
   height: 140px;
-  background: linear-gradient(135deg, rgba(129, 140, 248, 0.1), rgba(167, 139, 250, 0.1));
+  background: linear-gradient(135deg, var(--glow-cyan), var(--glow-magenta));
   position: relative;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .profile-card-avatar {
-  width: 110px;
-  height: 110px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   border: 4px solid var(--bg-dark);
   position: absolute;
-  bottom: -55px;
+  bottom: -60px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--bg-card);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
   object-fit: cover;
 }
 
@@ -780,22 +842,30 @@ main {
 .btn-primary,
 .btn-vote {
   width: 100%;
-  background: var(--text-primary);
+  background: var(--accent-cyan);
+  /* Gold Action Buttons */
   color: var(--bg-dark);
+  /* Obsidian text on gold */
   border: none;
-  padding: 14px;
-  border-radius: 12px;
+  padding: 16px;
+  /* Larger hit area */
+  border-radius: 6px;
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: 700;
+  font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 15px var(--glow-cyan);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .btn-primary:hover,
 .btn-vote:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
+  background: #E8C14A;
+  /* Brighter gold on hover */
 }
 
 .btn-primary.disabled,
@@ -810,23 +880,29 @@ main {
 .btn-secondary,
 .btn-close {
   width: 100%;
-  background: transparent;
-  color: var(--text-primary);
-  border: 1px solid var(--border-light);
+  background: rgba(230, 57, 70, 0.05);
+  /* Very faint crimson */
+  color: var(--accent-magenta);
+  /* Crimson text */
+  border: 1px solid var(--accent-magenta);
   padding: 14px;
-  border-radius: 12px;
+  border-radius: 6px;
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
   margin-top: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .btn-secondary:hover,
 .btn-close:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: var(--accent-magenta);
+  /* Fills with crimson */
+  color: var(--text-primary);
+  box-shadow: 0 4px 15px var(--glow-magenta);
 }
 
 .profile-actions {
