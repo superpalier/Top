@@ -246,15 +246,29 @@ const render = () => {
         <div class="logo">Pyramida</div>
       </div>
       <div class="header-controls">
-        <select class="lang-select" id="lang-switcher">
-          <option value="en" ${currentLang === 'en' ? 'selected' : ''}>EN</option>
-          <option value="es" ${currentLang === 'es' ? 'selected' : ''}>ES</option>
-          <option value="fr" ${currentLang === 'fr' ? 'selected' : ''}>FR</option>
-          <option value="de" ${currentLang === 'de' ? 'selected' : ''}>DE</option>
-        </select>
-        <div class="user-profile" id="profile-btn" style="cursor: pointer;">
-          <div class="avatar">${loggedInUser ? loggedInUser.name.substring(0, 2).toUpperCase() : '<i class="ph ph-user"></i>'}</div>
+        <div class="custom-lang-dropdown" id="lang-dropdown">
+          <div class="lang-selected" id="lang-selected">${currentLang.toUpperCase()} <i class="ph ph-caret-down"></i></div>
+          <div class="lang-options" id="lang-options">
+            <div class="lang-option" data-val="en">EN</div>
+            <div class="lang-option" data-val="es">ES</div>
+            <div class="lang-option" data-val="fr">FR</div>
+            <div class="lang-option" data-val="de">DE</div>
+          </div>
         </div>
+        
+        ${loggedInUser && loggedInUser.role === 'admin' ? `
+          <button class="btn-outline-gold" id="btn-nav-admin" style="padding: 6px 12px; font-size: 0.8rem;"><i class="ph ph-shield-check"></i> ${t.adminPanel}</button>
+        ` : ''}
+
+        ${loggedInUser ? `
+          <div class="user-profile" id="profile-btn" style="cursor: pointer;">
+            <div class="avatar">${loggedInUser.name.substring(0, 2).toUpperCase()}</div>
+          </div>
+        ` : `
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-outline-gold" id="btn-login">${t.join}</button>
+          </div>
+        `}
       </div>
     </header>
     <div class="app-container">
@@ -350,12 +364,6 @@ const renderHomeView = (container) => {
         ${contextHTML}
       </div>
     </div>
-    
-    <!-- Quick admin/register links for demonstration -->
-    <div style="margin-top: 40px; display: flex; gap: 10px; justify-content: center; border-top: 1px solid var(--border-light); padding-top: 20px;">
-      <button class="btn-primary" id="dev-btn-register" style="width: auto; background: var(--bg-card); border: 1px solid var(--border-light); font-size: 0.8rem;">${t.register}</button>
-      <button class="btn-primary" id="dev-btn-admin" style="width: auto; background: var(--bg-card); border: 1px solid var(--border-light); font-size: 0.8rem;">${t.adminPanel}</button>
-    </div>
   `;
 
   // Attach card clicks
@@ -365,9 +373,6 @@ const renderHomeView = (container) => {
       render();
     });
   });
-
-  document.getElementById('dev-btn-register').addEventListener('click', () => { currentView = 'register'; render(); });
-  document.getElementById('dev-btn-admin').addEventListener('click', () => { currentView = 'admin'; render(); });
 };
 
 const renderPyramidView = (container, contextInfo) => {
@@ -602,7 +607,7 @@ const renderRegisterView = (container) => {
   document.getElementById('signup-btn').addEventListener('click', () => {
     const val = document.getElementById('username-input').value.trim();
     if (val) {
-      loggedInUser = { name: val };
+      loggedInUser = { name: val, role: val.toLowerCase() === 'admin' ? 'admin' : 'user' };
       currentView = 'home';
       render();
     }
@@ -695,14 +700,36 @@ const showToast = (message, icon = 'ph-info') => {
 };
 
 const attachGlobalEvents = () => {
-  // Language switcher logic
-  const langSwitcher = document.getElementById('lang-switcher');
-  if (langSwitcher) {
-    langSwitcher.addEventListener('change', (e) => {
-      currentLang = e.target.value;
-      render(); // re-render entire app in new language
+  // Custom Language switcher logic
+  const langDropdown = document.getElementById('lang-dropdown');
+  const langOptions = document.getElementById('lang-options');
+  if (langDropdown && langOptions) {
+    document.getElementById('lang-selected').addEventListener('click', (e) => {
+      e.stopPropagation();
+      langOptions.classList.toggle('show');
+    });
+
+    document.querySelectorAll('.lang-option').forEach(opt => {
+      opt.addEventListener('click', (e) => {
+        currentLang = e.target.getAttribute('data-val');
+        render(); // re-render entire app
+      });
+    });
+
+    // Close dropdown on outside click
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#lang-dropdown')) {
+        langOptions.classList.remove('show');
+      }
     });
   }
+
+  // Header Nav buttons
+  const btnLogin = document.getElementById('btn-login');
+  if (btnLogin) btnLogin.addEventListener('click', () => { currentView = 'register'; render(); });
+
+  const btnAdmin = document.getElementById('btn-nav-admin');
+  if (btnAdmin) btnAdmin.addEventListener('click', () => { currentView = 'admin'; render(); });
 
   // Mobile menu logic
   const mobileMenuBtn = document.getElementById('mobile-menu-btn');
