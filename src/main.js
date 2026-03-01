@@ -49,7 +49,11 @@ const i18n = {
     suggestDesc: 'Have an idea for a new Pyramid context? Submit it here for Admin review!',
     titleEnInput: 'Category Title (English)',
     parentOptional: 'Parent Category (Optional)',
-    submitSug: 'Submit Suggestion'
+    submitSug: 'Submit Suggestion',
+    makeApex: 'Make Apex',
+    voteHistory: 'Voting History',
+    activeVote: 'Active',
+    expiredVote: 'Expired'
   },
   es: {
     dashboard: 'Inicio',
@@ -94,7 +98,11 @@ const i18n = {
     suggestDesc: '¿Tienes una idea para un nuevo contexto? ¡Envíala para revisión de los administradores!',
     titleEnInput: 'Título (Inglés)',
     parentOptional: 'Categoría Padre (Opcional)',
-    submitSug: 'Enviar Sugerencia'
+    submitSug: 'Enviar Sugerencia',
+    makeApex: 'Top de Pirámide',
+    voteHistory: 'Historial de Votos',
+    activeVote: 'Activo',
+    expiredVote: 'Expirado'
   },
   fr: {
     dashboard: 'Accueil',
@@ -139,7 +147,11 @@ const i18n = {
     suggestDesc: 'Une idée pour un nouveau contexte ? Soumettez-la ici pour évaluation !',
     titleEnInput: 'Titre (Anglais)',
     parentOptional: 'Catégorie Parente (Optionnel)',
-    submitSug: 'Soumettre la suggestion'
+    submitSug: 'Soumettre la suggestion',
+    makeApex: 'Voir comme Sommet',
+    voteHistory: 'Historique des Votes',
+    activeVote: 'Actif',
+    expiredVote: 'Expiré'
   },
   de: {
     dashboard: 'Dashboard',
@@ -184,7 +196,11 @@ const i18n = {
     suggestDesc: 'Idee für einen neuen Kontext? Hier zur Admin-Prüfung einreichen!',
     titleEnInput: 'Titel (Englisch)',
     parentOptional: 'Übergeordnete Kategorie (Optional)',
-    submitSug: 'Vorschlag einreichen'
+    submitSug: 'Vorschlag einreichen',
+    makeApex: 'Als Spitze Ansehen',
+    voteHistory: 'Abstimmungsverlauf',
+    activeVote: 'Aktiv',
+    expiredVote: 'Abgelaufen'
   }
 };
 
@@ -211,6 +227,46 @@ onSnapshot(collection(db, 'base_contexts'), (snapshot) => {
   // Re-render the app to show new contexts (especially in sidebar/home)
   if (document.getElementById('main-content')) {
     render();
+  }
+});
+
+// Real-time listener for voting history of the active session
+let voteHistoryLedger = [];
+onSnapshot(collection(db, 'votes_history'), (snapshot) => {
+  voteHistoryLedger = snapshot.docs.map(doc => doc.data());
+
+  if (loggedInUser) {
+    const today = new Date();
+    // Re-evaluate limits based strictly on the user's active votes
+    const userActiveVotes = voteHistoryLedger.filter(v =>
+      v.voterUsername === loggedInUser.name &&
+      v.status === 'active'
+    );
+
+    // Auto-Expire votes older than 30 days
+    userActiveVotes.forEach(async (v) => {
+      const expiry = new Date(v.expiresAt);
+      if (today > expiry) {
+        await setDoc(doc(db, 'votes_history', v.id), { status: 'expired' }, { merge: true });
+      }
+    });
+
+    // Check if daily limit reached
+    const todaysVotes = userActiveVotes.filter(v => {
+      const castDate = new Date(v.castAt);
+      return castDate.toDateString() === today.toDateString();
+    });
+
+    globalVotes.count = todaysVotes.length;
+
+    // Map active contexts to disable repetitive voting
+    let newContextMap = {};
+    userActiveVotes.forEach(v => {
+      newContextMap[v.contextId] = v.targetUserId;
+    });
+    globalVotes.byContext = newContextMap;
+
+    if (document.getElementById('main-content')) render();
   }
 });
 
@@ -508,28 +564,80 @@ const renderHomeView = (container) => {
     </div>
   `).join('');
 
+  // Generate Voting History HTML if user is logged in
+  let historyHTML = '';
+  if (loggedInUser) {
+    const myHistory = voteHistoryLedger.filter(v => v.voterUsername === loggedInUser.name).sort((a, b) => new Date(b.castAt) - new Date(a.castAt));
+    if (myHistory.length > 0) {
+      historyHTML = `
+        <div style="margin-top: 50px;">
+          <h2 class="section-title"><i class="ph ph-clock-counter-clockwise"></i> ${t.voteHistory}</h2>
+          <div style="background: var(--bg-card); padding: 16px; border-radius: 8px; border: 1px solid var(--border-light); overflow-x: auto;">
+            <table style="width: 100%; text-align: left; border-collapse: collapse; font-size: 0.85rem;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--border-light); color: var(--text-secondary);">
+                  <th style="padding: 10px;">Context</th>
+                  <th style="padding: 10px;">Voted For</th>
+                  <th style="padding: 10px;">Date Cast</th>
+                  <th style="padding: 10px;">Expires</th>
+                  <th style="padding: 10px;">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${myHistory.map(v => {
+        const ctxInfo = contexts.find(c => c.id === v.contextId);
+        const uInfo = baseUsers.find(u => u.id === v.targetUserId);
+        const isExp = v.status === 'expired' || new Date() > new Date(v.expiresAt);
+        return `
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                      <td style="padding: 10px; color: var(--accent-cyan);">${ctxInfo ? ctxInfo.titles[currentLang] : v.contextId}</td>
+                      <td style="padding: 10px;">${uInfo ? uInfo.name : v.targetUserId}</td>
+                      <td style="padding: 10px; color: var(--text-secondary);">${new Date(v.castAt).toLocaleDateString()}</td>
+                      <td style="padding: 10px; color: var(--text-secondary);">${new Date(v.expiresAt).toLocaleDateString()}</td>
+                      <td style="padding: 10px;">
+                        <span style="padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; background: ${isExp ? 'rgba(255,68,68,0.1)' : 'rgba(0,200,83,0.1)'}; color: ${isExp ? '#ff4444' : '#00e676'};">
+                          ${isExp ? t.expiredVote : t.activeVote}
+                        </span>
+                      </td>
+                    </tr>
+                  `;
+      }).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+  }
+
   container.innerHTML = `
     <div class="view-container">
-      ${loggedInUser ? `
-        <div class="user-stats-bar" style="margin-bottom:24px;">
+      <div class="home-hero">
+        <h1 class="hero-title">Pyramida</h1>
+        <p class="hero-subtitle">Visual consensus and decentralized rankings.<br>Every vote permanently alters the hierarchy stack.</p>
+        
+        <div class="stats-row">
           <div class="stat-item">
-            <div class="stat-value">5</div>
+            <div class="stat-value">${contexts.filter(c => !c.parentId).length}</div>
             <div class="stat-label">${t.contexts}</div>
           </div>
-          <div class="stat-item highlight">
-            <div class="stat-value">#1</div>
-            <div class="stat-label">${t.topRank}</div>
+          <div class="stat-item">
+            <div class="stat-value">${baseUsers.length}</div>
+            <div class="stat-label">${t.users}</div>
           </div>
           <div class="stat-item">
             <div class="stat-value">4.2k</div>
             <div class="stat-label">${t.votes}</div>
           </div>
         </div>
-      ` : ''}
+      </div>
+      
       <h2 class="section-title">${t.trendingContexts}</h2>
       <div class="context-grid">
         ${contextHTML}
       </div>
+      
+      ${historyHTML}
     </div>
   `;
 
@@ -706,8 +814,34 @@ const renderPyramidView = (container, contextInfo) => {
         vBtn.innerText = t.vote;
         vBtn.className = 'btn-vote';
         vBtn.disabled = false;
-        vBtn.onclick = () => {
-          voteAction(node, contextInfo.id);
+        vBtn.onclick = async () => {
+          if (!loggedInUser) {
+            currentView = 'register';
+            render();
+            return;
+          }
+
+          const now = new Date();
+          const expires = new Date();
+          expires.setDate(now.getDate() + 30); // 30-day life loop
+
+          const voteRecord = {
+            id: `vote_${Date.now()}`,
+            voterUsername: loggedInUser.name,
+            targetUserId: userId,
+            contextId: contextInfo.id,
+            castAt: now.toISOString(),
+            expiresAt: expires.toISOString(),
+            status: 'active'
+          };
+
+          try {
+            await setDoc(doc(db, 'votes_history', voteRecord.id), voteRecord);
+            // Also increment the cache instantly for visual jump
+            firebaseVotesCache[userId] = (firebaseVotesCache[userId] || 0) + 1;
+            showToast('Vote successfully cast!', 'ph-check-circle');
+          } catch (e) { console.error(e); }
+
           profileModal.classList.remove('active');
         };
       }
@@ -715,6 +849,7 @@ const renderPyramidView = (container, contextInfo) => {
       // Make Top Button Focus
       const pmMakeTopBtn = document.getElementById('pm-make-top-btn');
       if (pmMakeTopBtn) {
+        pmMakeTopBtn.innerText = t.makeApex;
         pmMakeTopBtn.onclick = () => {
           // Find the absolute rank of this user to set it as the new offset
           // userObj.rank is 1-indexed. offset is 0-indexed.
