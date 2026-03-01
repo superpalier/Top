@@ -254,18 +254,12 @@ const generatePyramidData = (contextId) => {
     u.rank = index + 1;
   });
 
-  // Handle Dynamic Focus: Shift the visible array if a user is focused
-  if (pyramidFocusUserId) {
-    const focusIndex = usersWithVotes.findIndex(u => u.id === pyramidFocusUserId);
-    if (focusIndex !== -1) {
-      // Keep only from the focused user downwards
-      usersWithVotes = usersWithVotes.slice(focusIndex);
-    }
-  }
+  // Handle Dynamic Focus and Pagination
+  // We take exactly 55 users starting from the current pyramidOffsetIndex
+  let visibleUsers = usersWithVotes.slice(pyramidOffsetIndex, pyramidOffsetIndex + 55);
 
-  // Group into exactly 10 visible tiers based on descending logic (Strict visual pyramid constraint)
-  // Max visible users = 104 (1 + 2 + 3 + 5 + 7 + 9 + 12 + 16 + 21 + 28)
-  const tiersCount = [1, 2, 3, 5, 7, 9, 12, 16, 21, 28];
+  // Group into exactly 10 visible tiers (1 + 2 + 3 + ... + 10 = 55)
+  const tiersCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const data = [];
   let userIndex = 0;
 
@@ -273,8 +267,8 @@ const generatePyramidData = (contextId) => {
     const tierSize = tiersCount[i];
     const tierUsers = [];
     for (let j = 0; j < tierSize; j++) {
-      if (userIndex < usersWithVotes.length) {
-        tierUsers.push(usersWithVotes[userIndex]);
+      if (userIndex < visibleUsers.length) {
+        tierUsers.push(visibleUsers[userIndex]);
         userIndex++;
       }
     }
@@ -282,7 +276,7 @@ const generatePyramidData = (contextId) => {
       data.push(tierUsers);
     }
   }
-  return data;
+  return { data, totalLength: usersWithVotes.length };
 };
 
 // Function to detect supported language
@@ -298,7 +292,7 @@ let currentView = 'home';
 let previousView = '';
 let loggedInUser = null;
 let searchQuery = ''; // Global search state
-let pyramidFocusUserId = null; // Used to override the top of the pyramid
+let pyramidOffsetIndex = 0; // Pagination/offset index for the pyramid apex
 let forceScrollReset = false; // Flag to discard previous scroll positions
 const MAX_DAILY_VOTES = 3;
 let globalVotes = { count: 0, byContext: {} }; // Tracks user's session votes { byContext: { ctxId: userId } }
@@ -510,7 +504,7 @@ const renderHomeView = (container) => {
   // Attach card clicks
   document.querySelectorAll('.context-card').forEach(card => {
     card.addEventListener('click', () => {
-      pyramidFocusUserId = null; // Reset focus on fresh context enter
+      pyramidOffsetIndex = 0; // Reset focus on fresh context enter
       currentView = `pyramid-${card.dataset.id}`;
       render();
     });
@@ -519,7 +513,9 @@ const renderHomeView = (container) => {
 
 const renderPyramidView = (container, contextInfo) => {
   const t = i18n[currentLang];
-  const pyramidData = generatePyramidData(contextInfo.id);
+  const pyramidObj = generatePyramidData(contextInfo.id);
+  const pyramidData = pyramidObj.data;
+  const totalUsersInContext = pyramidObj.totalLength;
   const hasVoted = globalVotes.byContext[contextInfo.id];
 
   // Generating tiers HTML
@@ -551,7 +547,11 @@ const renderPyramidView = (container, contextInfo) => {
           <i class="${contextInfo.icon}" style="color: var(--accent-cyan); margin-right: 8px;"></i>
           ${contextInfo.titles[currentLang]}
         </div>
-        ${pyramidFocusUserId ? `<button class="btn-outline-gold" id="reset-apex-btn" style="margin-left: auto; padding: 6px 14px; font-size: 0.8rem; display:flex; align-items:center; gap:6px; color:var(--text-primary); border-color:var(--text-secondary);"><i class="ph ph-arrows-out-line-vertical"></i> Reset Apex</button>` : ''}
+        <div class="pyramid-controls" style="margin-left: auto; display:flex; gap: 8px;">
+          ${pyramidOffsetIndex > 0 ? `<button class="btn-outline-gold" id="prev-apex-btn" style="padding: 6px 14px; font-size: 0.8rem; display:flex; align-items:center; gap:6px; color:var(--text-primary); border-color:var(--text-secondary);"><i class="ph ph-caret-up"></i> Prev 55</button>` : ''}
+          ${pyramidOffsetIndex + 55 < totalUsersInContext ? `<button class="btn-outline-gold" id="next-apex-btn" style="padding: 6px 14px; font-size: 0.8rem; display:flex; align-items:center; gap:6px; color:var(--text-primary); border-color:var(--text-secondary);"><i class="ph ph-caret-down"></i> Next 55</button>` : ''}
+          ${pyramidOffsetIndex > 0 ? `<button class="btn-outline-gold" id="reset-apex-btn" style="padding: 6px 14px; font-size: 0.8rem; display:flex; align-items:center; gap:6px; color:var(--text-primary); border-color:var(--text-secondary);"><i class="ph ph-arrows-out-line-vertical"></i> Top 1</button>` : ''}
+        </div>
       </div>
       
       <div class="voting-info">
@@ -576,15 +576,33 @@ const renderPyramidView = (container, contextInfo) => {
   `;
 
   document.getElementById('back-btn').addEventListener('click', () => {
-    pyramidFocusUserId = null;
+    pyramidOffsetIndex = 0;
     currentView = 'home';
     render();
   });
 
+  const nextApexBtn = document.getElementById('next-apex-btn');
+  if (nextApexBtn) {
+    nextApexBtn.addEventListener('click', () => {
+      pyramidOffsetIndex += 55;
+      forceScrollReset = true;
+      render();
+    });
+  }
+
+  const prevApexBtn = document.getElementById('prev-apex-btn');
+  if (prevApexBtn) {
+    prevApexBtn.addEventListener('click', () => {
+      pyramidOffsetIndex = Math.max(0, pyramidOffsetIndex - 55);
+      forceScrollReset = true;
+      render();
+    });
+  }
+
   const resetApexBtn = document.getElementById('reset-apex-btn');
   if (resetApexBtn) {
     resetApexBtn.addEventListener('click', () => {
-      pyramidFocusUserId = null;
+      pyramidOffsetIndex = 0;
       render();
     });
   }
@@ -661,7 +679,15 @@ const renderPyramidView = (container, contextInfo) => {
       const pmMakeTopBtn = document.getElementById('pm-make-top-btn');
       if (pmMakeTopBtn) {
         pmMakeTopBtn.onclick = () => {
-          pyramidFocusUserId = userId;
+          // Find the absolute rank of this user to set it as the new offset
+          // userObj.rank is 1-indexed. offset is 0-indexed.
+          // Wait, userObj doesn't have rank natively since it comes from baseUsers.
+          // Let's recalculate or find index. The easiest way is to recalculate the sorted array here, 
+          // but we can also rely on the clicked node's visual data, which has rank!
+          const rankText = node.querySelector('.node-rank').innerText.replace('#', '');
+          const absRank = parseInt(rankText, 10);
+
+          pyramidOffsetIndex = absRank - 1; // 0-indexed offset
           forceScrollReset = true;
           profileModal.classList.remove('active');
           setTimeout(() => render(), 200);
