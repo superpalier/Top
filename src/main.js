@@ -555,10 +555,9 @@ const renderPyramidView = (container, contextInfo) => {
     const zIndex = 50 - tIndex; // Higher tiers are visually "above"
 
     // Scale node sizes descending from Tier 0 to Tier 9
-    // Smoothing the slope considerably to prevent looking like two disconnected pyramids
-    // 86px -> 59px (down precisely 3px per tier)
-    const sizeScale = [86, 83, 80, 77, 74, 71, 68, 65, 62, 59];
-    const nodeSize = sizeScale[tIndex] || 59;
+    // Substantially increased sizes to proportionally fill the area. Apex is large (160px), base is solid (80px).
+    const sizeScale = [160, 150, 140, 130, 120, 110, 100, 90, 85, 80];
+    const nodeSize = sizeScale[tIndex] || 80;
 
     const usersHTML = tier.map(user => `
       <div class="user-node ${hasVoted && hasVoted === user.id ? 'voted' : ''}" 
