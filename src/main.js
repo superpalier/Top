@@ -41,7 +41,15 @@ const i18n = {
     bornOn: 'Born',
     vote: 'Vote',
     close: 'Close',
-    votesCount: 'Votes'
+    votesCount: 'Votes',
+    prev55: 'Prev 55',
+    next55: 'Next 55',
+    top1: 'Top 1',
+    suggestCat: 'Suggest Category',
+    suggestDesc: 'Have an idea for a new Pyramid context? Submit it here for Admin review!',
+    titleEnInput: 'Category Title (English)',
+    parentOptional: 'Parent Category (Optional)',
+    submitSug: 'Submit Suggestion'
   },
   es: {
     dashboard: 'Inicio',
@@ -78,7 +86,15 @@ const i18n = {
     bornOn: 'Nacido en',
     vote: 'Votar',
     close: 'Cerrar',
-    votesCount: 'Votos'
+    votesCount: 'Votos',
+    prev55: 'Ant 55',
+    next55: 'Sig 55',
+    top1: 'Top 1',
+    suggestCat: 'Sugerir Categoría',
+    suggestDesc: '¿Tienes una idea para un nuevo contexto? ¡Envíala para revisión de los administradores!',
+    titleEnInput: 'Título (Inglés)',
+    parentOptional: 'Categoría Padre (Opcional)',
+    submitSug: 'Enviar Sugerencia'
   },
   fr: {
     dashboard: 'Accueil',
@@ -115,7 +131,15 @@ const i18n = {
     bornOn: 'Né(e) le',
     vote: 'Voter',
     close: 'Fermer',
-    votesCount: 'Votes'
+    votesCount: 'Votes',
+    prev55: 'Préc 55',
+    next55: 'Suiv 55',
+    top1: 'Top 1',
+    suggestCat: 'Suggérer une Catégorie',
+    suggestDesc: 'Une idée pour un nouveau contexte ? Soumettez-la ici pour évaluation !',
+    titleEnInput: 'Titre (Anglais)',
+    parentOptional: 'Catégorie Parente (Optionnel)',
+    submitSug: 'Soumettre la suggestion'
   },
   de: {
     dashboard: 'Dashboard',
@@ -152,7 +176,15 @@ const i18n = {
     bornOn: 'Geboren am',
     vote: 'Abstimmen',
     close: 'Schließen',
-    votesCount: 'Stimmen'
+    votesCount: 'Stimmen',
+    prev55: 'Zurück 55',
+    next55: 'Vor 55',
+    top1: 'Top 1',
+    suggestCat: 'Kategorie vorschlagen',
+    suggestDesc: 'Idee für einen neuen Kontext? Hier zur Admin-Prüfung einreichen!',
+    titleEnInput: 'Titel (Englisch)',
+    parentOptional: 'Übergeordnete Kategorie (Optional)',
+    submitSug: 'Vorschlag einreichen'
   }
 };
 
@@ -394,7 +426,7 @@ const render = () => {
         </div>
         ${loggedInUser ? `
         <div style="padding: 16px; border-top: 1px solid var(--border-light); margin-top: auto;">
-          <button class="btn-secondary" id="suggest-cat-btn" style="width:100%; font-size: 0.8rem; padding: 10px;"><i class="ph ph-lightbulb"></i> Suggest Category</button>
+          <button class="btn-secondary" id="suggest-cat-btn" style="width:100%; font-size: 0.8rem; padding: 10px;"><i class="ph ph-lightbulb"></i> ${t.suggestCat}</button>
         </div>
         ` : ''}
       </nav>
@@ -523,10 +555,10 @@ const renderPyramidView = (container, contextInfo) => {
     const zIndex = 50 - tIndex; // Higher tiers are visually "above"
 
     // Scale node sizes descending from Tier 0 to Tier 9
-    // Apex is much larger (110px), bottom is standard size (56px)
-    // Decrement gradually so the 1-10 pyramid remains connected
-    const sizeScale = [110, 100, 92, 85, 78, 72, 66, 61, 58, 56];
-    const nodeSize = sizeScale[tIndex] || 56;
+    // Smoothing the slope considerably to prevent looking like two disconnected pyramids
+    // 86px -> 59px (down precisely 3px per tier)
+    const sizeScale = [86, 83, 80, 77, 74, 71, 68, 65, 62, 59];
+    const nodeSize = sizeScale[tIndex] || 59;
 
     const usersHTML = tier.map(user => `
       <div class="user-node ${hasVoted && hasVoted === user.id ? 'voted' : ''}" 
@@ -554,9 +586,9 @@ const renderPyramidView = (container, contextInfo) => {
           ${contextInfo.titles[currentLang]}
         </div>
         <div class="pyramid-controls" style="margin-left: auto; display:flex; gap: 8px;">
-          ${pyramidOffsetIndex > 0 ? `<button class="btn-outline-gold" id="prev-apex-btn" style="padding: 6px 14px; font-size: 0.8rem; display:flex; align-items:center; gap:6px; color:var(--text-primary); border-color:var(--text-secondary);"><i class="ph ph-caret-up"></i> Prev 55</button>` : ''}
-          ${pyramidOffsetIndex + 55 < totalUsersInContext ? `<button class="btn-outline-gold" id="next-apex-btn" style="padding: 6px 14px; font-size: 0.8rem; display:flex; align-items:center; gap:6px; color:var(--text-primary); border-color:var(--text-secondary);"><i class="ph ph-caret-down"></i> Next 55</button>` : ''}
-          ${pyramidOffsetIndex > 0 ? `<button class="btn-outline-gold" id="reset-apex-btn" style="padding: 6px 14px; font-size: 0.8rem; display:flex; align-items:center; gap:6px; color:var(--text-primary); border-color:var(--text-secondary);"><i class="ph ph-arrows-out-line-vertical"></i> Top 1</button>` : ''}
+          ${pyramidOffsetIndex > 0 ? `<button class="btn-outline-gold" id="prev-apex-btn" style="padding: 6px 14px; font-size: 0.8rem; display:flex; align-items:center; gap:6px; color:var(--text-primary); border-color:var(--text-secondary);"><i class="ph ph-caret-up"></i> ${t.prev55}</button>` : ''}
+          ${pyramidOffsetIndex + 55 < totalUsersInContext ? `<button class="btn-outline-gold" id="next-apex-btn" style="padding: 6px 14px; font-size: 0.8rem; display:flex; align-items:center; gap:6px; color:var(--text-primary); border-color:var(--text-secondary);"><i class="ph ph-caret-down"></i> ${t.next55}</button>` : ''}
+          ${pyramidOffsetIndex > 0 ? `<button class="btn-outline-gold" id="reset-apex-btn" style="padding: 6px 14px; font-size: 0.8rem; display:flex; align-items:center; gap:6px; color:var(--text-primary); border-color:var(--text-secondary);"><i class="ph ph-arrows-out-line-vertical"></i> ${t.top1}</button>` : ''}
         </div>
       </div>
       
@@ -825,26 +857,26 @@ const renderSuggestView = (container) => {
     <div class="view-container" style="max-width: 500px; margin: 40px auto; width: 100%;">
       <div class="pyramid-header" style="justify-content: center; margin-bottom: 30px; position:relative;">
         <button class="back-btn" id="suggest-back-btn" style="position:absolute; left:0;"><i class="ph ph-arrow-left"></i></button>
-        <div class="pyramid-context-title">Suggest a Category</div>
+        <div class="pyramid-context-title">${t.suggestCat}</div>
       </div>
       
       <div class="modal-content" style="transform: none; position: relative; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
-         <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:20px;">Have an idea for a new Pyramid context? Submit it here for Admin review!</p>
+         <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:20px;">${t.suggestDesc}</p>
          
          <div class="form-group">
-           <label>Category Title (English)</label>
+           <label>${t.titleEnInput}</label>
            <input type="text" class="form-input" id="suggest-title" placeholder="e.g. Best Sci-Fi Writer">
          </div>
          
          <div class="form-group">
-           <label>Parent Category (Optional)</label>
+           <label>${t.parentOptional}</label>
            <select class="form-input" id="suggest-parent" style="background:var(--bg-dark); color:var(--text-primary); border: 1px solid var(--border-light);">
              <option value="">-- None (Top Level) --</option>
              ${contexts.filter(c => !c.parentId).map(c => `<option value="${c.id}">${c.titles.en}</option>`).join('')}
            </select>
          </div>
          
-         <button class="btn-primary" id="submit-suggest-btn" style="margin-top:10px;">Submit Suggestion</button>
+         <button class="btn-primary" id="submit-suggest-btn" style="margin-top:10px;">${t.submitSug}</button>
       </div>
     </div>
   `;

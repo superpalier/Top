@@ -507,8 +507,6 @@ main {
   z-index: var(--z-index);
   transform-style: preserve-3d;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  max-width: 100%;
-  /* Ensure it doesn't cause horizontal scrolling */
 }
 
 .pyramid-tier:hover {
@@ -569,6 +567,7 @@ main {
 .user-node {
   width: var(--node-size);
   height: var(--node-size);
+  flex-shrink: 0;
   background: var(--bg-card);
   border-radius: 8px;
   display: flex;
