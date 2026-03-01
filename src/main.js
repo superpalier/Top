@@ -522,6 +522,11 @@ const renderPyramidView = (container, contextInfo) => {
   let tiersHTML = pyramidData.map((tier, tIndex) => {
     const zIndex = 50 - tIndex; // Higher tiers are visually "above"
 
+    // Scale node sizes descending from Tier 0 to Tier 9
+    // Apex is 96px, bottom is 46px
+    const sizeScale = [96, 88, 82, 76, 70, 64, 58, 54, 50, 46];
+    const nodeSize = sizeScale[tIndex] || 46;
+
     const usersHTML = tier.map(user => `
       <div class="user-node ${hasVoted && hasVoted === user.id ? 'voted' : ''}" 
            data-id="${user.id}" 
@@ -533,7 +538,7 @@ const renderPyramidView = (container, contextInfo) => {
     `).join('');
 
     return `
-      <div class="pyramid-tier tier-${tIndex}" style="--z-index: ${zIndex}">
+      <div class="pyramid-tier tier-${tIndex}" style="--z-index: ${zIndex}; --node-size: ${nodeSize}px;">
         ${usersHTML}
       </div>
     `;
