@@ -182,6 +182,20 @@ onSnapshot(collection(db, 'base_contexts'), (snapshot) => {
   }
 });
 
+let suggestions = [];
+onSnapshot(collection(db, 'category_recommendations'), (snapshot) => {
+  suggestions = snapshot.docs.map(doc => doc.data());
+  if (currentView === 'admin' && document.getElementById('main-content')) {
+    renderAdminView(document.getElementById('main-content'));
+  }
+});
+
+let notifications = [];
+onSnapshot(collection(db, 'notifications'), (snapshot) => {
+  notifications = snapshot.docs.map(doc => doc.data()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  if (document.getElementById('main-content')) render(); // Update badge
+});
+
 // Base Users pool (1000+ users simulated)
 const baseNames = ['Alex', 'Jordan', 'Sam', 'Taylor', 'Casey', 'Morgan', 'Riley', 'Avery', 'Quinn', 'Reese', 'Drew', 'Blake', 'Devin', 'Harper', 'Finley', 'Robin', 'Kelly', 'Jamie', 'Skyler', 'Ash', 'Rowan'];
 const baseBios = [
@@ -235,6 +249,20 @@ const generatePyramidData = (contextId) => {
     return { ...u, votes: baseVotes + realVotes };
   }).sort((a, b) => b.votes - a.votes);
 
+  // Assign explicit ranking based on absolute position
+  usersWithVotes.forEach((u, index) => {
+    u.rank = index + 1;
+  });
+
+  // Handle Dynamic Focus: Shift the visible array if a user is focused
+  if (pyramidFocusUserId) {
+    const focusIndex = usersWithVotes.findIndex(u => u.id === pyramidFocusUserId);
+    if (focusIndex !== -1) {
+      // Keep only from the focused user downwards
+      usersWithVotes = usersWithVotes.slice(focusIndex);
+    }
+  }
+
   // Group into exactly 10 visible tiers based on descending logic (Strict visual pyramid constraint)
   // Max visible users = 104 (1 + 2 + 3 + 5 + 7 + 9 + 12 + 16 + 21 + 28)
   const tiersCount = [1, 2, 3, 5, 7, 9, 12, 16, 21, 28];
@@ -257,12 +285,21 @@ const generatePyramidData = (contextId) => {
   return data;
 };
 
+// Function to detect supported language
+const getInitialLang = () => {
+  const browserLang = (navigator.language || navigator.userLanguage || 'en').substring(0, 2).toLowerCase();
+  const supported = ['en', 'es', 'fr', 'de'];
+  return supported.includes(browserLang) ? browserLang : 'en';
+};
+
 // State
-let currentLang = 'en';
+let currentLang = getInitialLang();
 let currentView = 'home';
 let previousView = '';
 let loggedInUser = null;
 let searchQuery = ''; // Global search state
+let pyramidFocusUserId = null; // Used to override the top of the pyramid
+let forceScrollReset = false; // Flag to discard previous scroll positions
 const MAX_DAILY_VOTES = 3;
 let globalVotes = { count: 0, byContext: {} }; // Tracks user's session votes { byContext: { ctxId: userId } }
 
@@ -326,8 +363,14 @@ const render = () => {
         ` : ''}
 
         ${loggedInUser ? `
-          <div class="user-profile" id="profile-btn" style="cursor: pointer;">
-            <div class="avatar">${loggedInUser.name.substring(0, 2).toUpperCase()}</div>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div class="notifications-btn" id="notif-btn" style="position:relative; cursor:pointer; color:var(--text-secondary); font-size:1.4rem;">
+              <i class="ph ph-bell"></i>
+              ${notifications.filter(n => n.targetUser === loggedInUser.name && !n.read).length > 0 ? `<span style="position:absolute; top:-4px; right:-4px; background:var(--accent-magenta); color:white; font-size:0.6rem; padding:2px 4px; border-radius:50%; font-weight:bold;">${notifications.filter(n => n.targetUser === loggedInUser.name && !n.read).length}</span>` : ''}
+            </div>
+            <div class="user-profile" id="profile-btn" style="cursor: pointer;">
+              <div class="avatar">${loggedInUser.name.substring(0, 2).toUpperCase()}</div>
+            </div>
           </div>
         ` : `
           <div style="display: flex; gap: 8px;">
@@ -350,11 +393,16 @@ const render = () => {
         </a>
         <div id="sidebar-contexts-list" style="overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:4px;">
           ${contexts.filter(ctx => ctx.titles[currentLang].toLowerCase().includes(searchQuery.toLowerCase())).map(ctx => `
-            <a class="sidebar-item ${currentView === `pyramid-${ctx.id}` ? 'active' : ''}" data-target="pyramid-${ctx.id}">
+            <a class="sidebar-item ${currentView === `pyramid-${ctx.id}` ? 'active' : ''}" data-target="pyramid-${ctx.id}" ${ctx.parentId ? 'style="padding-left: 36px; font-size: 0.85rem; border-left: 1px dashed rgba(255,255,255,0.1);"' : ''}>
               <i class="${ctx.icon}"></i> ${ctx.titles[currentLang]}
             </a>
           `).join('')}
         </div>
+        ${loggedInUser ? `
+        <div style="padding: 16px; border-top: 1px solid var(--border-light); margin-top: auto;">
+          <button class="btn-secondary" id="suggest-cat-btn" style="width:100%; font-size: 0.8rem; padding: 10px;"><i class="ph ph-lightbulb"></i> Suggest Category</button>
+        </div>
+        ` : ''}
       </nav>
       <main id="main-content"></main>
     </div>
@@ -374,7 +422,8 @@ const render = () => {
              <!-- Social links injected dynamically here -->
           </div>
 
-          <div class="profile-actions">
+          <div class="profile-actions" style="flex-wrap: wrap;">
+            <button class="btn-outline-gold" id="pm-make-top-btn" style="width:100%; margin-bottom:12px; border-color:var(--text-secondary); color:var(--text-secondary);"><i class="ph ph-arrow-arc-left"></i> Make Apex</button>
             <button class="btn-vote" id="pm-vote-btn"></button>
             <button class="btn-close" id="pm-close-btn"></button>
           </div>
@@ -390,6 +439,8 @@ const render = () => {
 
   if (currentView === 'home') {
     renderHomeView(mainContent);
+  } else if (currentView === 'suggest') {
+    renderSuggestView(mainContent);
   } else if (currentView.startsWith('pyramid-')) {
     const contextId = currentView.split('-')[1];
     const contextInfo = contexts.find(c => c.id === contextId);
@@ -406,8 +457,14 @@ const render = () => {
   // Restore scroll position after DOM rebuild
   const newVp = document.getElementById('pyramid-viewport');
   if (newVp && lastScrollX !== null) {
-    newVp.scrollLeft = lastScrollX;
-    newVp.scrollTop = lastScrollY;
+    if (forceScrollReset) {
+      newVp.scrollLeft = (newVp.scrollWidth - newVp.clientWidth) / 2;
+      newVp.scrollTop = 0;
+      forceScrollReset = false;
+    } else {
+      newVp.scrollLeft = lastScrollX;
+      newVp.scrollTop = lastScrollY;
+    }
   }
 };
 
@@ -453,6 +510,7 @@ const renderHomeView = (container) => {
   // Attach card clicks
   document.querySelectorAll('.context-card').forEach(card => {
     card.addEventListener('click', () => {
+      pyramidFocusUserId = null; // Reset focus on fresh context enter
       currentView = `pyramid-${card.dataset.id}`;
       render();
     });
@@ -473,6 +531,7 @@ const renderPyramidView = (container, contextInfo) => {
            data-id="${user.id}" 
            data-votes="${user.votes} ${t.votesCount}" 
            data-voted-text="&#x2713; ${t.voted}">
+        <div class="node-rank">#${user.rank}</div>
         <img src="${user.img}" alt="${user.name}">
       </div>
     `).join('');
@@ -492,6 +551,7 @@ const renderPyramidView = (container, contextInfo) => {
           <i class="${contextInfo.icon}" style="color: var(--accent-cyan); margin-right: 8px;"></i>
           ${contextInfo.titles[currentLang]}
         </div>
+        ${pyramidFocusUserId ? `<button class="btn-outline-gold" id="reset-apex-btn" style="margin-left: auto; padding: 6px 14px; font-size: 0.8rem; display:flex; align-items:center; gap:6px; color:var(--text-primary); border-color:var(--text-secondary);"><i class="ph ph-arrows-out-line-vertical"></i> Reset Apex</button>` : ''}
       </div>
       
       <div class="voting-info">
@@ -516,9 +576,18 @@ const renderPyramidView = (container, contextInfo) => {
   `;
 
   document.getElementById('back-btn').addEventListener('click', () => {
+    pyramidFocusUserId = null;
     currentView = 'home';
     render();
   });
+
+  const resetApexBtn = document.getElementById('reset-apex-btn');
+  if (resetApexBtn) {
+    resetApexBtn.addEventListener('click', () => {
+      pyramidFocusUserId = null;
+      render();
+    });
+  }
 
   // Adding simulated user profile open logic
   const profileModal = document.getElementById('profile-modal');
@@ -585,6 +654,17 @@ const renderPyramidView = (container, contextInfo) => {
         vBtn.onclick = () => {
           voteAction(node, contextInfo.id);
           profileModal.classList.remove('active');
+        };
+      }
+
+      // Make Top Button Focus
+      const pmMakeTopBtn = document.getElementById('pm-make-top-btn');
+      if (pmMakeTopBtn) {
+        pmMakeTopBtn.onclick = () => {
+          pyramidFocusUserId = userId;
+          forceScrollReset = true;
+          profileModal.classList.remove('active');
+          setTimeout(() => render(), 200);
         };
       }
 
@@ -707,6 +787,63 @@ const renderRegisterView = (container) => {
   });
 };
 
+const renderSuggestView = (container) => {
+  const t = i18n[currentLang];
+  container.innerHTML = `
+    <div class="view-container" style="max-width: 500px; margin: 40px auto; width: 100%;">
+      <div class="pyramid-header" style="justify-content: center; margin-bottom: 30px; position:relative;">
+        <button class="back-btn" id="suggest-back-btn" style="position:absolute; left:0;"><i class="ph ph-arrow-left"></i></button>
+        <div class="pyramid-context-title">Suggest a Category</div>
+      </div>
+      
+      <div class="modal-content" style="transform: none; position: relative; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+         <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:20px;">Have an idea for a new Pyramid context? Submit it here for Admin review!</p>
+         
+         <div class="form-group">
+           <label>Category Title (English)</label>
+           <input type="text" class="form-input" id="suggest-title" placeholder="e.g. Best Sci-Fi Writer">
+         </div>
+         
+         <div class="form-group">
+           <label>Parent Category (Optional)</label>
+           <select class="form-input" id="suggest-parent" style="background:var(--bg-dark); color:var(--text-primary); border: 1px solid var(--border-light);">
+             <option value="">-- None (Top Level) --</option>
+             ${contexts.filter(c => !c.parentId).map(c => `<option value="${c.id}">${c.titles.en}</option>`).join('')}
+           </select>
+         </div>
+         
+         <button class="btn-primary" id="submit-suggest-btn" style="margin-top:10px;">Submit Suggestion</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('suggest-back-btn').addEventListener('click', () => { currentView = 'home'; render(); });
+
+  document.getElementById('submit-suggest-btn').addEventListener('click', async () => {
+    const title = document.getElementById('suggest-title').value.trim();
+    const parentId = document.getElementById('suggest-parent').value;
+    if (!title) return showToast('Please enter a title', 'ph-warning');
+
+    const sugId = 'sug_' + Date.now();
+    try {
+      await setDoc(doc(db, 'category_recommendations', sugId), {
+        id: sugId,
+        titleEn: title,
+        parentId: parentId || null,
+        suggestedBy: loggedInUser.name,
+        status: 'pending',
+        createdAt: new Date().toISOString()
+      });
+      showToast('Suggestion submitted for review!', 'ph-check-circle');
+      currentView = 'home';
+      render();
+    } catch (e) {
+      console.error(e);
+      showToast('Error submitting suggestion', 'ph-warning');
+    }
+  });
+};
+
 let editingContextId = null;
 
 const renderAdminView = (container) => {
@@ -752,6 +889,14 @@ const renderAdminView = (container) => {
             </div>
 
             <div class="form-group">
+              <label>Parent Category (Optional Subfamily)</label>
+              <select class="form-input" id="new-ctx-parent" style="background:var(--bg-dark); color:var(--text-primary); border: 1px solid var(--border-light);">
+                <option value="">-- None (Top Level) --</option>
+                ${contexts.filter(c => c.id !== editingContextId && !c.parentId).map(c => `<option value="${c.id}">${c.titles.en}</option>`).join('')}
+              </select>
+            </div>
+            
+            <div class="form-group">
               <label>Image URL (Optional)</label>
               <input type="text" class="form-input" id="new-ctx-image" placeholder="https://example.com/image.jpg">
             </div>
@@ -772,6 +917,20 @@ const renderAdminView = (container) => {
        <div class="modal-content" style="transform: none; position: relative; width: 100%; max-width: 100%; padding:20px; max-height: 80vh; overflow-y:auto;">
            <h3 style="margin-bottom: 20px; font-family: var(--font-display);">Active Contexts (${contexts.length})</h3>
            ${contextsListHTML}
+           
+           <div style="margin-top: 40px; border-top: 1px solid var(--border-light); padding-top:20px;">
+              <h3 style="margin-bottom: 20px; font-family: var(--font-display); color: var(--accent-cyan);">Pending Suggestions (${suggestions.filter(s => s.status === 'pending').length})</h3>
+              ${suggestions.filter(s => s.status === 'pending').map(s => `
+                <div style="background:rgba(212, 175, 55, 0.05); padding:12px; border:1px solid rgba(212, 175, 55, 0.2); border-radius:6px; margin-bottom:8px;">
+                  <div style="font-weight:600; font-size:0.95rem;">${s.titleEn}</div>
+                  <div style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:8px;">Suggested by: ${s.suggestedBy} ${s.parentId ? `| Parent: ${s.parentId}` : ''}</div>
+                  <div style="display:flex; gap:8px;">
+                    <button class="btn-approve-sug" data-id="${s.id}" style="background:var(--accent-cyan); color:var(--bg-dark); border:none; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer; font-weight:600;">Approve</button>
+                    <button class="btn-reject-sug" data-id="${s.id}" style="background:transparent; color:#ff4444; border:1px solid #ff4444; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;">Reject</button>
+                  </div>
+                </div>
+              `).join('')}
+           </div>
        </div>
     </div>
   `;
@@ -798,6 +957,7 @@ const renderAdminView = (container) => {
 
     const ctxData = {
       id,
+      parentId: document.getElementById('new-ctx-parent').value.trim() || null,
       icon: document.getElementById('new-ctx-icon').value.trim() || 'ph-star',
       imageUrl: document.getElementById('new-ctx-image').value.trim() || '',
       titles: {
@@ -838,6 +998,7 @@ const renderAdminView = (container) => {
         // Populate inputs
         setTimeout(() => {
           document.getElementById('new-ctx-id').value = ctx.id;
+          document.getElementById('new-ctx-parent').value = ctx.parentId || '';
           document.getElementById('new-ctx-icon').value = ctx.icon || '';
           document.getElementById('new-ctx-image').value = ctx.imageUrl || '';
           document.getElementById('new-ctx-en').value = ctx.titles.en || '';
@@ -853,15 +1014,62 @@ const renderAdminView = (container) => {
   document.querySelectorAll('.btn-del-ctx').forEach(btn => {
     btn.addEventListener('click', async () => {
       const id = btn.getAttribute('data-id');
-      if (confirm('Are you sure you want to delete this context? This cannot be undone.')) {
+      if (confirm('Are you sure you want to delete this context?')) {
         try {
           await deleteDoc(doc(db, 'base_contexts', id));
-          showToast('Context deleted.', 'ph-trash');
-          setTimeout(() => renderAdminView(container), 200);
+          showToast('Context deleted', 'ph-trash');
         } catch (e) {
-          showToast('Error deleting context.', 'ph-warning');
+          console.error(e);
+          showToast('Failed to delete', 'ph-warning');
         }
       }
+    });
+  });
+
+  // Handle Suggestions Admin Actions
+  document.querySelectorAll('.btn-approve-sug').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const sugId = btn.getAttribute('data-id');
+      const sug = suggestions.find(s => s.id === sugId);
+      if (!sug) return;
+
+      const newCtxId = 'ctx_' + Date.now();
+      const ctxData = {
+        id: newCtxId,
+        icon: 'ph-star',
+        imageUrl: '',
+        parentId: sug.parentId,
+        participants: 0,
+        createdAt: new Date().toISOString(),
+        titles: {
+          en: sug.titleEn,
+          es: sug.titleEn,
+          fr: sug.titleEn,
+          de: sug.titleEn
+        }
+      };
+
+      try {
+        await setDoc(doc(db, 'base_contexts', newCtxId), ctxData);
+        await setDoc(doc(db, 'category_recommendations', sugId), { status: 'approved', approvedContextId: newCtxId }, { merge: true });
+
+        await setDoc(doc(db, 'notifications', `notif_${Date.now()}`), {
+          id: `notif_${Date.now()}`,
+          targetUser: sug.suggestedBy,
+          message: `Your category suggestion "${sug.titleEn}" was approved!`,
+          read: false,
+          createdAt: new Date().toISOString()
+        });
+        showToast('Suggestion Approved!', 'ph-check-circle');
+      } catch (e) { console.error(e); }
+    });
+  });
+
+  document.querySelectorAll('.btn-reject-sug').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const sugId = btn.getAttribute('data-id');
+      await setDoc(doc(db, 'category_recommendations', sugId), { status: 'rejected' }, { merge: true });
+      showToast('Suggestion Rejected.', 'ph-trash');
     });
   });
 };
@@ -932,21 +1140,47 @@ const attachGlobalEvents = () => {
   }
 
   // Sidebar logic
-  document.querySelectorAll('.sidebar-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const target = item.getAttribute('data-target');
+  document.body.addEventListener('click', (e) => {
+    // Sidebar Item click logic handled via global delegation
+    const sidebarItem = e.target.closest('.sidebar-item');
+    if (sidebarItem) {
+      const target = sidebarItem.getAttribute('data-target');
       if (currentView !== target) {
         currentView = target;
         render();
       }
-    });
+    }
+
+    // Suggest & Notification handlers
+    const sugBtn = e.target.closest('#suggest-cat-btn');
+    if (sugBtn) {
+      currentView = 'suggest';
+      render();
+    }
+
+    const notifBtn = e.target.closest('#notif-btn');
+    if (notifBtn && loggedInUser) {
+      const unread = notifications.filter(n => n.targetUser === loggedInUser.name && !n.read);
+      if (unread.length > 0) {
+        unread.forEach(async (n) => {
+          showToast(n.message, 'ph-bell-ringing');
+          try {
+            await setDoc(doc(db, 'notifications', n.id), { read: true }, { merge: true });
+          } catch (e) { console.warn(e); }
+        });
+      } else {
+        showToast('No new notifications', 'ph-bell');
+      }
+    }
   });
 
   const profileBtn = document.getElementById('profile-btn');
-  if (profileBtn && !loggedInUser) {
+  if (profileBtn) {
     profileBtn.addEventListener('click', () => {
-      currentView = 'register';
-      render();
+      if (!loggedInUser) {
+        currentView = 'register';
+        render();
+      }
     });
   }
 

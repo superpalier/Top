@@ -190,7 +190,7 @@ header {
 .avatar {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: 8px;
   background: #1e1e24;
   border: 2px solid var(--accent-magenta);
   /* Crimson border for user */
@@ -570,7 +570,7 @@ main {
   width: var(--node-size);
   height: var(--node-size);
   background: var(--bg-card);
-  border-radius: 50%;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -579,6 +579,33 @@ main {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0, 0, 0, 0.4);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
+}
+
+.node-rank {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(10, 10, 12, 0.85);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 3px 6px;
+  border-bottom-right-radius: 6px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 5;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+.tier-0 .node-rank {
+  background: var(--accent-cyan);
+  color: var(--bg-dark);
+  font-size: 0.95rem;
+  padding: 4px 8px;
+  border-color: var(--accent-cyan);
 }
 
 .user-node img {
@@ -792,7 +819,7 @@ main {
 .profile-card-avatar {
   width: 180px;
   height: 180px;
-  border-radius: 50%;
+  border-radius: 12px;
   border: 4px solid var(--bg-dark);
   position: absolute;
   bottom: -90px;
