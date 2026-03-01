@@ -523,9 +523,10 @@ const renderPyramidView = (container, contextInfo) => {
     const zIndex = 50 - tIndex; // Higher tiers are visually "above"
 
     // Scale node sizes descending from Tier 0 to Tier 9
-    // Apex is 96px, bottom is 46px
-    const sizeScale = [96, 88, 82, 76, 70, 64, 58, 54, 50, 46];
-    const nodeSize = sizeScale[tIndex] || 46;
+    // Apex is much larger (110px), bottom is standard size (56px)
+    // Decrement gradually so the 1-10 pyramid remains connected
+    const sizeScale = [110, 100, 92, 85, 78, 72, 66, 61, 58, 56];
+    const nodeSize = sizeScale[tIndex] || 56;
 
     const usersHTML = tier.map(user => `
       <div class="user-node ${hasVoted && hasVoted === user.id ? 'voted' : ''}" 

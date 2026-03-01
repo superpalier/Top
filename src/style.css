@@ -497,12 +497,12 @@ main {
 .pyramid-tier {
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-wrap: nowrap;
   /* Strictly enforce one row per tier */
-  gap: 16px;
-  margin-top: -4px;
-  /* Less overlap makes the pyramid taller */
-  /* Overlap tiers slightly */
+  gap: 12px;
+  margin-top: -16px;
+  /* Aggressive overlap makes the scaled size pyramid look cohesive and taller */
   position: relative;
   z-index: var(--z-index);
   transform-style: preserve-3d;
