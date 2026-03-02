@@ -50,7 +50,7 @@ const i18n = {
     titleEnInput: 'Category Title (English)',
     parentOptional: 'Parent Category (Optional)',
     submitSug: 'Submit Suggestion',
-    makeApex: 'Make Apex',
+    makeApex: 'View as Top',
     voteHistory: 'Voting History',
     activeVote: 'Active',
     expiredVote: 'Expired'
@@ -99,7 +99,7 @@ const i18n = {
     titleEnInput: 'Título (Inglés)',
     parentOptional: 'Categoría Padre (Opcional)',
     submitSug: 'Enviar Sugerencia',
-    makeApex: 'Top de Pirámide',
+    makeApex: 'Ver como Top',
     voteHistory: 'Historial de Votos',
     activeVote: 'Activo',
     expiredVote: 'Expirado'
@@ -204,18 +204,73 @@ const i18n = {
   }
 };
 
-// Dynamically Generate 1000 Contexts
-const baseIcons = ['ph-code', 'ph-lightbulb', 'ph-palette', 'ph-users-three', 'ph-smiley', 'ph-briefcase', 'ph-star', 'ph-rocket-launch', 'ph-planet', 'ph-cpu', 'ph-leaf', 'ph-drop'];
-const defaultContextNames = [
-  { en: 'Top Developer', es: 'Mejor Desarrollador', fr: 'Meilleur Développeur', de: 'Top-Entwickler' },
-  { en: 'Most Innovative', es: 'Más Innovador', fr: 'Plus Innovant', de: 'Am innovativsten' },
-  { en: 'Design Guru', es: 'Gurú del Diseño', fr: 'Gourou du Design', de: 'Design-Guru' },
-  { en: 'Community Leader', es: 'Líder Comunitario', fr: 'Leader Communautaire', de: 'Community-Leader' },
-  { en: 'Funniest Member', es: 'El Más Divertido', fr: 'Membre le plus Drôle', de: 'Lustigstes Mitglied' },
-  { en: 'Best Manager', es: 'Mejor Gerente', fr: 'Meilleur Manager', de: 'Bester Manager' },
-  { en: 'Rising Star', es: 'Estrella en Ascenso', fr: 'Étoile Montante', de: 'Aufgehender Stern' },
-  { en: 'Tech Visionary', es: 'Visionario Tech', fr: 'Visionnaire Tech', de: 'Tech-Visionär' }
-];
+// Developer Seeding Tool
+const seedDatabase = async () => {
+  const seedData = [
+    // PARENT CATEGORIES
+    {
+      id: 'tech_parent', parentId: null, icon: 'ph-cpu', participants: 153, createdAt: new Date().toISOString(),
+      imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop',
+      titles: { en: 'Technology', es: 'Tecnología', fr: 'Technologie', de: 'Technologie' }
+    },
+    {
+      id: 'biz_parent', parentId: null, icon: 'ph-briefcase', participants: 153, createdAt: new Date().toISOString(),
+      imageUrl: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop',
+      titles: { en: 'Business', es: 'Negocios', fr: 'Entreprise', de: 'Geschäft' }
+    },
+    {
+      id: 'creative_parent', parentId: null, icon: 'ph-palette', participants: 153, createdAt: new Date().toISOString(),
+      imageUrl: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=2071&auto=format&fit=crop',
+      titles: { en: 'Creative & Art', es: 'Creatividad y Arte', fr: 'Créatif et Art', de: 'Kreativität & Kunst' }
+    },
+
+    // TECH CHILDREN
+    {
+      id: 'top_dev', parentId: 'tech_parent', icon: 'ph-code', participants: 153, createdAt: new Date().toISOString(),
+      imageUrl: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop',
+      titles: { en: 'Top Developer', es: 'Mejor Desarrollador', fr: 'Meilleur Développeur', de: 'Top-Entwickler' }
+    },
+    {
+      id: 'ninja_back', parentId: 'tech_parent', icon: 'ph-database', participants: 153, createdAt: new Date().toISOString(),
+      imageUrl: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=2034&auto=format&fit=crop',
+      titles: { en: 'Backend Ninja', es: 'Ninja Backend', fr: 'Ninja Backend', de: 'Backend-Ninja' }
+    },
+    {
+      id: 'ai_expl', parentId: 'tech_parent', icon: 'ph-robot', participants: 153, createdAt: new Date().toISOString(),
+      imageUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1932&auto=format&fit=crop',
+      titles: { en: 'AI Explorer', es: 'Explorador IA', fr: 'Explorateur IA', de: 'KI-Forscher' }
+    },
+
+    // BUSINESS CHILDREN
+    {
+      id: 'master_strat', parentId: 'biz_parent', icon: 'ph-chess-knight', participants: 153, createdAt: new Date().toISOString(),
+      imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop',
+      titles: { en: 'Master Strategist', es: 'Estratega Maestro', fr: 'Maître Stratège', de: 'Meisterstratege' }
+    },
+    {
+      id: 'sales_crush', parentId: 'biz_parent', icon: 'ph-chart-line-up', participants: 153, createdAt: new Date().toISOString(),
+      imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1932&auto=format&fit=crop',
+      titles: { en: 'Sales Crusher', es: 'Triturador de Ventas', fr: 'Broyeur de Ventes', de: 'Verkaufscrusher' }
+    },
+
+    // CREATIVE CHILDREN
+    {
+      id: 'design_arch', parentId: 'creative_parent', icon: 'ph-pen-nib', participants: 153, createdAt: new Date().toISOString(),
+      imageUrl: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=2000&auto=format&fit=crop',
+      titles: { en: 'Design Architect', es: 'Arquitecto de Diseño', fr: 'Architecte en Design', de: 'Design-Architekt' }
+    },
+    {
+      id: 'mago_front', parentId: 'creative_parent', icon: 'ph-magic-wand', participants: 153, createdAt: new Date().toISOString(),
+      imageUrl: 'https://images.unsplash.com/photo-1550439062-609e1531270e?q=80&w=2070&auto=format&fit=crop',
+      titles: { en: 'Frontend Wizard', es: 'Mago Frontend', fr: 'Sorcier Frontend', de: 'Frontend-Zauberer' }
+    }
+  ];
+
+  for (const item of seedData) {
+    await setDoc(doc(db, 'base_contexts', item.id), item, { merge: true });
+  }
+  showToast('Database Seeded Successfully with Hierarchies!', 'ph-check-circle');
+};
 
 let contexts = [];
 
@@ -343,11 +398,11 @@ const generatePyramidData = (contextId) => {
   });
 
   // Handle Dynamic Focus and Pagination
-  // We take exactly 55 users starting from the current pyramidOffsetIndex
-  let visibleUsers = usersWithVotes.slice(pyramidOffsetIndex, pyramidOffsetIndex + 55);
+  // We take exactly 153 users starting from the current pyramidOffsetIndex
+  let visibleUsers = usersWithVotes.slice(pyramidOffsetIndex, pyramidOffsetIndex + 153);
 
-  // Group into exactly 10 visible tiers (1 + 2 + 3 + ... + 10 = 55)
-  const tiersCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  // Group into exactly 17 visible tiers (1 + 2 + ... + 17 = 153)
+  const tiersCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
   const data = [];
   let userIndex = 0;
 
@@ -556,13 +611,39 @@ const renderHomeView = (container) => {
   // Filter based on search
   const filteredContexts = contexts.filter(ctx => ctx.titles[currentLang].toLowerCase().includes(searchQuery.toLowerCase()));
 
-  let contextHTML = filteredContexts.length === 0 ? `<div style="color:var(--text-secondary); padding: 20px;">No contexts found.</div>` : filteredContexts.map(ctx => `
-    <div class="context-card" data-id="${ctx.id}" ${ctx.imageUrl ? `style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(10,0,15,0.9)), url('${ctx.imageUrl}'); background-size: cover; background-position: center;"` : ''}>
-      <i class="${ctx.icon} context-icon"></i>
-      <div class="context-title">${ctx.titles[currentLang]}</div>
-      <div class="context-stats"><i class="ph ph-users"></i> ${ctx.participants} ${t.users}</div>
-    </div>
-  `).join('');
+  // Group by Parent Hierarchy
+  const parents = filteredContexts.filter(c => !c.parentId);
+
+  let contextHTML = '';
+  if (parents.length === 0) {
+    contextHTML = `<div style="color:var(--text-secondary); padding: 20px;">No contexts found.</div>`;
+  } else {
+    parents.forEach(p => {
+      const children = filteredContexts.filter(c => c.parentId === p.id);
+
+      contextHTML += `
+        <div class="hierarchy-group" style="margin-bottom: 40px;">
+          <h3 style="font-family: var(--font-display); color: var(--accent-gold); margin-bottom: 15px; display:flex; align-items:center; gap:8px; font-size: 1.4rem;">
+            <i class="${p.icon}"></i> ${p.titles[currentLang]}
+          </h3>
+          <div class="context-grid">
+            <div class="context-card main-parent-card" data-id="${p.id}" ${p.imageUrl ? `style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(10,0,15,0.95)), url('${p.imageUrl}'); background-size: cover; background-position: center;"` : ''}>
+               <i class="${p.icon} context-icon" style="opacity: 0.5;"></i>
+               <div class="context-title" style="font-size: 1.5rem;">${p.titles[currentLang]} (Principal)</div>
+               <div class="context-stats"><i class="ph ph-users"></i> ${p.participants} ${t.users}</div>
+            </div>
+            ${children.map(ctx => `
+              <div class="context-card child-card" data-id="${ctx.id}" ${ctx.imageUrl ? `style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(10,0,15,0.95)), url('${ctx.imageUrl}'); background-size: cover; background-position: center; min-height: 120px;"` : 'style="min-height: 120px;"'}>
+                <i class="${ctx.icon} context-icon" style="font-size: 1.5rem;"></i>
+                <div class="context-title" style="font-size: 1.1rem;">${ctx.titles[currentLang]}</div>
+                <div class="context-stats"><i class="ph ph-users"></i> ${ctx.participants} ${t.users}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    });
+  }
 
   // Generate Voting History HTML if user is logged in
   let historyHTML = '';
@@ -633,7 +714,7 @@ const renderHomeView = (container) => {
       </div>
       
       <h2 class="section-title">${t.trendingContexts}</h2>
-      <div class="context-grid">
+      <div class="hierarchy-container">
         ${contextHTML}
       </div>
       
@@ -674,6 +755,10 @@ const renderPyramidView = (container, contextInfo) => {
            data-voted-text="&#x2713; ${t.voted}">
         <div class="node-rank">#${user.rank}</div>
         <img src="${user.img}" alt="${user.name}">
+        <div class="node-overlay">
+          <div class="node-name" style="font-size: 0.65rem; font-weight: 700; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); line-height: 1.1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; text-align: center;">${user.name}</div>
+          <div class="node-votes" style="font-size: 0.55rem; font-weight: 600; color: var(--accent-gold); display: flex; align-items: center; gap: 2px;"><i class="ph-fill ph-star"></i> ${user.votes}</div>
+        </div>
       </div>
     `).join('');
 
@@ -975,13 +1060,19 @@ const renderRegisterView = (container) => {
   `;
 
   document.getElementById('back-home-btn').addEventListener('click', () => { currentView = 'home'; render(); });
-  document.getElementById('signup-btn').addEventListener('click', () => {
+
+  const handleSignup = () => {
     const val = document.getElementById('username-input').value.trim();
     if (val) {
       loggedInUser = { name: val, role: val.toLowerCase() === 'admin' ? 'admin' : 'user' };
       currentView = 'home';
       render();
     }
+  };
+
+  document.getElementById('signup-btn').addEventListener('click', handleSignup);
+  document.getElementById('username-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') handleSignup();
   });
 };
 
@@ -1109,6 +1200,7 @@ const renderAdminView = (container) => {
             <button class="btn-primary" id="save-ctx-btn" style="margin-top: 10px; padding:10px;">${editingContextId ? 'Update Context' : t.createContext}</button>
             ${editingContextId ? '<button class="btn-secondary" id="cancel-edit-btn" style="padding:10px;">Cancel Edit</button>' : ''}
           </div>
+          <button id="dev-seed-btn" class="btn-outline-gold" style="margin-top: 40px; border-color: red; color: red;">[DEV] Seed Categories & Hierarchy</button>
        </div>
 
        <!-- Right side: List -->
@@ -1147,6 +1239,10 @@ const renderAdminView = (container) => {
       renderAdminView(container);
     });
   }
+
+  // Dev Seeder
+  const seedBtn = document.getElementById('dev-seed-btn');
+  if (seedBtn) seedBtn.addEventListener('click', seedDatabase);
 
   // Handle Save (Create/Update)
   document.getElementById('save-ctx-btn').addEventListener('click', async () => {

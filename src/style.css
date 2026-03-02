@@ -39,10 +39,149 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
-  /* Removed heavy radial gradients, using pure dark background with extremely subtle gold/crimson glow */
+}
+
+/* --- Atmospheric Animated Background --- */
+.ambient-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--bg-dark);
+  pointer-events: none;
+}
+
+/* Base glowing orbs */
+.ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.85;
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+
+/* Deep Crimson / Gold */
+.glow-1 {
+  width: 80vw;
+  height: 80vh;
+  background: radial-gradient(circle, rgba(139, 0, 0, 0.65) 0%, transparent 70%);
+  top: -20%;
+  left: -20%;
+  animation: float1 12s ease-in-out infinite alternate;
+}
+
+/* Obsidian Violet / Magenta */
+.glow-2 {
+  width: 90vw;
+  height: 90vh;
+  background: radial-gradient(circle, rgba(169, 17, 1, 0.55) 0%, transparent 75%);
+  bottom: -30%;
+  right: -20%;
+  animation: float2 15s ease-in-out infinite alternate-reverse;
+}
+
+/* Apex Gold Focus */
+.glow-3 {
+  width: 60vw;
+  height: 60vh;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.5) 0%, transparent 70%);
+  top: 40%;
+  left: 30%;
+  animation: float3 18s ease-in-out infinite alternate;
+}
+
+@keyframes float1 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(10vw, 5vh) scale(1.1);
+  }
+
+  100% {
+    transform: translate(-5vw, 15vh) scale(0.9);
+  }
+}
+
+@keyframes float2 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(-10vw, -15vh) scale(1.05);
+  }
+
+  100% {
+    transform: translate(5vw, -5vh) scale(1);
+  }
+}
+
+@keyframes float3 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(15vw, -10vh) scale(1.2);
+  }
+
+  100% {
+    transform: translate(-10vw, -15vh) scale(0.9);
+  }
+}
+
+/* Geo-Tech Lines & Grids */
+.ambient-grid {
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
   background-image:
-    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.05), transparent 30%),
-    radial-gradient(circle at 10% 90%, rgba(139, 0, 0, 0.05), transparent 20%);
+    linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  transform: perspective(500px) rotateX(60deg) translateY(0);
+  animation: gridMove 8s linear infinite;
+  opacity: 0.6;
+  mask-image: linear-gradient(to top, transparent, black 80%);
+  -webkit-mask-image: linear-gradient(to top, transparent, black 80%);
+}
+
+.ambient-lines {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: repeating-linear-gradient(45deg,
+      transparent,
+      transparent 100px,
+      rgba(169, 17, 1, 0.05) 100px,
+      rgba(169, 17, 1, 0.05) 102px);
+  animation: linePan 12s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes gridMove {
+  0% {
+    transform: perspective(500px) rotateX(60deg) translateY(0);
+  }
+
+  100% {
+    transform: perspective(500px) rotateX(60deg) translateY(60px);
+  }
+}
+
+@keyframes linePan {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 200px 200px;
+  }
 }
 
 /* Globally Hide Scrollbars for App-like feel */
@@ -82,7 +221,20 @@ header {
   /* Subtle gold line */
   background: rgba(10, 10, 12, 0.95);
   /* Obsidian glass */
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.child-card .context-icon {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  color: var(--accent-magenta);
+}
+
+.main-parent-card {
+  grid-column: 1 / -1;
+  min-height: 180px;
+  border: 1px solid var(--accent-gold);
+  margin-bottom: 15px;
 }
 
 .logo {
@@ -323,10 +475,21 @@ main {
 }
 
 /* Context Cards Grid */
+
+/* --- Hierarchy Groups --- */
+.hierarchy-group {
+  margin-bottom: 50px;
+  background: rgba(10, 0, 15, 0.4);
+  backdrop-filter: blur(10px);
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 .context-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
 }
 
 .context-card {
@@ -465,8 +628,8 @@ main {
   background: transparent;
   border-radius: 12px;
   /* Soft fade at the edges of the viewport to imply more content */
-  mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent),
-    linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 5%, black 95%, transparent),
+    linear-gradient(to right, transparent, black 5%, black 95%, transparent);
   -webkit-mask-image: linear-gradient(to bottom, transparent, black 5%, black 95%, transparent),
     linear-gradient(to right, transparent, black 5%, black 95%, transparent);
   -webkit-mask-composite: source-in;
@@ -485,13 +648,16 @@ main {
   height: max-content;
   /* Allow it to grow vertically infinitely */
   min-height: 100%;
-  padding: 80px 100px;
+  padding: 60px 20px 100px 20px;
   /* Space around the edges to pan into */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
   perspective: 1000px;
+  gap: var(--tier-gap);
+  cursor: grab;
+  /* Allow natural scrolling instead of forcing absolute center positioning */
 }
 
 .pyramid-tier {
@@ -501,7 +667,6 @@ main {
   flex-wrap: nowrap;
   /* Strictly enforce one row per tier */
   gap: 12px;
-  margin-top: 12px;
   /* Even vertical spacing, no more overlapping */
   position: relative;
   z-index: var(--z-index);
@@ -605,6 +770,21 @@ main {
   font-size: 0.95rem;
   padding: 4px 8px;
   border-color: var(--accent-cyan);
+}
+
+.node-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 40%, transparent 100%);
+  padding: 16px 4px 4px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  pointer-events: none;
+  z-index: 5;
 }
 
 .user-node img {
