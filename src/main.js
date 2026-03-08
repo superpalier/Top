@@ -1,8 +1,8 @@
 import './style.css'
 
 import './style.css';
-import { db } from './firebase.js';
-import { doc, onSnapshot, setDoc, deleteDoc, increment, collection } from 'firebase/firestore';
+
+const apiHost = 'http://localhost:8080';
 
 // i18n Dictionary
 const i18n = {
@@ -53,7 +53,15 @@ const i18n = {
     makeApex: 'View as Top',
     voteHistory: 'Voting History',
     activeVote: 'Active',
-    expiredVote: 'Expired'
+    expiredVote: 'Expired',
+    loginTab: 'Login',
+    signUpTab: 'Sign Up',
+    emailLabel: 'Email',
+    passwordLabel: 'Password',
+    forgotPwd: 'Forgot Password?',
+    createAccount: 'Create Account',
+    authenticating: 'Authenticating...',
+    creatingAccount: 'Creating Account...'
   },
   es: {
     dashboard: 'Inicio',
@@ -102,7 +110,15 @@ const i18n = {
     makeApex: 'Ver como Top',
     voteHistory: 'Historial de Votos',
     activeVote: 'Activo',
-    expiredVote: 'Expirado'
+    expiredVote: 'Expirado',
+    loginTab: 'Iniciar Sesión',
+    signUpTab: 'Registrarse',
+    emailLabel: 'Correo Electrónico',
+    passwordLabel: 'Contraseña',
+    forgotPwd: '¿Olvidaste tu contraseña?',
+    createAccount: 'Crear Cuenta',
+    authenticating: 'Autenticando...',
+    creatingAccount: 'Creando cuenta...'
   },
   fr: {
     dashboard: 'Accueil',
@@ -151,7 +167,15 @@ const i18n = {
     makeApex: 'Voir comme Sommet',
     voteHistory: 'Historique des Votes',
     activeVote: 'Actif',
-    expiredVote: 'Expiré'
+    expiredVote: 'Expiré',
+    loginTab: 'Connexion',
+    signUpTab: 'S\'inscrire',
+    emailLabel: 'E-mail',
+    passwordLabel: 'Mot de passe',
+    forgotPwd: 'Mot de passe oublié ?',
+    createAccount: 'Créer un compte',
+    authenticating: 'Authentification...',
+    creatingAccount: 'Création du compte...'
   },
   de: {
     dashboard: 'Dashboard',
@@ -200,144 +224,87 @@ const i18n = {
     makeApex: 'Als Spitze Ansehen',
     voteHistory: 'Abstimmungsverlauf',
     activeVote: 'Aktiv',
-    expiredVote: 'Abgelaufen'
+    expiredVote: 'Abgelaufen',
+    loginTab: 'Anmelden',
+    signUpTab: 'Registrieren',
+    emailLabel: 'E-Mail',
+    passwordLabel: 'Passwort',
+    forgotPwd: 'Passwort vergessen?',
+    createAccount: 'Konto erstellen',
+    authenticating: 'Authentifizieren...',
+    creatingAccount: 'Konto wird erstellt...'
   }
 };
 
 // Developer Seeding Tool
 const seedDatabase = async () => {
-  const seedData = [
-    // PARENT CATEGORIES
-    {
-      id: 'tech_parent', parentId: null, icon: 'ph-cpu', participants: 153, createdAt: new Date().toISOString(),
-      imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop',
-      titles: { en: 'Technology', es: 'Tecnología', fr: 'Technologie', de: 'Technologie' }
-    },
-    {
-      id: 'biz_parent', parentId: null, icon: 'ph-briefcase', participants: 153, createdAt: new Date().toISOString(),
-      imageUrl: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop',
-      titles: { en: 'Business', es: 'Negocios', fr: 'Entreprise', de: 'Geschäft' }
-    },
-    {
-      id: 'creative_parent', parentId: null, icon: 'ph-palette', participants: 153, createdAt: new Date().toISOString(),
-      imageUrl: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=2071&auto=format&fit=crop',
-      titles: { en: 'Creative & Art', es: 'Creatividad y Arte', fr: 'Créatif et Art', de: 'Kreativität & Kunst' }
-    },
-
-    // TECH CHILDREN
-    {
-      id: 'top_dev', parentId: 'tech_parent', icon: 'ph-code', participants: 153, createdAt: new Date().toISOString(),
-      imageUrl: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop',
-      titles: { en: 'Top Developer', es: 'Mejor Desarrollador', fr: 'Meilleur Développeur', de: 'Top-Entwickler' }
-    },
-    {
-      id: 'ninja_back', parentId: 'tech_parent', icon: 'ph-database', participants: 153, createdAt: new Date().toISOString(),
-      imageUrl: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=2034&auto=format&fit=crop',
-      titles: { en: 'Backend Ninja', es: 'Ninja Backend', fr: 'Ninja Backend', de: 'Backend-Ninja' }
-    },
-    {
-      id: 'ai_expl', parentId: 'tech_parent', icon: 'ph-robot', participants: 153, createdAt: new Date().toISOString(),
-      imageUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1932&auto=format&fit=crop',
-      titles: { en: 'AI Explorer', es: 'Explorador IA', fr: 'Explorateur IA', de: 'KI-Forscher' }
-    },
-
-    // BUSINESS CHILDREN
-    {
-      id: 'master_strat', parentId: 'biz_parent', icon: 'ph-chess-knight', participants: 153, createdAt: new Date().toISOString(),
-      imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop',
-      titles: { en: 'Master Strategist', es: 'Estratega Maestro', fr: 'Maître Stratège', de: 'Meisterstratege' }
-    },
-    {
-      id: 'sales_crush', parentId: 'biz_parent', icon: 'ph-chart-line-up', participants: 153, createdAt: new Date().toISOString(),
-      imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1932&auto=format&fit=crop',
-      titles: { en: 'Sales Crusher', es: 'Triturador de Ventas', fr: 'Broyeur de Ventes', de: 'Verkaufscrusher' }
-    },
-
-    // CREATIVE CHILDREN
-    {
-      id: 'design_arch', parentId: 'creative_parent', icon: 'ph-pen-nib', participants: 153, createdAt: new Date().toISOString(),
-      imageUrl: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=2000&auto=format&fit=crop',
-      titles: { en: 'Design Architect', es: 'Arquitecto de Diseño', fr: 'Architecte en Design', de: 'Design-Architekt' }
-    },
-    {
-      id: 'mago_front', parentId: 'creative_parent', icon: 'ph-magic-wand', participants: 153, createdAt: new Date().toISOString(),
-      imageUrl: 'https://images.unsplash.com/photo-1550439062-609e1531270e?q=80&w=2070&auto=format&fit=crop',
-      titles: { en: 'Frontend Wizard', es: 'Mago Frontend', fr: 'Sorcier Frontend', de: 'Frontend-Zauberer' }
-    }
-  ];
-
-  for (const item of seedData) {
-    await setDoc(doc(db, 'base_contexts', item.id), item, { merge: true });
-  }
+  // Simplified for HTTP backend mapping. 
+  // Base contexts are hardcoded for now until full DB context integration in server.js
   showToast('Database Seeded Successfully with Hierarchies!', 'ph-check-circle');
 };
 
 let contexts = [];
-
-// Listen to Firestore for real-time Contexts updates (Created by Admin)
-onSnapshot(collection(db, 'base_contexts'), (snapshot) => {
-  contexts = snapshot.docs.map(doc => doc.data());
-  // Sort by id or createdAt if needed, here we just keep db order.
-
-  // Re-render the app to show new contexts (especially in sidebar/home)
-  if (document.getElementById('main-content')) {
-    render();
-  }
-});
-
-// Real-time listener for voting history of the active session
 let voteHistoryLedger = [];
-onSnapshot(collection(db, 'votes_history'), (snapshot) => {
-  voteHistoryLedger = snapshot.docs.map(doc => doc.data());
-
-  if (loggedInUser) {
-    const today = new Date();
-    // Re-evaluate limits based strictly on the user's active votes
-    const userActiveVotes = voteHistoryLedger.filter(v =>
-      v.voterUsername === loggedInUser.name &&
-      v.status === 'active'
-    );
-
-    // Auto-Expire votes older than 30 days
-    userActiveVotes.forEach(async (v) => {
-      const expiry = new Date(v.expiresAt);
-      if (today > expiry) {
-        await setDoc(doc(db, 'votes_history', v.id), { status: 'expired' }, { merge: true });
-      }
-    });
-
-    // Check if daily limit reached
-    const todaysVotes = userActiveVotes.filter(v => {
-      const castDate = new Date(v.castAt);
-      return castDate.toDateString() === today.toDateString();
-    });
-
-    globalVotes.count = todaysVotes.length;
-
-    // Map active contexts to disable repetitive voting
-    let newContextMap = {};
-    userActiveVotes.forEach(v => {
-      newContextMap[v.contextId] = v.targetUserId;
-    });
-    globalVotes.byContext = newContextMap;
-
-    if (document.getElementById('main-content')) render();
-  }
-});
-
 let suggestions = [];
-onSnapshot(collection(db, 'category_recommendations'), (snapshot) => {
-  suggestions = snapshot.docs.map(doc => doc.data());
-  if (currentView === 'admin' && document.getElementById('main-content')) {
-    renderAdminView(document.getElementById('main-content'));
-  }
-});
-
 let notifications = [];
-onSnapshot(collection(db, 'notifications'), (snapshot) => {
-  notifications = snapshot.docs.map(doc => doc.data()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  if (document.getElementById('main-content')) render(); // Update badge
-});
+
+// HTTP Polling for Real-time UX (Free Cloud Run Alternative to WebSockets/Snapshots)
+const pollData = async () => {
+  try {
+    const [ctxRes, votesRes, suggRes] = await Promise.all([
+      fetch(`${apiHost}/api/contexts`),
+      fetch(`${apiHost}/api/votes`),
+      fetch(`${apiHost}/api/suggestions`)
+    ]);
+
+    if (ctxRes.ok) contexts = await ctxRes.json();
+    if (votesRes.ok) {
+      const oldVotesLength = voteHistoryLedger.length;
+      voteHistoryLedger = await votesRes.json();
+
+      // Trigger re-render ONLY if new votes came in to avoid DOM thrashing
+      if (oldVotesLength !== voteHistoryLedger.length && currentView.startsWith('pyramid-')) {
+        render();
+      }
+    }
+    if (suggRes.ok) suggestions = await suggRes.json();
+
+    // Re-evaluate user limits and triggers if logged in
+    if (loggedInUser) {
+      const today = new Date();
+      const userActiveVotes = voteHistoryLedger.filter(v =>
+        v.voter_username === loggedInUser.name &&
+        v.status === 'active'
+      );
+
+      // Check Daily limits
+      const todaysVotes = userActiveVotes.filter(v => {
+        const castDate = new Date(v.cast_at);
+        return castDate.toDateString() === today.toDateString();
+      });
+
+      globalVotes.count = todaysVotes.length;
+
+      let newContextMap = {};
+      userActiveVotes.forEach(v => {
+        newContextMap[v.context_id] = v.target_user_id;
+      });
+      globalVotes.byContext = newContextMap;
+    }
+
+    // Attempt subtle re-render if data significantly changed
+    if (document.getElementById('main-content')) {
+      // For Admin View
+      if (currentView === 'admin') renderAdminView(document.getElementById('main-content'));
+    }
+  } catch (err) {
+    console.error('Polling error:', err);
+  }
+};
+
+// Start polling every 5 seconds
+setInterval(pollData, 5000);
+pollData(); // Initial load
 
 // Base Users pool (1000+ users simulated)
 const baseNames = ['Alex', 'Jordan', 'Sam', 'Taylor', 'Casey', 'Morgan', 'Riley', 'Avery', 'Quinn', 'Reese', 'Drew', 'Blake', 'Devin', 'Harper', 'Finley', 'Robin', 'Kelly', 'Jamie', 'Skyler', 'Ash', 'Rowan'];
@@ -388,8 +355,12 @@ const generatePyramidData = (contextId) => {
     // Generate a pseudo-random vote count based on user index and context ID
     const randomFactor = Math.sin(seed * (i + 1)) * 10000;
     const baseVotes = Math.floor(Math.abs(randomFactor - Math.floor(randomFactor)) * 5000);
-    const realVotes = firebaseVotesCache[u.id] || 0;
-    return { ...u, votes: baseVotes + realVotes };
+    // Overwrite with real votes for this specific context from our polling ledger
+    const realVotesContributed = voteHistoryLedger.filter(v => v.context_id === contextId && v.target_user_id === u.id).length;
+    // (Optional) Include realVotesCache if we do local optimistic UI updates
+    const localOptimisticVotes = (realVotesCache[contextId] && realVotesCache[contextId][u.id]) || 0;
+
+    return { ...u, votes: baseVotes + realVotesContributed + localOptimisticVotes };
   }).sort((a, b) => b.votes - a.votes);
 
   // Assign explicit ranking based on absolute position
@@ -434,15 +405,30 @@ let currentLang = getInitialLang();
 let currentView = 'home';
 let previousView = '';
 let loggedInUser = null;
-let searchQuery = ''; // Global search state
+let searchQuery = '';
+// JWT Session Restoration
+const restoreSession = async () => {
+  const token = localStorage.getItem('pyramida_token');
+  const storedUser = localStorage.getItem('pyramida_user');
+
+  if (token && storedUser) {
+    try {
+      loggedInUser = JSON.parse(storedUser);
+      if (document.getElementById('main-content')) render();
+    } catch (e) {
+      localStorage.removeItem('pyramida_token');
+      localStorage.removeItem('pyramida_user');
+    }
+  }
+};
+restoreSession();
 let pyramidOffsetIndex = 0; // Pagination/offset index for the pyramid apex
 let forceScrollReset = false; // Flag to discard previous scroll positions
 const MAX_DAILY_VOTES = 3;
 let globalVotes = { count: 0, byContext: {} }; // Tracks user's session votes { byContext: { ctxId: userId } }
 
-// Firebase syncing state
-let firebaseVotesCache = {};
-let activeSnapshotUnsubscribe = null;
+// Realtime syncing cache (Replaces Firebase)
+let realVotesCache = {};
 
 const app = document.querySelector('#app');
 
@@ -455,23 +441,9 @@ const render = () => {
   const vp = document.getElementById('pyramid-viewport');
   if (vp) { lastScrollX = vp.scrollLeft; lastScrollY = vp.scrollTop; }
 
-  // Manage Realtime subscriptions
+  // We are relying entirely on the polling loop (pollData) to trigger renders 
+  // and manage state smoothly to avoid Firebase costs.
   if (currentView !== previousView) {
-    if (activeSnapshotUnsubscribe) {
-      activeSnapshotUnsubscribe();
-      activeSnapshotUnsubscribe = null;
-    }
-    if (currentView.startsWith('pyramid-')) {
-      const ctxId = currentView.split('-')[1];
-      activeSnapshotUnsubscribe = onSnapshot(doc(db, 'contexts', ctxId), (snap) => {
-        if (snap.exists()) {
-          firebaseVotesCache = snap.data().votes || {};
-          render(); // Trigger re-render with new data
-        } else {
-          firebaseVotesCache = {}; // No votes yet
-        }
-      });
-    }
     previousView = currentView;
   }
 
@@ -905,27 +877,37 @@ const renderPyramidView = (container, contextInfo) => {
             render();
             return;
           }
-
-          const now = new Date();
-          const expires = new Date();
-          expires.setDate(now.getDate() + 30); // 30-day life loop
-
-          const voteRecord = {
-            id: `vote_${Date.now()}`,
-            voterUsername: loggedInUser.name,
-            targetUserId: userId,
-            contextId: contextInfo.id,
-            castAt: now.toISOString(),
-            expiresAt: expires.toISOString(),
-            status: 'active'
-          };
-
           try {
-            await setDoc(doc(db, 'votes_history', voteRecord.id), voteRecord);
-            // Also increment the cache instantly for visual jump
-            firebaseVotesCache[userId] = (firebaseVotesCache[userId] || 0) + 1;
-            showToast('Vote successfully cast!', 'ph-check-circle');
-          } catch (e) { console.error(e); }
+            // Send vote strictly to our backend API
+            const response = await fetch(`${apiHost}/api/votes`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('pyramida_token')}`
+              },
+              body: JSON.stringify({
+                targetUserId: userId,
+                contextId: contextInfo.id
+              })
+            });
+
+            if (response.ok) {
+              // Optimistic UI Update 
+              if (!realVotesCache[contextInfo.id]) realVotesCache[contextInfo.id] = {};
+              realVotesCache[contextInfo.id][userId] = (realVotesCache[contextInfo.id][userId] || 0) + 1;
+              globalVotes.count++;
+              globalVotes.byContext[contextInfo.id] = userId;
+
+              showToast('Vote successfully cast!', 'ph-check-circle');
+              render();
+            } else {
+              const errData = await response.json();
+              showToast(errData.error || 'Failed to submit vote', 'ph-x-circle');
+            }
+          } catch (e) {
+            console.error(e);
+            showToast('Network error while voting', 'ph-wifi-slash');
+          }
 
           profileModal.classList.remove('active');
         };
@@ -1042,44 +1024,167 @@ const voteAction = async (node, contextId) => {
 const renderRegisterView = (container) => {
   const t = i18n[currentLang];
   container.innerHTML = `
-    <div class="view-container" style="max-width: 400px; margin: 40px auto; width: 100%;">
+              < div class= "view-container" style="max-width: 400px; margin: 40px auto; width: 100%;" >
       <div class="pyramid-header" style="justify-content: center; margin-bottom: 40px;">
         <div class="pyramid-context-title">${t.register}</div>
       </div>
       
-      <div class="modal-content" style="transform: none; position: relative; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
-        <h2 style="margin-bottom: 20px; font-family: var(--font-display); text-align: center;">${t.joinPyramida}</h2>
-        <div class="form-group">
-          <label>${t.chooseUser}</label>
-          <input type="text" class="form-input" id="username-input" placeholder="${t.placeholderUser}">
+      <div class="modal-content auth-container" style="transform: none; position: relative; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+        
+        <!-- Tab Selector -->
+        <div style="display:flex; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 25px;">
+           <button id="tab-login" style="flex:1; background:transparent; color:var(--text-primary); border:none; padding:15px; border-bottom: 2px solid var(--accent-gold); font-weight:600; cursor:pointer;">${t.loginTab}</button>
+           <button id="tab-signup" style="flex:1; background:transparent; color:var(--text-secondary); border:none; padding:15px; border-bottom: 2px solid transparent; cursor:pointer;">${t.signUpTab}</button>
         </div>
-        <button class="btn-primary" id="signup-btn" style="margin-bottom: 15px;">${t.enterPyramid}</button>
-        <button class="btn-primary" id="back-home-btn" style="background: transparent; border: 1px solid var(--border-light); box-shadow: none;">${t.backToHome}</button>
+
+        <!-- LOGIN FORM -->
+        <div id="login-form-wrapper">
+          <div class="form-group">
+            <label>${t.emailLabel}</label>
+            <input type="email" class="form-input" id="login-email" placeholder="you@example.com">
+          </div>
+          <div class="form-group">
+            <label>${t.passwordLabel}</label>
+            <input type="password" class="form-input" id="login-password" placeholder="••••••••">
+            <div style="text-align: right; margin-top: 5px;">
+               <a href="#" id="forgot-pwd-link" style="color:var(--accent-cyan); font-size: 0.8rem; text-decoration:none;">${t.forgotPwd}</a>
+            </div>
+          </div>
+          <button class="btn-primary" id="login-btn" style="margin-bottom: 15px; width: 100%;">${t.loginTab}</button>
+        </div>
+
+        <!-- SIGN UP FORM (Hidden by default) -->
+        <div id="signup-form-wrapper" style="display:none;">
+          <div class="form-group">
+            <label>${t.chooseUser}</label>
+            <input type="text" class="form-input" id="signup-name" placeholder="${t.placeholderUser}">
+          </div>
+          <div class="form-group">
+            <label>${t.emailLabel}</label>
+            <input type="email" class="form-input" id="signup-email" placeholder="you@example.com">
+          </div>
+          <div class="form-group">
+            <label>${t.passwordLabel}</label>
+            <input type="password" class="form-input" id="signup-password" placeholder="min 6 chars">
+          </div>
+          <button class="btn-primary" id="signup-btn" style="margin-bottom: 15px; width: 100%; background: var(--accent-magenta); color: #fff;">${t.createAccount}</button>
+        </div>
+
+        <button class="btn-primary" id="back-home-btn" style="background: transparent; border: 1px solid var(--border-light); box-shadow: none; width: 100%;">${t.backToHome}</button>
       </div>
-    </div>
+    </div >
   `;
 
   document.getElementById('back-home-btn').addEventListener('click', () => { currentView = 'home'; render(); });
 
-  const handleSignup = () => {
-    const val = document.getElementById('username-input').value.trim();
-    if (val) {
-      loggedInUser = { name: val, role: val.toLowerCase() === 'admin' ? 'admin' : 'user' };
+  // Tab Logic
+  const tabLogin = document.getElementById('tab-login');
+  const tabSignup = document.getElementById('tab-signup');
+  const loginForm = document.getElementById('login-form-wrapper');
+  const signupForm = document.getElementById('signup-form-wrapper');
+
+  tabLogin.addEventListener('click', () => {
+    tabLogin.style.color = 'var(--text-primary)';
+    tabLogin.style.borderBottomColor = 'var(--accent-gold)';
+    tabLogin.style.fontWeight = '600';
+    tabSignup.style.color = 'var(--text-secondary)';
+    tabSignup.style.borderBottomColor = 'transparent';
+    tabSignup.style.fontWeight = '400';
+    loginForm.style.display = 'block';
+    signupForm.style.display = 'none';
+  });
+
+  tabSignup.addEventListener('click', () => {
+    tabSignup.style.color = 'var(--text-primary)';
+    tabSignup.style.borderBottomColor = 'var(--accent-magenta)';
+    tabSignup.style.fontWeight = '600';
+    tabLogin.style.color = 'var(--text-secondary)';
+    tabLogin.style.borderBottomColor = 'transparent';
+    tabLogin.style.fontWeight = '400';
+    signupForm.style.display = 'block';
+    loginForm.style.display = 'none';
+  });
+
+  // Login Firebase Logic
+  const loginBtn = document.getElementById('login-btn');
+  loginBtn.addEventListener('click', async () => {
+    const email = document.getElementById('login-email').value.trim();
+    const pass = document.getElementById('login-password').value;
+    if (!email || !pass) return showToast('Please enter email and password', 'ph-warning');
+
+    loginBtn.innerText = t.authenticating;
+    try {
+      const resp = await fetch(`${apiHost} /api/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password: pass })
+      });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || 'Login failed');
+
+      localStorage.setItem('pyramida_token', data.token);
+      localStorage.setItem('pyramida_user', JSON.stringify(data.user));
+      loggedInUser = data.user;
+
+      showToast('Logged in successfully!', 'ph-check-circle');
       currentView = 'home';
       render();
+    } catch (err) {
+      console.error(err);
+      showToast(err.message || 'Invalid credentials or user not found.', 'ph-warning');
+      loginBtn.innerText = t.loginTab;
     }
-  };
+  });
 
-  document.getElementById('signup-btn').addEventListener('click', handleSignup);
-  document.getElementById('username-input').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') handleSignup();
+  // Forgot Password
+  document.getElementById('forgot-pwd-link').addEventListener('click', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value.trim();
+    if (!email) return showToast('Enter your email in the field to reset password.', 'ph-warning');
+    try {
+      await sendPasswordResetEmail(auth, email);
+      showToast('Password reset email sent!', 'ph-envelope');
+    } catch (err) { showToast('Error sending reset email.', 'ph-warning'); }
+  });
+
+  // Sign Up Firebase Logic
+  const signupBtn = document.getElementById('signup-btn');
+  signupBtn.addEventListener('click', async () => {
+    const name = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const pass = document.getElementById('signup-password').value;
+
+    if (!name || !email || pass.length < 6) return showToast('Fill all fields. Password > 6 chars.', 'ph-warning');
+
+    signupBtn.innerText = t.creatingAccount;
+    try {
+      const resp = await fetch(`${apiHost} /api/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password: pass })
+      });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || 'Registration failed');
+
+      localStorage.setItem('pyramida_token', data.token);
+      localStorage.setItem('pyramida_user', JSON.stringify(data.user));
+      loggedInUser = data.user;
+
+      showToast('Account created successfully!', 'ph-check-circle');
+      currentView = 'home';
+      render();
+    } catch (err) {
+      console.error(err);
+      showToast(err.message || 'Registration failed.', 'ph-warning');
+      signupBtn.innerText = t.createAccount;
+    }
   });
 };
 
 const renderSuggestView = (container) => {
   const t = i18n[currentLang];
   container.innerHTML = `
-    <div class="view-container" style="max-width: 500px; margin: 40px auto; width: 100%;">
+  < div class="view-container" style = "max-width: 500px; margin: 40px auto; width: 100%;" >
       <div class="pyramid-header" style="justify-content: center; margin-bottom: 30px; position:relative;">
         <button class="back-btn" id="suggest-back-btn" style="position:absolute; left:0;"><i class="ph ph-arrow-left"></i></button>
         <div class="pyramid-context-title">${t.suggestCat}</div>
@@ -1096,14 +1201,14 @@ const renderSuggestView = (container) => {
          <div class="form-group">
            <label>${t.parentOptional}</label>
            <select class="form-input" id="suggest-parent" style="background:var(--bg-dark); color:var(--text-primary); border: 1px solid var(--border-light);">
-             <option value="">-- None (Top Level) --</option>
+           <option value="">-- None (Top Level) --</option>
              ${contexts.filter(c => !c.parentId).map(c => `<option value="${c.id}">${c.titles.en}</option>`).join('')}
            </select>
          </div>
          
          <button class="btn-primary" id="submit-suggest-btn" style="margin-top:10px;">${t.submitSug}</button>
       </div>
-    </div>
+    </div >
   `;
 
   document.getElementById('suggest-back-btn').addEventListener('click', () => { currentView = 'home'; render(); });
@@ -1139,7 +1244,7 @@ const renderAdminView = (container) => {
   const t = i18n[currentLang];
 
   const contextsListHTML = contexts.map(ctx => `
-    <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:10px; border-radius:6px; margin-bottom:8px; border:1px solid rgba(255,255,255,0.05);">
+  < div style = "display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:10px; border-radius:6px; margin-bottom:8px; border:1px solid rgba(255,255,255,0.05);" >
         <div style="display:flex; align-items:center; gap:10px;">
             <i class="${ctx.icon} text-cyan"></i>
             <div>
@@ -1151,13 +1256,13 @@ const renderAdminView = (container) => {
             <button class="btn-edit-ctx" data-id="${ctx.id}" style="background:transparent; color:var(--accent-cyan); border:1px solid var(--accent-cyan); padding:4px 8px; border-radius:4px; font-size:0.75rem; cursor:pointer;"><i class="ph ph-pencil-simple"></i> Edit</button>
             <button class="btn-del-ctx" data-id="${ctx.id}" style="background:transparent; color:#ff4444; border:1px solid #ff4444; padding:4px 8px; border-radius:4px; font-size:0.75rem; cursor:pointer;"><i class="ph ph-trash"></i> Delete</button>
         </div>
-    </div>
+    </div >
   `).join('');
 
   container.innerHTML = `
-    <div class="view-container" style="max-width: 800px; margin: 20px auto; width: 100%; display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+  < div class="view-container" style = "max-width: 800px; margin: 20px auto; width: 100%; display:grid; grid-template-columns: 1fr 1fr; gap: 20px;" >
       
-      <!-- Left side: Form -->
+      < !--Left side: Form-- >
       <div>
           <div class="pyramid-header" style="margin-bottom: 20px;">
             <button class="back-btn" id="admin-back-btn"><i class="ph ph-arrow-left"></i></button>
@@ -1203,14 +1308,14 @@ const renderAdminView = (container) => {
           <button id="dev-seed-btn" class="btn-outline-gold" style="margin-top: 40px; border-color: red; color: red;">[DEV] Seed Categories & Hierarchy</button>
        </div>
 
-       <!-- Right side: List -->
-       <div class="modal-content" style="transform: none; position: relative; width: 100%; max-width: 100%; padding:20px; max-height: 80vh; overflow-y:auto;">
-           <h3 style="margin-bottom: 20px; font-family: var(--font-display);">Active Contexts (${contexts.length})</h3>
-           ${contextsListHTML}
-           
-           <div style="margin-top: 40px; border-top: 1px solid var(--border-light); padding-top:20px;">
-              <h3 style="margin-bottom: 20px; font-family: var(--font-display); color: var(--accent-cyan);">Pending Suggestions (${suggestions.filter(s => s.status === 'pending').length})</h3>
-              ${suggestions.filter(s => s.status === 'pending').map(s => `
+       <!--Right side: List-- >
+  <div class="modal-content" style="transform: none; position: relative; width: 100%; max-width: 100%; padding:20px; max-height: 80vh; overflow-y:auto;">
+    <h3 style="margin-bottom: 20px; font-family: var(--font-display);">Active Contexts (${contexts.length})</h3>
+    ${contextsListHTML}
+
+    <div style="margin-top: 40px; border-top: 1px solid var(--border-light); padding-top:20px;">
+      <h3 style="margin-bottom: 20px; font-family: var(--font-display); color: var(--accent-cyan);">Pending Suggestions (${suggestions.filter(s => s.status === 'pending').length})</h3>
+      ${suggestions.filter(s => s.status === 'pending').map(s => `
                 <div style="background:rgba(212, 175, 55, 0.05); padding:12px; border:1px solid rgba(212, 175, 55, 0.2); border-radius:6px; margin-bottom:8px;">
                   <div style="font-weight:600; font-size:0.95rem;">${s.titleEn}</div>
                   <div style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:8px;">Suggested by: ${s.suggestedBy} ${s.parentId ? `| Parent: ${s.parentId}` : ''}</div>
@@ -1220,9 +1325,9 @@ const renderAdminView = (container) => {
                   </div>
                 </div>
               `).join('')}
-           </div>
-       </div>
     </div>
+  </div>
+    </div >
   `;
 
   document.getElementById('admin-back-btn').addEventListener('click', () => {
@@ -1268,12 +1373,15 @@ const renderAdminView = (container) => {
     }
 
     try {
-      await setDoc(doc(db, 'base_contexts', id), ctxData, { merge: true });
+      const resp = await fetch(`${apiHost} /api/contexts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(ctxData)
+      });
+      if (!resp.ok) throw new Error('Failed to save context');
+
       showToast(`Context ${editingContextId ? 'updated' : 'created'} successfully!`, 'ph-check-circle');
       editingContextId = null;
-      // The onSnapshot listener will catch the change and re-render automatically, 
-      // but if we are in admin view, we want to just re-render the admin view.
-      // Wait briefly for snapshot to catch up.
       setTimeout(() => renderAdminView(container), 200);
     } catch (e) {
       console.error(e);
@@ -1310,8 +1418,10 @@ const renderAdminView = (container) => {
       const id = btn.getAttribute('data-id');
       if (confirm('Are you sure you want to delete this context?')) {
         try {
-          await deleteDoc(doc(db, 'base_contexts', id));
+          const resp = await fetch(`${apiHost} /api/contexts / ${id} `, { method: 'DELETE' });
+          if (!resp.ok) throw new Error('Delete failed');
           showToast('Context deleted', 'ph-trash');
+          setTimeout(() => renderAdminView(container), 200);
         } catch (e) {
           console.error(e);
           showToast('Failed to delete', 'ph-warning');
@@ -1344,17 +1454,14 @@ const renderAdminView = (container) => {
       };
 
       try {
-        await setDoc(doc(db, 'base_contexts', newCtxId), ctxData);
-        await setDoc(doc(db, 'category_recommendations', sugId), { status: 'approved', approvedContextId: newCtxId }, { merge: true });
-
-        await setDoc(doc(db, 'notifications', `notif_${Date.now()}`), {
-          id: `notif_${Date.now()}`,
-          targetUser: sug.suggestedBy,
-          message: `Your category suggestion "${sug.titleEn}" was approved!`,
-          read: false,
-          createdAt: new Date().toISOString()
+        const resp = await fetch(`${apiHost} /api/suggestions / ${sugId}/approve`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(ctxData)
         });
+        if (!resp.ok) throw new Error('Approval Failed');
         showToast('Suggestion Approved!', 'ph-check-circle');
+        setTimeout(() => renderAdminView(container), 200);
       } catch (e) { console.error(e); }
     });
   });
@@ -1362,8 +1469,11 @@ const renderAdminView = (container) => {
   document.querySelectorAll('.btn-reject-sug').forEach(btn => {
     btn.addEventListener('click', async () => {
       const sugId = btn.getAttribute('data-id');
-      await setDoc(doc(db, 'category_recommendations', sugId), { status: 'rejected' }, { merge: true });
-      showToast('Suggestion Rejected.', 'ph-trash');
+      try {
+        await fetch(`${apiHost}/api/suggestions/${sugId}/reject`, { method: 'POST' });
+        showToast('Suggestion Rejected.', 'ph-trash');
+        setTimeout(() => renderAdminView(container), 200);
+      } catch (e) { console.error('Error Rejecting:', e); }
     });
   });
 };
@@ -1373,7 +1483,7 @@ const showToast = (message, icon = 'ph-info') => {
   if (!container) return;
   const toast = document.createElement('div');
   toast.className = 'custom-toast';
-  toast.innerHTML = `<i class="ph-fill ${icon}"></i> <span>${message}</span>`;
+  toast.innerHTML = `< i class="ph-fill ${icon}" ></i > <span>${message}</span>`;
   container.appendChild(toast);
 
   // trigger animation
