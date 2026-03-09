@@ -1024,7 +1024,7 @@ const voteAction = async (node, contextId) => {
 const renderRegisterView = (container) => {
   const t = i18n[currentLang];
   container.innerHTML = `
-              < div class= "view-container" style="max-width: 400px; margin: 40px auto; width: 100%;" >
+      <div class="view-container" style="max-width: 400px; margin: 40px auto; width: 100%;">
       <div class="pyramid-header" style="justify-content: center; margin-bottom: 40px;">
         <div class="pyramid-context-title">${t.register}</div>
       </div>
@@ -1114,7 +1114,7 @@ const renderRegisterView = (container) => {
 
     loginBtn.innerText = t.authenticating;
     try {
-      const resp = await fetch(`${apiHost} /api/login`, {
+      const resp = await fetch(`${apiHost}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password: pass })
@@ -1158,7 +1158,7 @@ const renderRegisterView = (container) => {
 
     signupBtn.innerText = t.creatingAccount;
     try {
-      const resp = await fetch(`${apiHost} /api/register`, {
+      const resp = await fetch(`${apiHost}/api/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password: pass })
@@ -1373,7 +1373,7 @@ const renderAdminView = (container) => {
     }
 
     try {
-      const resp = await fetch(`${apiHost} /api/contexts`, {
+      const resp = await fetch(`${apiHost}/api/contexts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(ctxData)
@@ -1418,7 +1418,7 @@ const renderAdminView = (container) => {
       const id = btn.getAttribute('data-id');
       if (confirm('Are you sure you want to delete this context?')) {
         try {
-          const resp = await fetch(`${apiHost} /api/contexts / ${id} `, { method: 'DELETE' });
+          const resp = await fetch(`${apiHost}/api/contexts/${id}`, { method: 'DELETE' });
           if (!resp.ok) throw new Error('Delete failed');
           showToast('Context deleted', 'ph-trash');
           setTimeout(() => renderAdminView(container), 200);
@@ -1454,7 +1454,7 @@ const renderAdminView = (container) => {
       };
 
       try {
-        const resp = await fetch(`${apiHost} /api/suggestions / ${sugId}/approve`, {
+        const resp = await fetch(`${apiHost}/api/suggestions/${sugId}/approve`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(ctxData)
