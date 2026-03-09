@@ -65,7 +65,8 @@ const i18n = {
     heroSubtitle: 'Visual consensus and decentralized rankings. Every vote permanently alters the hierarchy stack inside this elite enclosed ecosystem.',
     heroContexts: 'Contexts',
     heroUsers: 'Users',
-    heroVotes: 'Votes'
+    heroVotes: 'Votes',
+    swipePrompt: 'Swipe to see the full pyramid'
   },
   es: {
     dashboard: 'Inicio',
@@ -126,7 +127,8 @@ const i18n = {
     heroSubtitle: 'Consenso visual y rankings descentralizados. Cada voto altera permanentemente la estructura jerárquica dentro de este ecosistema cerrado de élite.',
     heroContexts: 'Contextos',
     heroUsers: 'Usuarios',
-    heroVotes: 'Votos'
+    heroVotes: 'Votos',
+    swipePrompt: 'Desliza para ver la pirámide completa'
   },
   fr: {
     dashboard: 'Accueil',
@@ -187,7 +189,8 @@ const i18n = {
     heroSubtitle: "Consensus visuel et classements décentralisés. Chaque vote modifie en permanence la structure hiérarchique au sein de cet écosystème d'élite.",
     heroContexts: 'Contextes',
     heroUsers: 'Utilisateurs',
-    heroVotes: 'Votes'
+    heroVotes: 'Votes',
+    swipePrompt: 'Faites glisser pour voir la pyramide complète'
   },
   de: {
     dashboard: 'Dashboard',
@@ -248,7 +251,8 @@ const i18n = {
     heroSubtitle: 'Visueller Konsens und dezentrale Rankings. Jede Stimme verändert dauerhaft die hierarchische Struktur in diesem elitären Ökosystem.',
     heroContexts: 'Kontexte',
     heroUsers: 'Benutzer',
-    heroVotes: 'Stimmen'
+    heroVotes: 'Stimmen',
+    swipePrompt: 'Wischen, um die vollständige Pyramide zu sehen'
   }
 };
 
@@ -822,7 +826,12 @@ const renderPyramidView = (container, contextInfo) => {
         </div>
       </div>
 
-      <div class="pyramid-viewport" id="pyramid-viewport">
+      <div class="pyramid-viewport" id="pyramid-viewport" style="position: relative;">
+        <!-- Swipe Prompt Overlay -->
+        <div id="swipe-prompt" style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); color: var(--text-primary); padding: 12px 24px; border-radius: 30px; border: 1px solid rgba(212,175,55,0.3); font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 8px; z-index: 100; pointer-events: none; opacity: 1; transition: opacity 0.5s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+          <i class="ph ph-hand-swipe-up" style="font-size: 1.2rem; color: var(--accent-gold);"></i> ${t.swipePrompt}
+        </div>
+        
         <div class="pyramid-wrapper">
           <div class="pyramid-bg"></div>
           ${tiersHTML}
@@ -1031,11 +1040,17 @@ const renderPyramidView = (container, contextInfo) => {
     viewport.addEventListener('touchend', onLeaveOrUp);
     viewport.addEventListener('touchmove', onMove, { passive: false });
 
-    // Subtly auto-center the pyramid on initial load
+    // Auto-center the pyramid on initial load to show the Apex (Top 1)
     setTimeout(() => {
       viewport.scrollLeft = (viewport.scrollWidth - viewport.clientWidth) / 2;
-      viewport.scrollTop = viewport.scrollHeight;
+      viewport.scrollTop = 0; // Top 1 is at the top
     }, 50);
+
+    // Hide swipe prompt on native scroll
+    viewport.addEventListener('scroll', () => {
+      const prompt = document.getElementById('swipe-prompt');
+      if (prompt) prompt.style.opacity = '0';
+    }, { once: true });
   }
 };
 
