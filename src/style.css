@@ -41,147 +41,51 @@ body {
   overflow-x: hidden;
 }
 
-/* --- Atmospheric Animated Background --- */
+/* --- Elite Dashboard Background --- */
 .ambient-background {
   position: fixed;
   inset: 0;
   z-index: -1;
   overflow: hidden;
-  background: var(--bg-dark);
+  background-color: var(--bg-dark);
+  background-image: url('/hero_bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  opacity: 0.9;
+  filter: contrast(1.1) brightness(0.85);
   pointer-events: none;
 }
 
-/* Base glowing orbs */
-.ambient-glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.85;
-  mix-blend-mode: screen;
-  will-change: transform;
-}
-
-/* Deep Crimson / Gold */
-.glow-1 {
-  width: 80vw;
-  height: 80vh;
-  background: radial-gradient(circle, rgba(139, 0, 0, 0.65) 0%, transparent 70%);
-  top: -20%;
-  left: -20%;
-  animation: float1 12s ease-in-out infinite alternate;
-}
-
-/* Obsidian Violet / Magenta */
-.glow-2 {
-  width: 90vw;
-  height: 90vh;
-  background: radial-gradient(circle, rgba(169, 17, 1, 0.55) 0%, transparent 75%);
-  bottom: -30%;
-  right: -20%;
-  animation: float2 15s ease-in-out infinite alternate-reverse;
-}
-
-/* Apex Gold Focus */
-.glow-3 {
-  width: 60vw;
-  height: 60vh;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.5) 0%, transparent 70%);
-  top: 40%;
-  left: 30%;
-  animation: float3 18s ease-in-out infinite alternate;
-}
-
-@keyframes float1 {
+/* Add a slow breathing animation to the background for an "alive" feeling */
+@keyframes slowBreathe {
   0% {
-    transform: translate(0, 0) scale(1);
+    transform: scale(1);
+    filter: brightness(0.85);
   }
 
   50% {
-    transform: translate(10vw, 5vh) scale(1.1);
+    transform: scale(1.02);
+    filter: brightness(0.95);
   }
 
   100% {
-    transform: translate(-5vw, 15vh) scale(0.9);
+    transform: scale(1);
+    filter: brightness(0.85);
   }
 }
 
-@keyframes float2 {
-  0% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  50% {
-    transform: translate(-10vw, -15vh) scale(1.05);
-  }
-
-  100% {
-    transform: translate(5vw, -5vh) scale(1);
-  }
+.ambient-background {
+  animation: slowBreathe 20s ease-in-out infinite;
 }
 
-@keyframes float3 {
-  0% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  50% {
-    transform: translate(15vw, -10vh) scale(1.2);
-  }
-
-  100% {
-    transform: translate(-10vw, -15vh) scale(0.9);
-  }
-}
-
-/* Geo-Tech Lines & Grids */
-.ambient-grid {
-  position: absolute;
-  inset: -50%;
-  width: 200%;
-  height: 200%;
-  background-image:
-    linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-  transform: perspective(500px) rotateX(60deg) translateY(0);
-  animation: gridMove 8s linear infinite;
-  opacity: 0.6;
-  mask-image: linear-gradient(to top, transparent, black 80%);
-  -webkit-mask-image: linear-gradient(to top, transparent, black 80%);
-}
-
-.ambient-lines {
-  position: absolute;
+/* Elegant Vignette Overlay to focus the center */
+.vignette-overlay {
+  position: fixed;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
-  background-image: repeating-linear-gradient(45deg,
-      transparent,
-      transparent 100px,
-      rgba(169, 17, 1, 0.05) 100px,
-      rgba(169, 17, 1, 0.05) 102px);
-  animation: linePan 12s linear infinite;
-  opacity: 0.7;
-}
-
-@keyframes gridMove {
-  0% {
-    transform: perspective(500px) rotateX(60deg) translateY(0);
-  }
-
-  100% {
-    transform: perspective(500px) rotateX(60deg) translateY(60px);
-  }
-}
-
-@keyframes linePan {
-  0% {
-    background-position: 0 0;
-  }
-
-  100% {
-    background-position: 200px 200px;
-  }
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(circle at center, transparent 30%, rgba(5, 5, 5, 0.9) 100%);
 }
 
 /* Globally Hide Scrollbars for App-like feel */
@@ -208,20 +112,20 @@ body {
 
 /* Header */
 header {
-  padding: 16px 24px;
+  padding: 18px 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-  /* Subtle gold line */
-  background: rgba(10, 10, 12, 0.95);
-  /* Obsidian glass */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  /* Thinner, sleeker glass edge */
+  background: rgba(8, 8, 10, 0.75);
+  /* Highly translucent obsidian */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(212, 175, 55, 0.05);
 }
 
 .child-card .context-icon {
@@ -478,12 +382,16 @@ main {
 
 /* --- Hierarchy Groups --- */
 .hierarchy-group {
-  margin-bottom: 50px;
-  background: rgba(10, 0, 15, 0.4);
-  backdrop-filter: blur(10px);
-  padding: 24px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 55px;
+  background: rgba(10, 10, 12, 0.55);
+  /* Deep frosted glass */
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  padding: 32px;
+  border-radius: 16px;
+  /* Elegant softer curves */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .context-grid {
@@ -493,30 +401,33 @@ main {
 }
 
 .context-card {
-  background: var(--bg-card);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  /* Sharper edges */
-  padding: 24px 20px;
+  background: linear-gradient(135deg, rgba(20, 20, 25, 0.8), rgba(10, 10, 14, 0.95));
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-top-color: rgba(255, 255, 255, 0.12);
+  /* Fake top light reflection */
+  border-radius: 12px;
+  padding: 28px 24px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  gap: 16px;
+  gap: 18px;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), inset 0 -30px 40px -20px rgba(0, 0, 0, 0.5);
 }
 
 .context-card:hover,
 .context-card:active {
-  transform: translateY(-6px);
-  border-color: var(--accent-cyan);
-  /* Borders turn gold on interaction */
-  box-shadow: 0 5px 20px rgba(212, 175, 55, 0.15);
-  background: rgba(10, 10, 12, 0.8);
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(212, 175, 55, 0.4);
+  /* Premium Gold Focus */
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 25px rgba(212, 175, 55, 0.15), inset 0 1px 0 rgba(212, 175, 55, 0.3);
+  background: linear-gradient(135deg, rgba(25, 25, 30, 0.9), rgba(15, 15, 20, 0.98));
 }
 
 .context-card::after {
@@ -733,15 +644,19 @@ main {
   width: var(--node-size);
   height: var(--node-size);
   flex-shrink: 0;
-  background: var(--bg-card);
-  border-radius: 8px;
+  background-color: var(--bg-dark);
+  background-image: url('/avatar_placeholder.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  /* Slight rounding for elegant sharp corners */
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   cursor: pointer;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 4px 12px rgba(0, 0, 0, 0.4);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 8px 16px rgba(0, 0, 0, 0.8);
+  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
   overflow: hidden;
 }
 
@@ -749,26 +664,30 @@ main {
   position: absolute;
   top: 0;
   left: 0;
-  background: rgba(10, 10, 12, 0.85);
+  background: rgba(8, 8, 10, 0.9);
   color: var(--text-primary);
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.75rem;
-  padding: 3px 6px;
-  border-bottom-right-radius: 6px;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  font-weight: 800;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-bottom-right-radius: 8px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 5;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   pointer-events: none;
 }
 
 .tier-0 .node-rank {
-  background: var(--accent-cyan);
-  color: var(--bg-dark);
-  font-size: 0.95rem;
-  padding: 4px 8px;
+  background: linear-gradient(135deg, var(--accent-cyan), #fff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-color: rgba(20, 20, 20, 0.95);
+  /* Extremely dark box for gold text contrast */
+  font-size: 1rem;
+  padding: 6px 12px;
   border-color: var(--accent-cyan);
 }
 
@@ -860,9 +779,7 @@ main {
   --tier-color: var(--accent-cyan);
   /* Gold */
   border: 2px solid var(--accent-cyan);
-  /* Thinner border */
-  box-shadow: 0 0 15px var(--glow-cyan), inset 0 0 10px rgba(212, 175, 55, 0.2);
-  /* Noticeably reduced glow */
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.4), inset 0 0 20px rgba(212, 175, 55, 0.3);
   z-index: 50;
 }
 

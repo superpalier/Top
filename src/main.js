@@ -586,17 +586,51 @@ const renderHomeView = (container) => {
   // Group by Parent Hierarchy
   const parents = filteredContexts.filter(c => !c.parentId);
 
-  let contextHTML = '';
+  let contextHTML = `
+    <!-- Elite Hero Section -->
+    <div style="margin-bottom: 50px; padding: 40px; border-radius: 16px; background: linear-gradient(135deg, rgba(20,20,25,0.8), rgba(10,10,12,0.9)); border: 1px solid rgba(212,175,55,0.15); box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); position: relative; overflow: hidden;">
+      <!-- Subtle internal glow -->
+      <div style="position: absolute; top: -50%; left: -20%; width: 50%; height: 200%; background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%); transform: rotate(30deg); pointer-events: none;"></div>
+      
+      <h1 style="font-family: var(--font-display); font-size: 2.8rem; font-weight: 700; margin-bottom: 16px; letter-spacing: -1px; background: linear-gradient(135deg, #fff, #a0a0a0); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Pyramida</h1>
+      <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6; margin-bottom: 30px;">
+        Visual consensus and decentralized rankings. Every vote permanently alters the hierarchy stack inside this elite enclosed ecosystem.
+      </p>
+      
+      <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+        <div style="display: flex; flex-direction: column;">
+          <span style="font-size: 2rem; font-weight: 800; color: var(--accent-cyan); font-family: var(--font-display); line-height: 1;">${contexts.length}</span>
+          <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Contexts</span>
+        </div>
+        <div style="width: 1px; background: rgba(255,255,255,0.1);"></div>
+        <div style="display: flex; flex-direction: column;">
+          <span style="font-size: 2rem; font-weight: 800; color: var(--text-primary); font-family: var(--font-display); line-height: 1;">3,000+</span>
+          <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Users</span>
+        </div>
+        <div style="width: 1px; background: rgba(255,255,255,0.1);"></div>
+        <div style="display: flex; flex-direction: column;">
+          <span style="font-size: 2rem; font-weight: 800; color: var(--text-primary); font-family: var(--font-display); line-height: 1;">4.2k</span>
+          <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Votes</span>
+        </div>
+      </div>
+    </div>
+    
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+      <h2 class="section-title" style="font-size: 1.4rem; color: var(--text-primary); font-weight: 600;">${t.trendingContexts}</h2>
+    </div>
+  `;
+
   if (parents.length === 0) {
-    contextHTML = `<div style="color:var(--text-secondary); padding: 20px;">No contexts found.</div>`;
+    contextHTML += `<div style="color:var(--text-secondary); padding: 20px;">No contexts found.</div>`;
   } else {
     parents.forEach(p => {
       const children = filteredContexts.filter(c => c.parentId === p.id);
 
       contextHTML += `
         <div class="hierarchy-group" style="margin-bottom: 40px;">
-          <h3 style="font-family: var(--font-display); color: var(--accent-gold); margin-bottom: 15px; display:flex; align-items:center; gap:8px; font-size: 1.4rem;">
-            <i class="${p.icon}"></i> ${p.titles[currentLang]}
+          <h3 style="font-family: var(--font-display); color: var(--accent-cyan); margin-bottom: 20px; display:flex; align-items:center; gap:12px; font-size: 1.5rem; letter-spacing: -0.5px;">
+            <div style="background: rgba(212,175,55,0.1); padding: 8px; border-radius: 8px; border: 1px solid rgba(212,175,55,0.2);"><i class="${p.icon}"></i></div>
+            ${p.titles[currentLang]}
           </h3>
           <div class="context-grid">
             <div class="context-card main-parent-card" data-id="${p.id}" ${p.imageUrl ? `style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(10,0,15,0.95)), url('${p.imageUrl}'); background-size: cover; background-position: center;"` : ''}>
