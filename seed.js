@@ -1,17 +1,21 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import dotenv from 'dotenv';
+import pg from 'pg';
+const { Pool } = pg;
+dotenv.config();
 
-const firebaseConfig = {
-    apiKey: "AIzaSyC3DNX9fLVXkTyIUlLzrH5Peb9HFnFG9c8",
-    authDomain: "topce-5bc6f.firebaseapp.com",
-    projectId: "topce-5bc6f",
-    storageBucket: "topce-5bc6f.firebasestorage.app",
-    messagingSenderId: "178473671409",
-    appId: "1:178473671409:web:6246297486d661a9896750"
-};
+// We need to pass the connection string manually since it's not in a local .env file yet
+const connectionString = process.env.DATABASE_URL;
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+if (!connectionString) {
+    console.error("Please export DATABASE_URL before running this script.");
+    console.error("Example: set DATABASE_URL=postgresql://... && node seed.js");
+    process.exit(1);
+}
+
+const pool = new Pool({
+    connectionString: connectionString,
+    ssl: { rejectUnauthorized: false }
+});
 
 const baseIcons = ['ph-code', 'ph-lightbulb', 'ph-palette', 'ph-users-three', 'ph-smiley', 'ph-briefcase', 'ph-star', 'ph-rocket-launch', 'ph-planet', 'ph-cpu', 'ph-leaf', 'ph-drop'];
 
@@ -39,24 +43,46 @@ const defaultContextNames = [
 ];
 
 async function seedContexts() {
-    console.log("Seeding 20 contexts to Firestore...");
-    for (let i = 0; i < defaultContextNames.length; i++) {
-        const contextId = `ctx_${i + 1}`;
-        const docRef = doc(db, "base_contexts", contextId);
+    console.log("Connecting to Supabase PostgreSQL...");
+    const client = await pool.connect();
 
-        await setDoc(docRef, {
-            id: contextId,
-            titles: defaultContextNames[i],
-            icon: baseIcons[i % baseIcons.length],
-            participants: Math.floor(Math.random() * 800) + 100,
-            imageUrl: "", // empty for now to be updated via admin crud
-            createdAt: new Date().toISOString()
-        });
+    try {
+        console.log("Creating 'base_contexts' table if it doesn't exist...");
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS base_contexts (
+                id VARCHAR(255) PRIMARY KEY,
+                titles JSONB NOT NULL,
+                icon VARCHAR(255),
+                participants INTEGER DEFAULT 0,
+                image_url VARCHAR(255),
+                created_at TIMESTAMP NOT NULL
+            );
+        `);
 
-        console.log(`Successfully wrote ${contextId} to Firestore.`);
+        console.log("Seeding 20 contexts to Supabase...");
+        for (let i = 0; i < defaultContextNames.length; i++) {
+            const contextId = `ctx_${i + 1}`;
+            const titles = JSON.stringify(defaultContextNames[i]);
+            const icon = baseIcons[i % baseIcons.length];
+            const participants = Math.floor(Math.random() * 800) + 100;
+            const createdAt = new Date().toISOString();
+
+            await client.query(
+                `INSERT INTO base_contexts (id, titles, icon, participants, image_url, created_at)
+                 VALUES ($1, $2, $3, $4, $5, $6)
+                 ON CONFLICT (id) DO UPDATE SET titles = EXCLUDED.titles, icon = EXCLUDED.icon`,
+                [contextId, titles, icon, participants, "", createdAt]
+            );
+
+            console.log(`Successfully wrote ${contextId} to Supabase.`);
+        }
+        console.log("Seeding complete! You can now see contexts in the app.");
+    } catch (err) {
+        console.error("Error during seeding:", err);
+    } finally {
+        client.release();
+        pool.end();
     }
-    console.log("Seeding complete!");
-    process.exit(0);
 }
 
-seedContexts().catch(console.error);
+seedContexts();

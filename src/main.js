@@ -481,7 +481,6 @@ const render = () => {
         <button class="hamburger-btn" id="mobile-menu-btn"><i class="ph ph-list"></i></button>
         <div style="display: flex; flex-direction: column;">
           <div class="logo">Pyramida</div>
-          <div style="font-size: 0.65rem; color: var(--text-secondary); font-weight: 600; letter-spacing: 1px; margin-top: -4px;">v1.1.0-neon</div>
         </div>
       </div>
       <div class="header-controls">

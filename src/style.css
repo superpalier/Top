@@ -1,25 +1,25 @@
 :root {
-  --bg-dark: #0a0a0c;
+  --bg-dark: #050507;
   /* Obsidian Void */
-  --bg-card: rgba(20, 20, 25, 0.9);
+  --bg-card: rgba(10, 10, 15, 0.45);
   /* Deeper premium glass */
-  --border-light: rgba(212, 175, 55, 0.2);
-  /* Thin Gold border */
-  --text-primary: #f8fafc;
-  --text-secondary: #e5e4e2;
+  --border-light: rgba(255, 255, 255, 0.04);
+  /* Delicate light border */
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0b0;
   /* Platinum / Slate */
 
   /* Power Accent Colors */
-  --accent-cyan: #d4af37;
-  /* Apex Gold (Top level) */
-  --accent-magenta: #8b0000;
-  /* Royal Crimson */
-  --accent-violet: #a91101;
-  /* Ruby Red for minor accents */
+  --accent-cyan: #00f0ff;
+  /* Electric Cyan */
+  --accent-magenta: #ff0055;
+  /* Electric Magenta */
+  --accent-violet: #7000ff;
+  /* Electric Violet */
 
-  --glow-cyan: rgba(212, 175, 55, 0.15);
-  /* Reduced Gold glow */
-  --glow-magenta: rgba(139, 0, 0, 0.15);
+  --glow-cyan: rgba(0, 240, 255, 0.15);
+  /* Accent glow */
+  --glow-magenta: rgba(255, 0, 85, 0.15);
 
   /* Typography conveying authority */
   --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -48,12 +48,12 @@ body {
   z-index: -1;
   overflow: hidden;
   background-color: var(--bg-dark);
-  background-image: url('/hero_bg.png');
+  background-image: url('/pro_bg.png');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  opacity: 0.9;
-  filter: contrast(1.1) brightness(0.85);
+  opacity: 1;
+  filter: contrast(1.05) brightness(0.9);
   pointer-events: none;
 }
 
@@ -137,7 +137,7 @@ header {
 .main-parent-card {
   grid-column: 1 / -1;
   min-height: 180px;
-  border: 1px solid var(--accent-gold);
+  border: 1px solid var(--border-light);
   margin-bottom: 15px;
 }
 
@@ -146,10 +146,10 @@ header {
   font-size: 1.6rem;
   font-weight: 700;
   /* Bolder logo for authority */
-  color: var(--accent-cyan);
-  /* Gold Logo */
-  letter-spacing: -0.5px;
-  text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+  color: var(--text-primary);
+  /* Clean white logo */
+  letter-spacing: 1px;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
 .header-controls {
@@ -219,8 +219,8 @@ header {
 
 .btn-outline-gold {
   background: transparent;
-  color: var(--accent-cyan);
-  border: 1px solid var(--accent-cyan);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 8px 16px;
   border-radius: 6px;
   font-family: var(--font-display);
@@ -229,12 +229,13 @@ header {
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
 }
 
 .btn-outline-gold:hover {
-  background: rgba(212, 175, 55, 0.1);
-  box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--text-primary);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
 }
 
 .user-profile {
@@ -247,9 +248,8 @@ header {
   width: 40px;
   height: 40px;
   border-radius: 8px;
-  background: #1e1e24;
-  border: 2px solid var(--accent-magenta);
-  /* Crimson border for user */
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-light);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -257,13 +257,12 @@ header {
   font-size: 0.95rem;
   color: var(--text-primary);
   transition: all 0.3s ease;
-  box-shadow: 0 0 12px rgba(139, 0, 0, 0.4);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
 }
 
 .user-profile:hover .avatar {
   border-color: var(--accent-cyan);
-  /* Shifts to gold on hover */
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
 }
 
 /* Main Content Area */
@@ -340,11 +339,10 @@ header {
 }
 
 .sidebar-item.active {
-  background: rgba(0, 0, 0, 0.5);
-  color: var(--accent-cyan);
-  /* Gold active states */
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
   border-left-color: var(--accent-cyan);
-  box-shadow: inset 2px 0 10px rgba(212, 175, 55, 0.1);
+  box-shadow: inset 2px 0 10px rgba(0, 240, 255, 0.05);
 }
 
 .sidebar-item i {
@@ -383,15 +381,15 @@ main {
 /* --- Hierarchy Groups --- */
 .hierarchy-group {
   margin-bottom: 55px;
-  background: rgba(10, 10, 12, 0.55);
+  background: var(--bg-card);
   /* Deep frosted glass */
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   padding: 32px;
   border-radius: 16px;
   /* Elegant softer curves */
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .context-grid {
@@ -401,11 +399,11 @@ main {
 }
 
 .context-card {
-  background: linear-gradient(135deg, rgba(20, 20, 25, 0.8), rgba(10, 10, 14, 0.95));
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-top-color: rgba(255, 255, 255, 0.12);
+  background: rgba(15, 15, 20, 0.3);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--border-light);
+  border-top-color: rgba(255, 255, 255, 0.1);
   /* Fake top light reflection */
   border-radius: 12px;
   padding: 28px 24px;
@@ -418,16 +416,15 @@ main {
   transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), inset 0 -30px 40px -20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .context-card:hover,
 .context-card:active {
   transform: translateY(-8px) scale(1.02);
-  border-color: rgba(212, 175, 55, 0.4);
-  /* Premium Gold Focus */
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 25px rgba(212, 175, 55, 0.15), inset 0 1px 0 rgba(212, 175, 55, 0.3);
-  background: linear-gradient(135deg, rgba(25, 25, 30, 0.9), rgba(15, 15, 20, 0.98));
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 240, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: rgba(25, 25, 30, 0.4);
 }
 
 .context-card::after {
@@ -461,8 +458,8 @@ main {
 .context-card:hover .context-icon {
   color: var(--accent-cyan);
   border-color: var(--accent-cyan);
-  background: rgba(212, 175, 55, 0.1);
-  box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+  background: rgba(0, 240, 255, 0.05);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
 }
 
 .context-title {
