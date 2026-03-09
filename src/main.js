@@ -2,7 +2,7 @@ import './style.css'
 
 import './style.css';
 
-const apiHost = 'http://localhost:8080';
+const apiHost = import.meta.env.PROD ? '' : 'http://localhost:8080';
 
 // i18n Dictionary
 const i18n = {
