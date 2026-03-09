@@ -243,4 +243,4 @@ app.get('/api/', (req, res) => {
 
 // Vercel Serverless Export
 initDb().catch(console.error);
-module.exports = app;
+export default app;
