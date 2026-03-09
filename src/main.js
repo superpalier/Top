@@ -61,7 +61,11 @@ const i18n = {
     forgotPwd: 'Forgot Password?',
     createAccount: 'Create Account',
     authenticating: 'Authenticating...',
-    creatingAccount: 'Creating Account...'
+    creatingAccount: 'Creating Account...',
+    heroSubtitle: 'Visual consensus and decentralized rankings. Every vote permanently alters the hierarchy stack inside this elite enclosed ecosystem.',
+    heroContexts: 'Contexts',
+    heroUsers: 'Users',
+    heroVotes: 'Votes'
   },
   es: {
     dashboard: 'Inicio',
@@ -118,7 +122,11 @@ const i18n = {
     forgotPwd: '¿Olvidaste tu contraseña?',
     createAccount: 'Crear Cuenta',
     authenticating: 'Autenticando...',
-    creatingAccount: 'Creando cuenta...'
+    creatingAccount: 'Creando cuenta...',
+    heroSubtitle: 'Consenso visual y rankings descentralizados. Cada voto altera permanentemente la estructura jerárquica dentro de este ecosistema cerrado de élite.',
+    heroContexts: 'Contextos',
+    heroUsers: 'Usuarios',
+    heroVotes: 'Votos'
   },
   fr: {
     dashboard: 'Accueil',
@@ -175,7 +183,11 @@ const i18n = {
     forgotPwd: 'Mot de passe oublié ?',
     createAccount: 'Créer un compte',
     authenticating: 'Authentification...',
-    creatingAccount: 'Création du compte...'
+    creatingAccount: 'Création du compte...',
+    heroSubtitle: "Consensus visuel et classements décentralisés. Chaque vote modifie en permanence la structure hiérarchique au sein de cet écosystème d'élite.",
+    heroContexts: 'Contextes',
+    heroUsers: 'Utilisateurs',
+    heroVotes: 'Votes'
   },
   de: {
     dashboard: 'Dashboard',
@@ -232,7 +244,11 @@ const i18n = {
     forgotPwd: 'Passwort vergessen?',
     createAccount: 'Konto erstellen',
     authenticating: 'Authentifizieren...',
-    creatingAccount: 'Konto wird erstellt...'
+    creatingAccount: 'Konto wird erstellt...',
+    heroSubtitle: 'Visueller Konsens und dezentrale Rankings. Jede Stimme verändert dauerhaft die hierarchische Struktur in diesem elitären Ökosystem.',
+    heroContexts: 'Kontexte',
+    heroUsers: 'Benutzer',
+    heroVotes: 'Stimmen'
   }
 };
 
@@ -247,6 +263,7 @@ let contexts = [];
 let voteHistoryLedger = [];
 let suggestions = [];
 let notifications = [];
+let initialDataFetched = false;
 
 // HTTP Polling for Real-time UX (Free Cloud Run Alternative to WebSockets/Snapshots)
 const pollData = async () => {
@@ -290,6 +307,13 @@ const pollData = async () => {
         newContextMap[v.context_id] = v.target_user_id;
       });
       globalVotes.byContext = newContextMap;
+    }
+
+    if (!initialDataFetched) {
+      initialDataFetched = true;
+      if (document.getElementById('main-content') && currentView === 'home') {
+        render(); // Force initial full render to clear skeleton
+      }
     }
 
     // Attempt subtle re-render if data significantly changed
@@ -580,6 +604,24 @@ const render = () => {
 const renderHomeView = (container) => {
   const t = i18n[currentLang];
 
+  if (!initialDataFetched) {
+    container.innerHTML = `
+      <div style="display:flex; flex-direction:column; gap:20px; animation: pulse 1.5s infinite alternate;">
+        <!-- Hero Skeleton -->
+        <div style="height: 300px; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);"></div>
+        <!-- Title Skeleton -->
+        <div style="height: 30px; width: 250px; background: rgba(255,255,255,0.03); border-radius: 6px; margin-top:20px;"></div>
+        <!-- Card Skeletons -->
+        <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;">
+           <div style="height: 180px; border-radius: 12px; background: rgba(255,255,255,0.03);"></div>
+           <div style="height: 180px; border-radius: 12px; background: rgba(255,255,255,0.03);"></div>
+           <div style="height: 180px; border-radius: 12px; background: rgba(255,255,255,0.03);"></div>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
   // Filter based on search
   const filteredContexts = contexts.filter(ctx => ctx.titles[currentLang].toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -594,23 +636,23 @@ const renderHomeView = (container) => {
       
       <h1 style="font-family: var(--font-display); font-size: 2.8rem; font-weight: 700; margin-bottom: 16px; letter-spacing: -1px; background: linear-gradient(135deg, #fff, #a0a0a0); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Pyramida</h1>
       <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6; margin-bottom: 30px;">
-        Visual consensus and decentralized rankings. Every vote permanently alters the hierarchy stack inside this elite enclosed ecosystem.
+        ${t.heroSubtitle}
       </p>
       
       <div style="display: flex; gap: 24px; flex-wrap: wrap;">
         <div style="display: flex; flex-direction: column;">
           <span style="font-size: 2rem; font-weight: 800; color: var(--accent-cyan); font-family: var(--font-display); line-height: 1;">${contexts.length}</span>
-          <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Contexts</span>
+          <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">${t.heroContexts}</span>
         </div>
         <div style="width: 1px; background: rgba(255,255,255,0.1);"></div>
         <div style="display: flex; flex-direction: column;">
           <span style="font-size: 2rem; font-weight: 800; color: var(--text-primary); font-family: var(--font-display); line-height: 1;">3,000+</span>
-          <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Users</span>
+          <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">${t.heroUsers}</span>
         </div>
         <div style="width: 1px; background: rgba(255,255,255,0.1);"></div>
         <div style="display: flex; flex-direction: column;">
           <span style="font-size: 2rem; font-weight: 800; color: var(--text-primary); font-family: var(--font-display); line-height: 1;">4.2k</span>
-          <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">Votes</span>
+          <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">${t.heroVotes}</span>
         </div>
       </div>
     </div>
