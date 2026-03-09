@@ -19,7 +19,7 @@ app.use(express.json());
 // In GCP Cloud Run, this will naturally connect to Cloud SQL using environment variables
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+    ssl: { rejectUnauthorized: false }
 });
 
 // Initialize Database Tables
