@@ -634,8 +634,7 @@ const renderHomeView = (container) => {
       <!-- Subtle internal glow -->
       <div style="position: absolute; top: -50%; left: -20%; width: 50%; height: 200%; background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%); transform: rotate(30deg); pointer-events: none;"></div>
       
-      <h1 style="font-family: var(--font-display); font-size: 2.8rem; font-weight: 700; margin-bottom: 16px; letter-spacing: -1px; background: linear-gradient(135deg, #fff, #a0a0a0); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Pyramida</h1>
-      <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; line-height: 1.6; margin-bottom: 30px;">
+      <p style="font-size: 1.3rem; font-weight: 500; color: var(--text-primary); max-width: 700px; line-height: 1.5; margin-bottom: 30px;">
         ${t.heroSubtitle}
       </p>
       
