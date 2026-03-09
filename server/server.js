@@ -145,11 +145,24 @@ app.post('/api/login', async (req, res) => {
 // App Data Routes
 app.get('/api/contexts', async (req, res) => {
     try {
-        // In a full implementation, contexts would also be in a PostgreSQL table (e.g. 'contexts')
-        // We'll scaffold a quick mock response based on the previous seed data logic or add the table.
-        // Assuming we have a 'contexts' table later, for now return empty array to prevent Crash
-        res.json([]);
+        if (!process.env.DATABASE_URL) return res.json([]);
+        const client = await pool.connect();
+        const result = await client.query('SELECT * FROM base_contexts ORDER BY id');
+        client.release();
+
+        // Map the snake_case DB fields to the camelCase expected by the frontend
+        const mappedContexts = result.rows.map(row => ({
+            id: row.id,
+            titles: row.titles,
+            icon: row.icon,
+            participants: row.participants,
+            imageUrl: row.image_url,
+            createdAt: row.created_at
+        }));
+
+        res.json(mappedContexts);
     } catch (err) {
+        console.warn('DB Error:', err.message);
         res.status(500).json({ error: err.message });
     }
 });
