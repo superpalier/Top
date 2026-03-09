@@ -740,27 +740,6 @@ const renderHomeView = (container) => {
 
   container.innerHTML = `
     <div class="view-container">
-      <div class="home-hero">
-        <h1 class="hero-title">Pyramida</h1>
-        <p class="hero-subtitle">Visual consensus and decentralized rankings.<br>Every vote permanently alters the hierarchy stack.</p>
-        
-        <div class="stats-row">
-          <div class="stat-item">
-            <div class="stat-value">${contexts.filter(c => !c.parentId).length}</div>
-            <div class="stat-label">${t.contexts}</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-value">${baseUsers.length}</div>
-            <div class="stat-label">${t.users}</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-value">4.2k</div>
-            <div class="stat-label">${t.votes}</div>
-          </div>
-        </div>
-      </div>
-      
-      <h2 class="section-title">${t.trendingContexts}</h2>
       <div class="hierarchy-container">
         ${contextHTML}
       </div>
