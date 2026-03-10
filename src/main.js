@@ -136,7 +136,13 @@ const i18n = {
     parentCatOptional: 'Parent Category (Optional Subfamily)',
     imageUrlOptional: 'Image URL (Optional)',
     noneTopLevel: '-- None (Top Level) --',
-    noContextsFound: 'No contexts found.'
+    noContextsFound: 'No contexts found.',
+    myProfile: 'My Profile',
+    logout: 'Logout',
+    noVotesYet: 'No votes cast yet.',
+    votedFor: 'Voted for',
+    category: 'Category',
+    date: 'Date'
   },
   es: {
     dashboard: 'Inicio',
@@ -268,7 +274,13 @@ const i18n = {
     parentCatOptional: 'Categoría Padre (Opcional)',
     imageUrlOptional: 'URL de Imagen (Opcional)',
     noneTopLevel: '-- Ninguna (Nivel Superior) --',
-    noContextsFound: 'No se encontraron contextos.'
+    noContextsFound: 'No se encontraron contextos.',
+    myProfile: 'Mi Perfil',
+    logout: 'Cerrar Sesión',
+    noVotesYet: 'Aún no has votado.',
+    votedFor: 'Votó por',
+    category: 'Categoría',
+    date: 'Fecha'
   },
   fr: {
     dashboard: 'Accueil',
@@ -897,6 +909,8 @@ const render = () => {
     renderRegisterView(mainContent);
   } else if (currentView === 'admin') {
     renderAdminView(mainContent);
+  } else if (currentView === 'profile') {
+    renderProfileView(mainContent);
   }
 
   attachGlobalEvents();
@@ -2287,7 +2301,10 @@ const attachGlobalEvents = () => {
   const profileBtn = document.getElementById('profile-btn');
   if (profileBtn) {
     profileBtn.addEventListener('click', () => {
-      if (!loggedInUser) {
+      if (loggedInUser) {
+        currentView = 'profile';
+        render();
+      } else {
         currentView = 'register';
         render();
       }
