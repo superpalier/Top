@@ -761,6 +761,110 @@ main {
   flex-wrap: wrap;
 }
 
+/* ── Family / Subcategory View ────────────────────────── */
+.family-apex-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  margin: 16px 0 8px;
+  background: linear-gradient(135deg, rgba(20, 20, 25, 0.9), rgba(10, 10, 12, 0.95));
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.15), 0 10px 30px rgba(0, 0, 0, 0.6);
+  flex-wrap: wrap;
+}
+
+.family-apex-photo-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.family-apex-photo {
+  width: 96px;
+  height: 96px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid rgba(212, 175, 55, 0.7);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  display: block;
+}
+
+.family-apex-crown {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2rem;
+  filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.9));
+  line-height: 1;
+}
+
+.family-apex-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.family-apex-rank {
+  font-size: 0.8rem;
+  color: var(--accent-gold);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.family-apex-name {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.family-apex-votes {
+  font-size: 0.82rem;
+  color: var(--accent-gold);
+}
+
+.btn-enter-pyramid {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, var(--accent-cyan), rgba(0, 210, 220, 0.7));
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btn-enter-pyramid:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 240, 255, 0.3);
+}
+
+.family-child-top1-img {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(212, 175, 55, 0.6);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  z-index: 2;
+}
+
 /* 3D-Like Pyramid Container */
 .pyramid-viewport {
   width: 100%;
@@ -774,9 +878,9 @@ main {
   margin-top: -20px;
   background: transparent;
   border-radius: 12px;
-  mask-image: linear-gradient(to bottom, transparent, black 3%, black 95%, transparent),
+  mask-image: linear-gradient(to bottom, transparent, black 10%, black 94%, transparent),
     linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 3%, black 95%, transparent),
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 94%, transparent),
     linear-gradient(to right, transparent, black 5%, black 95%, transparent);
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
@@ -1032,13 +1136,9 @@ main {
   bottom: -35px;
 }
 
-/* Special styling for top tier (The Apex) */
+/* Special styling for top tier (The Apex) - z-index and color token */
 .tier-0 .user-node {
-  /* Colossal Apex */
   --tier-color: var(--accent-cyan);
-  /* Gold */
-  border: 2px solid var(--accent-cyan);
-  box-shadow: 0 0 30px rgba(212, 175, 55, 0.4), inset 0 0 20px rgba(212, 175, 55, 0.3);
   z-index: 50;
 }
 

@@ -86,7 +86,15 @@ const i18n = {
     heroContexts: 'Contexts',
     heroUsers: 'Users',
     heroVotes: 'Votes',
-    swipePrompt: 'Swipe to see the full pyramid'
+    swipePrompt: 'Swipe to see the full pyramid',
+    voteCast: '✓ Vote cast! Good choice.',
+    voteFailed: 'Failed to submit vote. Try again.',
+    networkError: 'Network error. Please check your connection.',
+    dailyLimitLabel: 'Daily limit reached',
+    noNotifications: 'No new notifications',
+    subcategories: 'Subcategories',
+    enterContext: 'Enter Pyramid',
+    backToFamily: '← Back'
   },
   es: {
     dashboard: 'Inicio',
@@ -168,7 +176,15 @@ const i18n = {
     heroContexts: 'Contextos',
     heroUsers: 'Usuarios',
     heroVotes: 'Votos',
-    swipePrompt: 'Desliza para ver la pirámide completa'
+    swipePrompt: 'Desliza para ver la pirámide completa',
+    voteCast: '✓ Voto registrado. ¡Buena elección!',
+    voteFailed: 'Error al votar. Intentá de nuevo.',
+    networkError: 'Error de red. Verificá tu conexión.',
+    dailyLimitLabel: 'Límite diario alcanzado',
+    noNotifications: 'Sin notificaciones nuevas',
+    subcategories: 'Subcategorías',
+    enterContext: 'Entrar a la Pirámide',
+    backToFamily: '← Volver'
   },
   fr: {
     dashboard: 'Accueil',
@@ -246,7 +262,15 @@ const i18n = {
     heroContexts: 'Contextes',
     heroUsers: 'Utilisateurs',
     heroVotes: 'Votes',
-    swipePrompt: 'Faites glisser pour voir la pyramide complète'
+    swipePrompt: 'Faites glisser pour voir la pyramide complète',
+    voteCast: '✓ Vote enregistré !',
+    voteFailed: 'Échec du vote. Réessayez.',
+    networkError: 'Erreur réseau. Vérifiez votre connexion.',
+    dailyLimitLabel: 'Limite quotidienne atteinte',
+    noNotifications: 'Aucune nouvelle notification',
+    subcategories: 'Sous-catégories',
+    enterContext: 'Entrer dans la Pyramide',
+    backToFamily: '← Retour'
   },
   de: {
     dashboard: 'Dashboard',
@@ -308,7 +332,15 @@ const i18n = {
     heroContexts: 'Kontexte',
     heroUsers: 'Benutzer',
     heroVotes: 'Stimmen',
-    swipePrompt: 'Wischen, um die vollständige Pyramide zu sehen'
+    swipePrompt: 'Wischen, um die vollständige Pyramide zu sehen',
+    voteCast: '✓ Stimme abgegeben!',
+    voteFailed: 'Abstimmung fehlgeschlagen. Erneut versuchen.',
+    networkError: 'Netzwerkfehler. Bitte Verbindung prüfen.',
+    dailyLimitLabel: 'Tageslimit erreicht',
+    noNotifications: 'Keine neuen Benachrichtigungen',
+    subcategories: 'Unterkategorien',
+    enterContext: 'Pyramide betreten',
+    backToFamily: '← Zurück'
   }
 };
 
@@ -612,7 +644,7 @@ const render = () => {
         </a>
         <div id="sidebar-contexts-list" style="overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:4px;">
           ${contexts.filter(ctx => ctx.titles[currentLang].toLowerCase().includes(searchQuery.toLowerCase())).map(ctx => `
-            <a class="sidebar-item ${currentView === `pyramid-${ctx.id}` ? 'active' : ''}" data-target="pyramid-${ctx.id}" ${ctx.parentId ? 'style="padding-left: 36px; font-size: 0.85rem; border-left: 1px dashed rgba(255,255,255,0.1);"' : ''}>
+            <a class="sidebar-item ${(currentView === `pyramid-${ctx.id}` || currentView === `family-${ctx.id}`) ? 'active' : ''}" data-target="${contexts.some(c => c.parentId === ctx.id) ? `family-${ctx.id}` : `pyramid-${ctx.id}`}" ${ctx.parentId ? 'style="padding-left: 36px; font-size: 0.85rem; border-left: 1px dashed rgba(255,255,255,0.1);"' : ''}>
               <i class="${ctx.icon}"></i> ${ctx.titles[currentLang]}
             </a>
           `).join('')}
@@ -660,6 +692,11 @@ const render = () => {
     renderHomeView(mainContent);
   } else if (currentView === 'suggest') {
     renderSuggestView(mainContent);
+  } else if (currentView.startsWith('family-')) {
+    const contextId = currentView.replace('family-', '');
+    const contextInfo = contexts.find(c => c.id === contextId);
+    if (contextInfo) renderFamilyView(mainContent, contextInfo);
+    else { currentView = 'home'; render(); }
   } else if (currentView.startsWith('pyramid-')) {
     const contextId = currentView.split('-')[1];
     const contextInfo = contexts.find(c => c.id === contextId);
@@ -853,11 +890,98 @@ const renderHomeView = (container) => {
     </div>
   `;
 
-  // Attach card clicks
+  // Attach card clicks — parent contexts with children show family/subcategory view
   document.querySelectorAll('.context-card').forEach(card => {
     card.addEventListener('click', () => {
-      pyramidOffsetIndex = 0; // Reset focus on fresh context enter
-      currentView = `pyramid-${card.dataset.id}`;
+      const ctxId = card.dataset.id;
+      const hasChildren = contexts.some(c => c.parentId === ctxId);
+      pyramidOffsetIndex = 0;
+      currentView = hasChildren ? `family-${ctxId}` : `pyramid-${ctxId}`;
+      render();
+    });
+  });
+};
+
+/* ─ Family / Subcategory View ─────────────────────────── */
+const renderFamilyView = (container, parentCtx) => {
+  const t = i18n[currentLang];
+  const children = contexts.filter(c => c.parentId === parentCtx.id);
+
+  // Get the Top 1 person in the parent context
+  const pyramidObj = generatePyramidData(parentCtx.id);
+  const top1 = pyramidObj.data[0]?.[0]; // tier 0, first user
+
+  const top1HTML = top1 ? `
+    <div class="family-apex-card">
+      <div class="family-apex-photo-wrap">
+        <img src="${top1.img}" alt="${top1.name}" class="family-apex-photo">
+        <span class="family-apex-crown">👑</span>
+      </div>
+      <div class="family-apex-info">
+        <span class="family-apex-rank">#1</span>
+        <span class="family-apex-name">${top1.name}</span>
+        <span class="family-apex-votes">★ ${top1.votes} ${t.votesCount}</span>
+      </div>
+      <button class="btn-enter-pyramid" id="enter-parent-pyramid-btn">
+        <i class="ph ph-hierarchy"></i> ${t.enterContext || 'Enter Pyramid'}
+      </button>
+    </div>
+  ` : '';
+
+  const childrenHTML = children.length ? `
+    <div style="margin-top:28px;">
+      <h3 style="font-size:1rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;>${t.subcategories || 'Subcategories'}</h3>
+      <div class="context-grid">
+        ${children.map(child => {
+    const childTop1 = generatePyramidData(child.id).data[0]?.[0];
+    const bgStyle = child.imageUrl
+      ? `background-image:linear-gradient(to top,rgba(5,5,7,0.95),rgba(10,10,15,0.6)),url('${child.imageUrl}');background-size:cover;background-position:center;`
+      : '';
+    return `
+            <div class="context-card child-card family-child-card" data-id="${child.id}" style="${bgStyle}position:relative;overflow:hidden;">
+              ${childTop1 ? `<img src="${childTop1.img}" alt="${childTop1.name}" class="family-child-top1-img">` : ''}
+              <i class="${child.icon} context-icon" style="font-size:1.4rem;"></i>
+              <div class="context-title" style="font-size:1rem;">${child.titles[currentLang]}</div>
+              <div class="context-stats"><i class="ph ph-users"></i> ${child.participants} ${t.users}</div>
+            </div>
+          `;
+  }).join('')}
+      </div>
+    </div>
+  ` : '';
+
+  container.innerHTML = `
+    <div class="view-container">
+      <div class="pyramid-header context-header">
+        <button class="back-btn" id="back-to-home-btn"><i class="ph ph-arrow-left"></i></button>
+        <div class="pyramid-context-title">
+          <i class="${parentCtx.icon}" style="color:var(--accent-cyan);margin-right:6px;"></i>
+          ${parentCtx.titles[currentLang]}
+        </div>
+      </div>
+
+      ${top1HTML}
+      ${childrenHTML}
+    </div>
+  `;
+
+  // Back button
+  document.getElementById('back-to-home-btn')?.addEventListener('click', () => { currentView = 'home'; render(); });
+
+  // Enter parent pyramid button
+  document.getElementById('enter-parent-pyramid-btn')?.addEventListener('click', () => {
+    pyramidOffsetIndex = 0;
+    currentView = `pyramid-${parentCtx.id}`;
+    render();
+  });
+
+  // Child context card clicks
+  document.querySelectorAll('.family-child-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const ctxId = card.dataset.id;
+      const hasGrandchildren = contexts.some(c => c.parentId === ctxId);
+      pyramidOffsetIndex = 0;
+      currentView = hasGrandchildren ? `family-${ctxId}` : `pyramid-${ctxId}`;
       render();
     });
   });
@@ -1029,7 +1153,7 @@ const renderPyramidView = (container, contextInfo) => {
         vBtn.disabled = true;
         vBtn.onclick = null; // Do nothing or dismiss
       } else if (globalVotes.count >= MAX_DAILY_VOTES) {
-        vBtn.innerText = 'Daily Limit Reached';
+        vBtn.innerText = t.dailyLimitLabel;
         vBtn.className = 'btn-vote disabled';
         vBtn.disabled = true;
         vBtn.onclick = null;
@@ -1066,15 +1190,15 @@ const renderPyramidView = (container, contextInfo) => {
                 localStorage.setItem('pyramida_anon_votes', JSON.stringify(localHistory));
               }
 
-              showToast('Vote successfully cast!', 'ph-check-circle');
+              showToast(t.voteCast, 'ph-check-circle');
               render();
             } else {
               const errData = await response.json();
-              showToast(errData.error || 'Failed to submit vote', 'ph-x-circle');
+              showToast(errData.error || t.voteFailed, 'ph-x-circle');
             }
           } catch (e) {
             console.error(e);
-            showToast('Network error while voting', 'ph-wifi-slash');
+            showToast(t.networkError, 'ph-wifi-slash');
           }
 
           profileModal.classList.remove('active');
@@ -1800,7 +1924,7 @@ const attachGlobalEvents = () => {
           } catch (e) { console.warn(e); }
         });
       } else {
-        showToast('No new notifications', 'ph-bell');
+        showToast(t.noNotifications, 'ph-bell');
       }
     }
   });
