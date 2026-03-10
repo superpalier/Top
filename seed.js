@@ -73,7 +73,7 @@ async function seedContexts() {
     const client = await pool.connect();
 
     try {
-        console.log("Ensuring 'base_contexts' table and 'parent_id' column exist...");
+        console.log("Ensuring 'base_contexts' table and all columns exist...");
         await client.query(`
             CREATE TABLE IF NOT EXISTS base_contexts (
                 id VARCHAR(255) PRIMARY KEY,
@@ -81,10 +81,15 @@ async function seedContexts() {
                 icon VARCHAR(255),
                 participants INTEGER DEFAULT 0,
                 image_url VARCHAR(255),
-                created_at TIMESTAMP NOT NULL
+                parent_id VARCHAR(255),
+                created_at TIMESTAMP
             );
+            -- Explicitly ensure columns exist for older tables
             ALTER TABLE base_contexts ADD COLUMN IF NOT EXISTS parent_id VARCHAR(255);
-            -- Clean up old numeric placeholders if they exist to make room for the new elegant hierarchy
+            ALTER TABLE base_contexts ADD COLUMN IF NOT EXISTS image_url VARCHAR(255);
+            ALTER TABLE base_contexts ADD COLUMN IF NOT EXISTS created_at TIMESTAMP;
+            
+            -- Clean up old numeric placeholders if they exist
             DELETE FROM base_contexts WHERE id ~ '^ctx_[0-9]+$';
         `);
 

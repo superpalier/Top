@@ -24,7 +24,7 @@ const i18n = {
     votedInCat: 'Voted in this context',
     expiresIn: 'Expires 24h',
     votesAvail: (rem) => `${rem} Votes Left Today`,
-    joinPyramida: 'Join Pyramida',
+    joinVotenaut: 'Join Votenaut',
     chooseUser: 'Choose a Username',
     placeholderUser: 'e.g. capcris',
     enterPyramid: 'Enter the Pyramid',
@@ -69,7 +69,7 @@ const i18n = {
     heroSubtitle: '🏆 Who really deserves the #1 spot? <strong>You decide.</strong> Cast your vote, shake up the rankings, and see the pyramid shift in real time — no sign-up needed.',
     heroSubtitle2: 'Vote anonymously for free (lasts 24h), or <strong>create a free account</strong> to lock in your votes for 30 days and track your full voting history.',
     rulesModalBtn: 'How does it work? →',
-    rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ How Voternaut Works</h2>
+    rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ How Votenaut Works</h2>
 <p style="margin-bottom:12px;">Each <strong>Pyramid</strong> represents a category or context (e.g. Best Musician, Best Athlete). Inside each pyramid, users are ranked from #1 (Apex) to #55 based on votes received.</p>
 <h3 style="margin:16px 0 8px;color:var(--accent-gold);">⚡ Anonymous Voting (no account needed)</h3>
 <ul style="padding-left:18px;margin-bottom:12px;line-height:2;">
@@ -156,7 +156,7 @@ const i18n = {
     votedInCat: 'Has votado en este contexto',
     expiresIn: 'Expira en 24h',
     votesAvail: (rem) => `${rem} Votos Restantes`,
-    joinPyramida: 'Únete a Pyramida',
+    joinVotenaut: 'Únete a Votenaut',
     chooseUser: 'Ingresa un Username',
     placeholderUser: 'ej. capcris',
     enterPyramid: 'Entrar a la Pirámide',
@@ -201,7 +201,7 @@ const i18n = {
     heroSubtitle: '🏆 ¿Quién merece realmente el puesto #1? <strong>Tú decides.</strong> Vota, sacude el ranking y mira cómo la pirámide se reconfigura en tiempo real — sin registro.',
     heroSubtitle2: 'Vota anónimo gratis (dura 24h), o <strong>crea una cuenta gratuita</strong> para que tus votos duren 30 días y puedas seguir todo tu historial.',
     rulesModalBtn: '¿Cómo funciona? →',
-    rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ Cómo funciona Voternaut</h2>
+    rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ Cómo funciona Votenaut</h2>
 <p style="margin-bottom:12px;">Cada <strong>Pirámide</strong> es una categoría o contexto (ej. Mejor Músico). Dentro, los usuarios se rankean del #1 (Apex) al #55 según los votos recibidos.</p>
 <h3 style="margin:16px 0 8px;color:var(--accent-gold);">⚡ Votación Anónima (sin cuenta)</h3>
 <ul style="padding-left:18px;margin-bottom:12px;line-height:2;">
@@ -288,7 +288,7 @@ const i18n = {
     votedInCat: 'Voté dans ce contexte',
     expiresIn: 'Expire 24h',
     votesAvail: (rem) => `${rem} Votes Restants`,
-    joinPyramida: 'Rejoindre Pyramida',
+    joinVotenaut: 'Rejoindre Votenaut',
     chooseUser: 'Choisir un Pseudo',
     placeholderUser: 'ex. capcris',
     enterPyramid: 'Entrer dans la Pyramide',
@@ -333,7 +333,7 @@ const i18n = {
     heroSubtitle: '🏆 Qui mérite vraiment la place #1 ? <strong>C\'est vous qui décidez.</strong> Votez, bousculez le classement et regardez la pyramide se transformer en direct — sans inscription.',
     heroSubtitle2: 'Vote anonyme gratuit (valable 24h), ou <strong>créez un compte gratuit</strong> pour que vos votes durent 30 jours et accéder à votre historique complet.',
     rulesModalBtn: 'Comment ça marche ? →',
-    rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ Comment fonctionne Voternaut</h2>
+    rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ Comment fonctionne Votenaut</h2>
 <p style="margin-bottom:12px;">Chaque <strong>Pyramide</strong> est une catégorie (ex. Meilleur Musicien). Les utilisateurs sont classés du #1 (Apex) au #55 selon les votes reçus.</p>
 <h3 style="margin:16px 0 8px;color:var(--accent-gold);">⚡ Vote Anonyme (sans compte)</h3>
 <ul style="padding-left:18px;margin-bottom:12px;line-height:2;">
@@ -412,7 +412,7 @@ const i18n = {
     votedInCat: 'In diesem Kontext abgestimmt',
     expiresIn: 'Ablauf 24h',
     votesAvail: (rem) => `${rem} Stimmen Übrig`,
-    joinPyramida: 'Pyramida Beitreten',
+    joinVotenaut: 'Votenaut Beitreten',
     chooseUser: 'Wählen Sie einen Namen',
     placeholderUser: 'z.B. capcris',
     enterPyramid: 'Die Pyramide Betreten',
@@ -584,7 +584,7 @@ const pollData = async () => {
       });
     } else {
       // Anonymous User Polling from LocalStorage
-      const anonVotes = JSON.parse(localStorage.getItem('pyramida_anon_votes') || '[]');
+      const anonVotes = JSON.parse(localStorage.getItem('votenaut_anon_votes') || '[]');
       const todaysAnon = anonVotes.filter(v => {
         const castDate = new Date(v.castAt);
         return castDate.toDateString() === today.toDateString() && (new Date() - castDate) < (24 * 60 * 60 * 1000); // 24 hours
@@ -731,16 +731,16 @@ let loggedInUser = null;
 let searchQuery = '';
 // JWT Session Restoration
 const restoreSession = async () => {
-  const token = localStorage.getItem('pyramida_token');
-  const storedUser = localStorage.getItem('pyramida_user');
+  const token = localStorage.getItem('votenaut_token');
+  const storedUser = localStorage.getItem('votenaut_user');
 
   if (token && storedUser) {
     try {
       loggedInUser = JSON.parse(storedUser);
       if (document.getElementById('main-content')) render();
     } catch (e) {
-      localStorage.removeItem('pyramida_token');
-      localStorage.removeItem('pyramida_user');
+      localStorage.removeItem('votenaut_token');
+      localStorage.removeItem('votenaut_user');
     }
   }
 };
@@ -1375,7 +1375,7 @@ const renderPyramidView = (container, contextInfo) => {
           try {
             // Send vote strictly to our backend API
             const headers = { 'Content-Type': 'application/json' };
-            const token = localStorage.getItem('pyramida_token');
+            const token = localStorage.getItem('votenaut_token');
             if (token) headers['Authorization'] = `Bearer ${token}`;
 
             const response = await fetch(`${apiHost}/api/votes`, {
@@ -1395,9 +1395,9 @@ const renderPyramidView = (container, contextInfo) => {
               globalVotes.byContext[contextInfo.id] = userId;
 
               if (!loggedInUser) {
-                const localHistory = JSON.parse(localStorage.getItem('pyramida_anon_votes') || '[]');
+                const localHistory = JSON.parse(localStorage.getItem('votenaut_anon_votes') || '[]');
                 localHistory.push({ contextId: contextInfo.id, targetUserId: userId, castAt: new Date().toISOString() });
-                localStorage.setItem('pyramida_anon_votes', JSON.stringify(localHistory));
+                localStorage.setItem('votenaut_anon_votes', JSON.stringify(localHistory));
               }
 
               showToast(t.voteCast, 'ph-check-circle');
@@ -1555,9 +1555,9 @@ const voteAction = async (node, contextId) => {
 
   // Store in LocalStorage for anonymous tracking
   if (!loggedInUser) {
-    const localHistory = JSON.parse(localStorage.getItem('pyramida_anon_votes') || '[]');
+    const localHistory = JSON.parse(localStorage.getItem('votenaut_anon_votes') || '[]');
     localHistory.push({ contextId, targetUserId: userId, castAt: new Date().toISOString() });
-    localStorage.setItem('pyramida_anon_votes', JSON.stringify(localHistory));
+    localStorage.setItem('votenaut_anon_votes', JSON.stringify(localHistory));
   }
 
   // Fast UI updates automatically but we ensure one immediate local render
@@ -1667,8 +1667,8 @@ const renderRegisterView = (container) => {
         throw new Error(t_api(data.error));
       }
 
-      localStorage.setItem('pyramida_token', data.token);
-      localStorage.setItem('pyramida_user', JSON.stringify(data.user));
+      localStorage.setItem('votenaut_token', data.token);
+      localStorage.setItem('votenaut_user', JSON.stringify(data.user));
       loggedInUser = data.user;
 
       showToast(t.loginSuccess, 'ph-check-circle');
@@ -1713,8 +1713,8 @@ const renderRegisterView = (container) => {
         throw new Error(t_api(data.error));
       }
 
-      localStorage.setItem('pyramida_token', data.token);
-      localStorage.setItem('pyramida_user', JSON.stringify(data.user));
+      localStorage.setItem('votenaut_token', data.token);
+      localStorage.setItem('votenaut_user', JSON.stringify(data.user));
       loggedInUser = data.user;
 
       showToast(t.regSuccess, 'ph-check-circle');

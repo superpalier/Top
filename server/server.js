@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken';
 
 const app = express();
 const PORT = process.env.PORT || 8080;
-const SECRET_KEY = process.env.JWT_SECRET || 'gcp-cloud-run-pyramida-secret-key';
+const SECRET_KEY = process.env.JWT_SECRET || 'votenaut-secret-key-prod-2026';
 
 // Middleware
 app.use(cors());
@@ -292,9 +292,7 @@ app.post('/api/votes', async (req, res) => {
 });
 
 // Health Check for Vercel
-app.get('/api/', (req, res) => {
-    res.status(200).send('Pyramida Express API running horizontally on Vercel Serverless!');
-});
+res.status(200).send('Votenaut Express API running horizontally on Vercel Serverless!');
 
 // Vercel Serverless Export
 initDb().catch(console.error);
