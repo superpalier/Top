@@ -600,6 +600,11 @@ const pollData = async () => {
         render(); // Force initial full render to clear skeleton
       }
     }
+
+    // Trigger re-render for active Admin View during polling
+    if (document.getElementById('main-content') && currentView === 'admin') {
+      renderAdminView(document.getElementById('main-content'));
+    }
   } catch (err) {
     console.error('Polling error:', err);
   }
@@ -985,12 +990,12 @@ const renderHomeView = (container) => {
         <div class="hierarchy-group" style="margin-bottom: 40px;">
           <h3 style="font-family: var(--font-display); color: var(--accent-cyan); margin-bottom: 20px; display:flex; align-items:center; gap:12px; font-size: 1.5rem; letter-spacing: -0.5px;">
             <div style="background: rgba(212,175,55,0.1); padding: 8px; border-radius: 8px; border: 1px solid rgba(212,175,55,0.2);"><i class="${p.icon}"></i></div>
-            ${p.titles[currentLang]}
+            ${p.titles[currentLang] || p.titles['en'] || p.id}
           </h3>
           <div class="context-grid">
             <div class="context-card main-parent-card" data-id="${p.id}" ${p.imageUrl ? `style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(10,0,15,0.95)), url('${p.imageUrl}'); background-size: cover; background-position: center;"` : ''}>
                <i class="${p.icon} context-icon" style="opacity: 0.5;"></i>
-               <div class="context-title" style="font-size: 1.5rem;">${p.titles[currentLang]}</div>
+               <div class="context-title" style="font-size: 1.5rem;">${p.titles[currentLang] || p.titles['en'] || p.id}</div>
                <div class="context-stats"><i class="ph ph-users"></i> ${p.participants} ${t.users}</div>
             </div>
             ${children.map(ctx => {
@@ -1003,7 +1008,7 @@ const renderHomeView = (container) => {
         return `
               <div class="context-card child-card" data-id="${ctx.id}" ${bgStyle}>
                 <i class="${ctx.icon} context-icon" style="font-size: 1.5rem;"></i>
-                <div class="context-title" style="font-size: 1.1rem;">${ctx.titles[currentLang]}</div>
+                <div class="context-title" style="font-size: 1.1rem;">${ctx.titles[currentLang] || ctx.titles['en'] || ctx.id}</div>
                 <div class="context-stats"><i class="ph ph-users"></i> ${ctx.participants} ${t.users}</div>
               </div>
             `;
@@ -1110,7 +1115,7 @@ const renderFamilyView = (container, parentCtx) => {
 
   const childrenHTML = children.length ? `
     <div style="margin-top:28px;">
-      <h3 style="font-size:1rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;>${t.subcategories || 'Subcategories'}</h3>
+      <h3 style="font-size:1rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;">${t.subcategories || 'Subcategories'}</h3>
       <div class="context-grid">
         ${children.map(child => {
     const childTop1 = generatePyramidData(child.id).data[0]?.[0];
