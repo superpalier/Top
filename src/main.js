@@ -979,10 +979,13 @@ const renderProfileView = (container) => {
          <!-- User Info Card -->
          <div class="profile-card" style="position:relative; width:100%; max-width:none; transform:none; opacity:1; pointer-events:all; box-shadow:0 10px 40px rgba(0,0,0,0.5);">
             <div class="profile-card-header" style="height: 80px; background: var(--accent-gold); opacity: 0.15;"></div>
-            <div class="profile-card-body" style="padding-top: 40px;">
-              <div class="avatar-large" style="width:100px; height:100px; background:var(--bg-dark); border:3px solid var(--accent-gold); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:800; color:var(--accent-gold); margin: -50px auto 15px; position:relative; z-index:2;">
-                ${loggedInUser.name.substring(0, 2).toUpperCase()}
-              </div>
+             <div class="profile-card-body" style="padding-top: 40px;">
+               <div class="avatar-large" style="width:100px; height:100px; background:var(--bg-card); border:3px solid var(--accent-gold); border-radius:50%; overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:800; color:var(--accent-gold); margin: -50px auto 15px; position:relative; z-index:2; box-shadow:0 4px 20px rgba(212,175,55,0.3);">
+                 ${loggedInUser.img
+      ? `<img src="${loggedInUser.img}" alt="${loggedInUser.name}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`
+      : loggedInUser.name.substring(0, 2).toUpperCase()
+    }
+               </div>
               <h2 style="margin-bottom:4px; font-family:var(--font-display); color:var(--text-primary); font-size:1.4rem;">${loggedInUser.name}</h2>
               <p style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:20px;">${loggedInUser.email}</p>
               
@@ -1014,16 +1017,17 @@ const renderProfileView = (container) => {
 
         return `
                    <div class="history-item ${isExpired ? 'expired' : ''}" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:12px; padding:14px; display:flex; align-items:center; gap:15px; position:relative; overflow:hidden;">
-                     <div style="width:40px; height:40px; border-radius:8px; background:rgba(212,175,55,0.1); display:flex; align-items:center; justify-content:center; color:var(--accent-gold);">
+                     <div style="width:44px; height:44px; border-radius:10px; background:rgba(212,175,55,0.1); display:flex; align-items:center; justify-content:center; color:var(--accent-gold); font-size:1.2rem; flex-shrink:0;">
                         <i class="${ctx ? ctx.icon : 'ph ph-question'}"></i>
                      </div>
-                     <div style="flex:1;">
-                        <div style="font-size:0.9rem; font-weight:600; color:var(--text-primary);">${ctxTitle}</div>
-                        <div style="font-size:0.75rem; color:var(--text-secondary);">${t.votedFor}: <span style="color:var(--accent-cyan); font-weight:500;">@${vote.target_user_id}</span></div>
+                     <div style="flex:1; min-width:0;">
+                        <div style="font-size:0.9rem; font-weight:600; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${ctxTitle}</div>
+                        <div style="font-size:0.7rem; color:var(--text-secondary); margin-bottom:4px; font-family:monospace; letter-spacing:0.5px; opacity:0.6;">#${vote.context_id}</div>
+                        <div style="font-size:0.75rem; color:var(--text-secondary);">${t.votedFor}: <span style="color:var(--accent-cyan); font-weight:600;">@${vote.target_user_id}</span></div>
                      </div>
-                     <div style="text-align:right;">
-                        <div style="font-size:0.75rem; color:var(--text-secondary);">${new Date(vote.cast_at).toLocaleDateString()}</div>
-                        <span class="badge ${isExpired ? 'bg-expired' : 'bg-active'}" style="font-size:0.6rem; padding: 2px 6px; border-radius:4px; text-transform:uppercase;">${isExpired ? t.expiredVote : t.activeVote}</span>
+                     <div style="text-align:right; flex-shrink:0;">
+                        <div style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:4px;">${new Date(vote.cast_at).toLocaleDateString()}</div>
+                        <span class="badge ${isExpired ? 'bg-expired' : 'bg-active'}" style="font-size:0.6rem; padding: 2px 8px; border-radius:6px; text-transform:uppercase; display:inline-block;">${isExpired ? t.expiredVote : t.activeVote}</span>
                      </div>
                    </div>
                  `;
