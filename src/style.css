@@ -1,27 +1,29 @@
 :root {
-  --bg-dark: #050507;
-  /* Obsidian Void */
-  --bg-card: rgba(10, 10, 15, 0.45);
-  /* Deeper premium glass */
-  --border-light: rgba(255, 255, 255, 0.04);
-  /* Delicate light border */
-  --text-primary: #ffffff;
-  --text-secondary: #a0a0b0;
-  /* Platinum / Slate */
+  /* ── 4-COLOR PREMIUM PALETTE ───────────
+     1. Deep Obsidian   #07070F  → backgrounds
+     2. Warm Gold       #C9A84C  → primary accent / CTA
+     3. Royal Indigo    #6C5CE7  → secondary accent
+     4. Teal Jade       #00C9A7  → tertiary / interactive
+  ───────────────────────────────── */
+  --bg-dark: #07070F;
+  --bg-card: rgba(12, 12, 22, 0.55);
+  --border-light: rgba(255, 255, 255, 0.06);
+  --text-primary: #F2F0F9;
+  --text-secondary: #9896B0;
 
-  /* Power Accent Colors */
-  --accent-cyan: #00f0ff;
-  /* Electric Cyan */
-  --accent-magenta: #ff0055;
-  /* Electric Magenta */
-  --accent-violet: #7000ff;
-  /* Electric Violet */
+  /* Primary: Warm Gold */
+  --accent-gold: #C9A84C;
+  --accent-cyan: #00C9A7;
+  /* renamed semantically as teal but kept var name for compat */
+  --accent-magenta: #6C5CE7;
+  /* now Royal Indigo */
+  --accent-violet: #9D8FE0;
+  /* lighter indigo for subtle uses */
 
-  --glow-cyan: rgba(0, 240, 255, 0.15);
-  /* Accent glow */
-  --glow-magenta: rgba(255, 0, 85, 0.15);
+  --glow-cyan: rgba(0, 201, 167, 0.18);
+  --glow-magenta: rgba(108, 92, 231, 0.15);
+  --glow-gold: rgba(201, 168, 76, 0.2);
 
-  /* Typography conveying authority */
   --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-display: 'Space Grotesk', -apple-system, sans-serif;
 }
@@ -893,13 +895,11 @@ main {
 .pyramid-wrapper {
   position: relative;
   width: max-content;
-  /* Allow it to grow horizontally infinitely */
   min-width: 100%;
   height: max-content;
-  /* Allow it to grow vertically infinitely */
   min-height: 100%;
-  padding: 0 20px 100px 20px;
-  /* No top padding - tier 1 starts right at the top of the viewport */
+  /* 56px top padding gives the crown emoji room without being clipped */
+  padding: 56px 20px 100px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -907,7 +907,6 @@ main {
   perspective: 1000px;
   gap: var(--tier-gap);
   cursor: grab;
-  /* Allow natural scrolling instead of forcing absolute center positioning */
 }
 
 .pyramid-tier {
@@ -1030,28 +1029,53 @@ main {
   border-color: var(--accent-cyan);
 }
 
-/* Apex (Top 1) hero treatment — golden laurel crown aura */
+@keyframes apexPulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.15), 0 0 24px rgba(201, 168, 76, 0.35), 0 8px 24px rgba(0, 0, 0, 0.85);
+  }
+
+  50% {
+    box-shadow: 0 0 0 8px rgba(201, 168, 76, 0.08), 0 0 40px rgba(201, 168, 76, 0.55), 0 8px 24px rgba(0, 0, 0, 0.85);
+  }
+}
+
+@keyframes crownFloat {
+
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-3px);
+  }
+}
+
+/* Apex (Top 1) hero treatment — pulsing gold ring */
 .tier-0 .user-node {
-  border: 2px solid rgba(212, 175, 55, 0.9) !important;
-  box-shadow:
-    0 0 0 4px rgba(212, 175, 55, 0.15),
-    0 0 20px rgba(212, 175, 55, 0.4),
-    0 8px 20px rgba(0, 0, 0, 0.8) !important;
-  transform: scale(1.08);
-  border-radius: 12px !important;
+  border: 2px solid var(--accent-gold) !important;
+  border-radius: 14px !important;
+  transform: scale(1.1);
+  animation: apexPulse 2.8s ease-in-out infinite;
+  outline: 1px solid rgba(201, 168, 76, 0.35);
+  outline-offset: 4px;
+  z-index: 50;
 }
 
 .tier-0 .user-node::before {
   content: '👑';
   position: absolute;
-  top: -18px;
+  top: -22px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 0.9rem;
+  font-size: 1.3rem;
   z-index: 10;
-  filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.8));
+  filter: drop-shadow(0 0 6px rgba(201, 168, 76, 0.9));
   pointer-events: none;
   line-height: 1;
+  animation: crownFloat 2.8s ease-in-out infinite;
 }
 
 .node-overlay {
