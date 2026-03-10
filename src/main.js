@@ -876,9 +876,9 @@ const renderPyramidView = (container, contextInfo) => {
     const zIndex = 50 - tIndex; // Higher tiers are visually "above"
 
     // Scale node sizes proportionally per tier using viewport-friendly values
-    // Desktop: apex=110px → base=58px. Faces always visible.
-    const sizeScale = [110, 102, 95, 88, 81, 74, 68, 64, 61, 58];
-    const nodeSize = sizeScale[tIndex] || 58;
+    // Desktop: apex=138px → base=73px (+25% vs previous). Faces clearly visible.
+    const sizeScale = [138, 128, 119, 110, 101, 93, 85, 80, 76, 73];
+    const nodeSize = sizeScale[tIndex] || 73;
 
     const usersHTML = tier.map(user => `
       <div class="user-node ${hasVoted && hasVoted === user.id ? 'voted' : ''}" 
