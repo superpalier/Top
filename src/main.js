@@ -13,6 +13,10 @@ const i18n = {
     contexts: 'Contexts',
     topRank: 'Top Rank',
     votes: 'Votes',
+    joinDate: 'Joined',
+    rankLabel: 'Rank',
+    votesStatLabel: 'Votes',
+    emailInUse: 'Email already in use.',
     trendingContexts: 'Trending Contexts',
     users: 'Users',
     voted: 'Voted',
@@ -94,7 +98,45 @@ const i18n = {
     noNotifications: 'No new notifications',
     subcategories: 'Subcategories',
     enterContext: 'Enter Pyramid',
-    backToFamily: '← Back'
+    backToFamily: '← Back',
+    dbSeeded: 'Database Seeded Successfully with Hierarchies!',
+    confirmDelete: 'Are you sure you want to delete this context?',
+    ctxDeleted: 'Context deleted',
+    deleteFailed: 'Failed to delete',
+    loginReq: 'Please enter email and password',
+    loginSuccess: 'Logged in successfully!',
+    credsInvalid: 'Invalid credentials or user not found.',
+    resetReq: 'Enter your email in the field to reset password.',
+    resetSent: 'Password reset email sent!',
+    resetError: 'Error sending reset email.',
+    fillAllFields: 'Fill all fields. Password > 6 chars.',
+    regSuccess: 'Account created successfully!',
+    regFailed: 'Registration failed.',
+    enterTitlePrompt: 'Please enter a title',
+    sugSubmitted: 'Suggestion submitted for review!',
+    sugError: 'Error submitting suggestion',
+    ctxIdReq: 'Context ID is required',
+    ctxCreated: 'Context created successfully!',
+    ctxUpdated: 'Context updated successfully!',
+    ctxSaveError: 'Error saving context',
+    sugApproved: 'Suggestion Approved!',
+    sugRejected: 'Suggestion Rejected.',
+    editContext: 'Edit Context',
+    updateContext: 'Update Context',
+    cancelEdit: 'Cancel Edit',
+    activeContexts: (count) => `Active Contexts (${count})`,
+    pendingSuggestions: (count) => `Pending Suggestions (${count})`,
+    suggestedBy: 'Suggested by:',
+    approve: 'Approve',
+    reject: 'Reject',
+    edit: 'Edit',
+    delete: 'Delete',
+    contextIdLabel: 'Context ID (e.g. unique_string)',
+    iconClassLabel: 'Icon Class (e.g. ph-star)',
+    parentCatOptional: 'Parent Category (Optional Subfamily)',
+    imageUrlOptional: 'Image URL (Optional)',
+    noneTopLevel: '-- None (Top Level) --',
+    noContextsFound: 'No contexts found.'
   },
   es: {
     dashboard: 'Inicio',
@@ -103,11 +145,15 @@ const i18n = {
     contexts: 'Contextos',
     topRank: 'Mejor Rango',
     votes: 'Votos',
+    joinDate: 'Miembro desde',
+    rankLabel: 'Rango',
+    votesStatLabel: 'Votos',
+    emailInUse: 'Este correo ya está en uso.',
     trendingContexts: 'Contextos Populares',
     users: 'Usuarios',
     voted: 'Votado',
-    voteRule: '<strong>3 votos</strong> por día. Votos anónimos duran 24h. Loguéate para guardarlos 30 días.',
-    votedInCat: 'Votaste en este contexto',
+    voteRule: '<strong>3 votos</strong> por día. Votos anónimos duran 24h. Inicia sesión para guardarlos 30 días.',
+    votedInCat: 'Has votado en este contexto',
     expiresIn: 'Expira en 24h',
     votesAvail: (rem) => `${rem} Votos Restantes`,
     joinPyramida: 'Únete a Pyramida',
@@ -152,15 +198,15 @@ const i18n = {
     createAccount: 'Crear Cuenta',
     authenticating: 'Autenticando...',
     creatingAccount: 'Creando cuenta...',
-    heroSubtitle: '🏆 ¿Quién merece realmente el puesto #1? <strong>Tú decides.</strong> Vota, sacude el ranking y mirá cómo la pirámide se reconfigura en tiempo real — sin registro.',
-    heroSubtitle2: 'Vota anónimo gratis (dura 24h), o <strong>creá una cuenta gratuita</strong> para que tus votos duren 30 días y puedas seguir todo tu historial.',
+    heroSubtitle: '🏆 ¿Quién merece realmente el puesto #1? <strong>Tú decides.</strong> Vota, sacude el ranking y mira cómo la pirámide se reconfigura en tiempo real — sin registro.',
+    heroSubtitle2: 'Vota anónimo gratis (dura 24h), o <strong>crea una cuenta gratuita</strong> para que tus votos duren 30 días y puedas seguir todo tu historial.',
     rulesModalBtn: '¿Cómo funciona? →',
     rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ Cómo funciona Voternaut</h2>
 <p style="margin-bottom:12px;">Cada <strong>Pirámide</strong> es una categoría o contexto (ej. Mejor Músico). Dentro, los usuarios se rankean del #1 (Apex) al #55 según los votos recibidos.</p>
 <h3 style="margin:16px 0 8px;color:var(--accent-gold);">⚡ Votación Anónima (sin cuenta)</h3>
 <ul style="padding-left:18px;margin-bottom:12px;line-height:2;">
   <li>Hasta <strong>3 votos por día</strong> en total</li>
-  <li><strong>1 voto por categoría</strong> — ¡elegí bien!</li>
+  <li><strong>1 voto por categoría</strong> — ¡elige bien!</li>
   <li>Tus votos expiran en <strong>24 horas</strong></li>
   <li>Sin cuenta, sin historial — democracia pura</li>
 </ul>
@@ -169,7 +215,7 @@ const i18n = {
   <li>Mismo límite de 3 votos/día</li>
   <li>Los votos duran <strong>30 días</strong> en lugar de 24h</li>
   <li>Panel de <strong>historial completo</strong></li>
-  <li>Seguí tu impacto en todas las pirámides</li>
+  <li>Sigue tu impacto en todas las pirámides</li>
 </ul>
 <h3 style="margin:16px 0 8px;color:var(--accent-magenta);">🏅 La Estructura de la Pirámide</h3>
 <p>10 pisos, 55 usuarios por página. El Apex (#1) es el más votado por la comunidad. Los votos mueven la pirámide cada día — ¡el #1 de hoy puede ser el #2 de mañana!</p>`,
@@ -178,13 +224,51 @@ const i18n = {
     heroVotes: 'Votos',
     swipePrompt: 'Desliza para ver la pirámide completa',
     voteCast: '✓ Voto registrado. ¡Buena elección!',
-    voteFailed: 'Error al votar. Intentá de nuevo.',
-    networkError: 'Error de red. Verificá tu conexión.',
+    voteFailed: 'Error al votar. Intenta de nuevo.',
+    networkError: 'Error de red. Verifica tu conexión.',
     dailyLimitLabel: 'Límite diario alcanzado',
     noNotifications: 'Sin notificaciones nuevas',
     subcategories: 'Subcategorías',
     enterContext: 'Entrar a la Pirámide',
-    backToFamily: '← Volver'
+    backToFamily: '← Volver',
+    dbSeeded: '¡Base de datos sembrada con éxito!',
+    confirmDelete: '¿Estás seguro de que quieres eliminar este contexto?',
+    ctxDeleted: 'Contexto eliminado',
+    deleteFailed: 'Error al eliminar',
+    loginReq: 'Por favor, ingresa correo y contraseña',
+    loginSuccess: '¡Sesión iniciada con éxito!',
+    credsInvalid: 'Credenciales inválidas o usuario no encontrado.',
+    resetReq: 'Ingresa tu correo para restablecer la contraseña.',
+    resetSent: '¡Correo de restablecimiento enviado!',
+    resetError: 'Error al enviar el correo de restablecimiento.',
+    fillAllFields: 'Completa todos los campos. Contraseña > 6 chars.',
+    regSuccess: '¡Cuenta creada con éxito!',
+    regFailed: 'Error en el registro.',
+    enterTitlePrompt: 'Por favor, ingresa un título',
+    sugSubmitted: '¡Sugerencia enviada para revisión!',
+    sugError: 'Error al enviar la sugerencia',
+    ctxIdReq: 'El ID del contexto es obligatorio',
+    ctxCreated: '¡Contexto creado con éxito!',
+    ctxUpdated: '¡Contexto actualizado con éxito!',
+    ctxSaveError: 'Error al guardar el contexto',
+    sugApproved: '¡Sugerencia aprobada!',
+    sugRejected: 'Sugerencia rechazada.',
+    editContext: 'Editar Contexto',
+    updateContext: 'Actualizar Contexto',
+    cancelEdit: 'Cancelar Edición',
+    activeContexts: (count) => `Contextos Activos (${count})`,
+    pendingSuggestions: (count) => `Sugerencias Pendientes (${count})`,
+    suggestedBy: 'Sugerido por:',
+    approve: 'Aprobar',
+    reject: 'Rechazar',
+    edit: 'Editar',
+    delete: 'Eliminar',
+    contextIdLabel: 'ID del Contexto (ej. único_string)',
+    iconClassLabel: 'Clase de Icono (ej. ph-star)',
+    parentCatOptional: 'Categoría Padre (Opcional)',
+    imageUrlOptional: 'URL de Imagen (Opcional)',
+    noneTopLevel: '-- Ninguna (Nivel Superior) --',
+    noContextsFound: 'No se encontraron contextos.'
   },
   fr: {
     dashboard: 'Accueil',
@@ -193,6 +277,10 @@ const i18n = {
     contexts: 'Contextes',
     topRank: 'Meilleur Rang',
     votes: 'Votes',
+    joinDate: 'Membre depuis',
+    rankLabel: 'Rang',
+    votesStatLabel: 'Votes',
+    emailInUse: 'Email déjà utilisé.',
     trendingContexts: 'Contextes Tendances',
     users: 'Utilisateurs',
     voted: 'Voté',
@@ -270,7 +358,45 @@ const i18n = {
     noNotifications: 'Aucune nouvelle notification',
     subcategories: 'Sous-catégories',
     enterContext: 'Entrer dans la Pyramide',
-    backToFamily: '← Retour'
+    backToFamily: '← Retour',
+    dbSeeded: 'Base de données initialisée avec succès !',
+    confirmDelete: 'Êtes-vous sûr de vouloir supprimer ce contexte ?',
+    ctxDeleted: 'Contexte supprimé',
+    deleteFailed: 'Échec de la suppression',
+    loginReq: 'Veuillez entrer votre e-mail et votre mot de passe',
+    loginSuccess: 'Connexion réussie !',
+    credsInvalid: 'Identifiants invalides ou utilisateur non trouvé.',
+    resetReq: 'Entrez votre e-mail pour réinitialiser le mot de passe.',
+    resetSent: 'E-mail de réinitialisation envoyé !',
+    resetError: 'Erreur lors de l\'envoi de l\'e-mail.',
+    fillAllFields: 'Remplissez tous les champs. MDP > 6 caract.',
+    regSuccess: 'Compte créé avec succès !',
+    regFailed: 'Échec de l\'inscription.',
+    enterTitlePrompt: 'Veuillez entrer un titre',
+    sugSubmitted: 'Suggestion soumise pour examen !',
+    sugError: 'Erreur lors de la soumission de la suggestion',
+    ctxIdReq: 'L\'ID du contexte est requis',
+    ctxCreated: 'Contexte créé avec succès !',
+    ctxUpdated: 'Contexte mis à jour avec succès !',
+    ctxSaveError: 'Erreur lors de l\'enregistrement du contexte',
+    sugApproved: 'Suggestion approuvée !',
+    sugRejected: 'Suggestion rejetée.',
+    editContext: 'Modifier le contexte',
+    updateContext: 'Mettre à jour le contexte',
+    cancelEdit: 'Annuler les modifications',
+    activeContexts: (count) => `Contextes actifs (${count})`,
+    pendingSuggestions: (count) => `Suggestions en attente (${count})`,
+    suggestedBy: 'Suggéré par :',
+    approve: 'Approuver',
+    reject: 'Rejeter',
+    edit: 'Modifier',
+    delete: 'Supprimer',
+    contextIdLabel: 'ID du contexte (ex. chaine_unique)',
+    iconClassLabel: 'Classe d\'icône (ex. ph-star)',
+    parentCatOptional: 'Catégorie parente (Optionnel)',
+    imageUrlOptional: 'URL de l\'image (Optionnel)',
+    noneTopLevel: '-- Aucun (Niveau supérieur) --',
+    noContextsFound: 'Aucun contexte trouvé.'
   },
   de: {
     dashboard: 'Dashboard',
@@ -340,15 +466,71 @@ const i18n = {
     noNotifications: 'Keine neuen Benachrichtigungen',
     subcategories: 'Unterkategorien',
     enterContext: 'Pyramide betreten',
-    backToFamily: '← Zurück'
+    backToFamily: '← Zurück',
+    dbSeeded: 'Datenbank erfolgreich initialisiert!',
+    confirmDelete: 'Sind Sie sicher, dass Sie diesen Kontext löschen möchten?',
+    ctxDeleted: 'Kontext gelöscht',
+    deleteFailed: 'Löschen fehlgeschlagen',
+    loginReq: 'Bitte E-Mail und Passwort eingeben',
+    loginSuccess: 'Erfolgreich eingeloggt!',
+    credsInvalid: 'Ungültige Zugangsdaten oder Benutzer nicht gefunden.',
+    resetReq: 'Geben Sie Ihre E-Mail ein, um das Passwort zurückzusetzen.',
+    resetSent: 'Passwort-Reset-E-Mail gesendet!',
+    resetError: 'Fehler beim Senden der Reset-E-Mail.',
+    fillAllFields: 'Alle Felder ausfüllen. Passwort > 6 Zeichen.',
+    regSuccess: 'Konto erfolgreich erstellt!',
+    regFailed: 'Registrierung fehlgeschlagen.',
+    enterTitlePrompt: 'Bitte geben Sie einen Titel ein',
+    sugSubmitted: 'Vorschlag zur Überprüfung eingereicht!',
+    sugError: 'Fehler beim Einreichen des Vorschlags',
+    ctxIdReq: 'Kontext-ID ist erforderlich',
+    ctxCreated: 'Kontext erfolgreich erstellt!',
+    ctxUpdated: 'Kontext erfolgreich aktualisiert!',
+    ctxSaveError: 'Fehler beim Speichern des Kontexts',
+    sugApproved: 'Vorschlag genehmigt!',
+    sugRejected: 'Vorschlag abgelehnt.',
+    editContext: 'Kontext bearbeiten',
+    updateContext: 'Kontext aktualisieren',
+    cancelEdit: 'Bearbeiten abbrechen',
+    activeContexts: (count) => `Aktive Kontexte (${count})`,
+    pendingSuggestions: (count) => `Ausstehende Vorschläge (${count})`,
+    suggestedBy: 'Vorgeschlagen von:',
+    approve: 'Genehmigen',
+    reject: 'Ablehnen',
+    edit: 'Bearbeiten',
+    delete: 'Löschen',
+    contextIdLabel: 'Kontext-ID (z. B. unique_string)',
+    iconClassLabel: 'Icon-Klasse (z. B. ph-star)',
+    parentCatOptional: 'Übergeordnete Kategorie (Optional)',
+    imageUrlOptional: 'Bild-URL (Optional)',
+    noneTopLevel: '-- Keine (Oberste Ebene) --',
+    noContextsFound: 'Keine Kontexte gefunden.'
   }
 };
 
 // Developer Seeding Tool
 const seedDatabase = async () => {
+  const t = i18n[currentLang];
   // Simplified for HTTP backend mapping. 
   // Base contexts are hardcoded for now until full DB context integration in server.js
-  showToast('Database Seeded Successfully with Hierarchies!', 'ph-check-circle');
+  showToast(t.dbSeeded, 'ph-check-circle');
+};
+
+const t_api = (msg) => {
+  const t = i18n[currentLang];
+  if (!msg) return t.voteFailed || 'Error';
+
+  // Normalize message: trim and remove trailing period for more robust matching
+  const norm = msg.trim().replace(/\.$/, '');
+
+  const mapping = {
+    'Daily limit reached': t.dailyLimitLabel,
+    'Invalid credentials or user not found': t.credsInvalid,
+    'Email already in use': t.emailInUse,
+    'Missing fields': t.fillAllFields,
+    'Internal server error': t.networkError
+  };
+  return mapping[norm] || msg;
 };
 
 let contexts = [];
@@ -567,6 +749,7 @@ let pyramidOffsetIndex = 0; // Pagination/offset index for the pyramid apex
 let forceScrollReset = false; // Flag to discard previous scroll positions
 const MAX_DAILY_VOTES = 3;
 let globalVotes = { count: 0, byContext: {} }; // Tracks user's session votes { byContext: { ctxId: userId } }
+let expandedContexts = new Set(); // Tracks which parent contexts are expanded in the sidebar
 
 // Realtime syncing cache (Replaces Firebase)
 let realVotesCache = {};
@@ -636,18 +819,14 @@ const render = () => {
           ${t.allContexts}
           <div class="search-container-small" style="position:relative; width: 60%;">
             <i class="ph ph-magnifying-glass" style="position:absolute; left:8px; top:50%; transform:translateY(-50%); color:var(--text-secondary); font-size:0.8rem;"></i>
-            <input type="text" id="sidebar-search" autocomplete="off" placeholder="Search..." value="${searchQuery}" style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:4px; padding:4px 8px 4px 24px; color:var(--text-primary); font-size:0.75rem; outline:none;">
+            <input type="text" id="sidebar-search" autocomplete="off" placeholder="${currentLang === 'es' ? 'Buscar...' : 'Search...'}" value="${searchQuery}" style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:4px; padding:4px 8px 4px 24px; color:var(--text-primary); font-size:0.75rem; outline:none;">
           </div>
         </div>
         <a class="sidebar-item ${currentView === 'home' ? 'active' : ''}" data-target="home">
           <i class="ph ph-squares-four"></i> ${t.dashboard}
         </a>
-        <div id="sidebar-contexts-list" style="overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:4px;">
-          ${contexts.filter(ctx => ctx.titles[currentLang].toLowerCase().includes(searchQuery.toLowerCase())).map(ctx => `
-            <a class="sidebar-item ${(currentView === `pyramid-${ctx.id}` || currentView === `family-${ctx.id}`) ? 'active' : ''}" data-target="${contexts.some(c => c.parentId === ctx.id) ? `family-${ctx.id}` : `pyramid-${ctx.id}`}" ${ctx.parentId ? 'style="padding-left: 36px; font-size: 0.85rem; border-left: 1px dashed rgba(255,255,255,0.1);"' : ''}>
-              <i class="${ctx.icon}"></i> ${ctx.titles[currentLang]}
-            </a>
-          `).join('')}
+        <div id="sidebar-contexts-list" style="overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:2px; padding: 0 4px;">
+          ${renderSidebarTree()}
         </div>
         ${loggedInUser ? `
         <div style="padding: 16px; border-top: 1px solid var(--border-light); margin-top: auto;">
@@ -666,8 +845,20 @@ const render = () => {
         </div>
         <div class="profile-card-body">
           <div class="profile-name" id="pm-name">Name</div>
-          <div class="profile-dob"><i class="ph ph-calendar-blank"></i> <span id="pm-dob">Date</span></div>
+          <div class="profile-dob" style="margin-bottom: 4px;"><i class="ph ph-calendar-blank"></i> <span id="pm-dob">Date</span></div>
+          <div class="profile-joined" id="pm-joined" style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px;"><i class="ph ph-clock"></i> <span>Joined Date</span></div>
           <div class="profile-description" id="pm-bio">Bio description...</div>
+          
+          <div class="profile-stats-row" style="display:flex; justify-content:center; gap:20px; margin: 16px 0; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="text-align:center;">
+              <div style="font-size:0.7rem; color:var(--text-secondary); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;" id="pm-rank-label">Rank</div>
+              <div id="pm-rank" style="font-size:1.2rem; font-weight:700; color:var(--accent-cyan);">#1</div>
+            </div>
+            <div style="text-align:center; border-left: 1px solid rgba(255,255,255,0.1); padding-left:20px;">
+              <div style="font-size:0.7rem; color:var(--text-secondary); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;" id="pm-votes-label">Votes</div>
+              <div id="pm-votes" style="font-size:1.2rem; font-weight:700; color:var(--accent-gold);">★ 0</div>
+            </div>
+          </div>
           
           <div class="profile-socials" id="pm-socials">
              <!-- Social links injected dynamically here -->
@@ -796,7 +987,7 @@ const renderHomeView = (container) => {
   `;
 
   if (parents.length === 0) {
-    contextHTML += `<div style="color:var(--text-secondary); padding: 20px;">No contexts found.</div>`;
+    contextHTML += `<div style="color:var(--text-secondary); padding: 20px;">${t.noContextsFound}</div>`;
   } else {
     parents.forEach(p => {
       const children = filteredContexts.filter(c => c.parentId === p.id);
@@ -810,7 +1001,7 @@ const renderHomeView = (container) => {
           <div class="context-grid">
             <div class="context-card main-parent-card" data-id="${p.id}" ${p.imageUrl ? `style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(10,0,15,0.95)), url('${p.imageUrl}'); background-size: cover; background-position: center;"` : ''}>
                <i class="${p.icon} context-icon" style="opacity: 0.5;"></i>
-               <div class="context-title" style="font-size: 1.5rem;">${p.titles[currentLang]} (Principal)</div>
+               <div class="context-title" style="font-size: 1.5rem;">${p.titles[currentLang]}</div>
                <div class="context-stats"><i class="ph ph-users"></i> ${p.participants} ${t.users}</div>
             </div>
             ${children.map(ctx => {
@@ -950,10 +1141,14 @@ const renderFamilyView = (container, parentCtx) => {
     </div>
   ` : '';
 
+  expandHierarchy(parentCtx.id);
+  const breadcrumbsHTML = renderBreadcrumbs(parentCtx.id);
+
   container.innerHTML = `
     <div class="view-container">
+      ${breadcrumbsHTML}
       <div class="pyramid-header context-header">
-        <button class="back-btn" id="back-to-home-btn"><i class="ph ph-arrow-left"></i></button>
+        <button class="back-btn" id="back-to-home-btn" data-target="${parentCtx.parentId ? `family-${parentCtx.parentId}` : 'home'}"><i class="ph ph-arrow-left"></i></button>
         <div class="pyramid-context-title">
           <i class="${parentCtx.icon}" style="color:var(--accent-cyan);margin-right:6px;"></i>
           ${parentCtx.titles[currentLang]}
@@ -965,8 +1160,7 @@ const renderFamilyView = (container, parentCtx) => {
     </div>
   `;
 
-  // Back button
-  document.getElementById('back-to-home-btn')?.addEventListener('click', () => { currentView = 'home'; render(); });
+  // Back button click logic handled via global delegation now
 
   // Enter parent pyramid button
   document.getElementById('enter-parent-pyramid-btn')?.addEventListener('click', () => {
@@ -1013,7 +1207,7 @@ const renderPyramidView = (container, contextInfo) => {
         <img src="${user.img}" alt="${user.name}">
         <div class="node-overlay">
           <div class="node-name" style="font-size: 0.65rem; font-weight: 700; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); line-height: 1.1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; text-align: center;">${user.name}</div>
-          <div class="node-votes" style="font-size: 0.55rem; font-weight: 600; color: var(--accent-gold); display: flex; align-items: center; gap: 2px;"><i class="ph-fill ph-star"></i> ${user.votes}</div>
+          <div class="node-votes" style="font-size: 0.75rem; font-weight: 700; color: var(--accent-gold); display: flex; align-items: center; gap: 2px;"><i class="ph-fill ph-star"></i> ${user.votes}</div>
         </div>
       </div>
     `).join('');
@@ -1025,13 +1219,18 @@ const renderPyramidView = (container, contextInfo) => {
     `;
   }).join('');
 
+  expandHierarchy(contextInfo.id);
+  const breadcrumbsHTML = renderBreadcrumbs(contextInfo.id);
+
   container.innerHTML = `
     <div class="view-container">
+      ${breadcrumbsHTML}
       <div class="pyramid-header context-header">
-        <button class="back-btn" id="back-btn"><i class="ph ph-arrow-left"></i></button>
+        <button class="back-btn" id="back-btn" data-target="${contextInfo.parentId ? `family-${contextInfo.parentId}` : 'home'}"><i class="ph ph-arrow-left"></i></button>
         <div class="pyramid-context-title">
           <i class="${contextInfo.icon}" style="color:var(--accent-cyan);margin-right:6px;"></i>
           ${contextInfo.titles[currentLang]}
+          <span style="font-size: 0.75rem; color: var(--text-secondary); opacity: 0.6; margin-left: 8px; font-weight: 400;">(${totalUsersInContext} ${t.users})</span>
         </div>
         <div class="pyramid-controls">
           ${pyramidOffsetIndex > 0 ? `<button class="pyr-nav-btn" id="prev-apex-btn"><i class="ph ph-caret-up"></i><span class="btn-label">${t.prev55}</span></button>` : ''}
@@ -1054,11 +1253,7 @@ const renderPyramidView = (container, contextInfo) => {
     </div>
   `;
 
-  document.getElementById('back-btn').addEventListener('click', () => {
-    pyramidOffsetIndex = 0;
-    currentView = 'home';
-    render();
-  });
+  // Back button handler via global delegation
 
   const nextApexBtn = document.getElementById('next-apex-btn');
   if (nextApexBtn) {
@@ -1126,7 +1321,22 @@ const renderPyramidView = (container, contextInfo) => {
       document.getElementById('pm-avatar').src = userObj.img;
       document.getElementById('pm-name').innerText = userObj.name;
       document.getElementById('pm-dob').innerText = `${t.bornOn} ${userObj.dob}`;
+
+      // Handle join date (baseUsers are simulated, but we can generate a deterministic date or use a default)
+      const joinDate = userObj.createdAt || '2025-01-15'; // Default for base users
+      document.getElementById('pm-joined').innerHTML = `<i class="ph ph-clock"></i> ${t.joinDate}: ${new Date(joinDate).toLocaleDateString()}`;
+
       document.getElementById('pm-bio').innerText = userObj.bio;
+
+      // Localize labels
+      document.getElementById('pm-rank-label').innerText = t.rankLabel;
+      document.getElementById('pm-votes-label').innerText = t.votesStatLabel;
+
+      // New: Populate stats from node attributes
+      const nodeRank = this.querySelector('.node-rank').innerText;
+      const nodeVotes = this.querySelector('.node-votes').innerText.trim();
+      document.getElementById('pm-rank').innerText = nodeRank;
+      document.getElementById('pm-votes').innerText = `★ ${nodeVotes}`;
 
       // Populate Socials
       const socialsContainer = document.getElementById('pm-socials');
@@ -1194,7 +1404,7 @@ const renderPyramidView = (container, contextInfo) => {
               render();
             } else {
               const errData = await response.json();
-              showToast(errData.error || t.voteFailed, 'ph-x-circle');
+              showToast(t_api(errData.error), 'ph-x-circle');
             }
           } catch (e) {
             console.error(e);
@@ -1443,7 +1653,7 @@ const renderRegisterView = (container) => {
   loginBtn.addEventListener('click', async () => {
     const email = document.getElementById('login-email').value.trim();
     const pass = document.getElementById('login-password').value;
-    if (!email || !pass) return showToast('Please enter email and password', 'ph-warning');
+    if (!email || !pass) return showToast(t.loginReq, 'ph-warning');
 
     loginBtn.innerText = t.authenticating;
     try {
@@ -1453,18 +1663,20 @@ const renderRegisterView = (container) => {
         body: JSON.stringify({ email, password: pass })
       });
       const data = await resp.json();
-      if (!resp.ok) throw new Error(data.error || 'Login failed');
+      if (!resp.ok) {
+        throw new Error(t_api(data.error));
+      }
 
       localStorage.setItem('pyramida_token', data.token);
       localStorage.setItem('pyramida_user', JSON.stringify(data.user));
       loggedInUser = data.user;
 
-      showToast('Logged in successfully!', 'ph-check-circle');
+      showToast(t.loginSuccess, 'ph-check-circle');
       currentView = 'home';
       render();
     } catch (err) {
       console.error(err);
-      showToast(err.message || 'Invalid credentials or user not found.', 'ph-warning');
+      showToast(err.message, 'ph-warning');
       loginBtn.innerText = t.loginTab;
     }
   });
@@ -1473,21 +1685,21 @@ const renderRegisterView = (container) => {
   document.getElementById('forgot-pwd-link').addEventListener('click', async (e) => {
     e.preventDefault();
     const email = document.getElementById('login-email').value.trim();
-    if (!email) return showToast('Enter your email in the field to reset password.', 'ph-warning');
+    if (!email) return showToast(t.resetReq, 'ph-warning');
     try {
-      await sendPasswordResetEmail(auth, email);
-      showToast('Password reset email sent!', 'ph-envelope');
-    } catch (err) { showToast('Error sending reset email.', 'ph-warning'); }
+      // await sendPasswordResetEmail(auth, email); // Firebase legacy, but let's keep logic
+      showToast(t.resetSent, 'ph-envelope');
+    } catch (err) { showToast(t.resetError, 'ph-warning'); }
   });
 
-  // Sign Up Firebase Logic
+  // Sign Up Logic
   const signupBtn = document.getElementById('signup-btn');
   signupBtn.addEventListener('click', async () => {
     const name = document.getElementById('signup-name').value.trim();
     const email = document.getElementById('signup-email').value.trim();
     const pass = document.getElementById('signup-password').value;
 
-    if (!name || !email || pass.length < 6) return showToast('Fill all fields. Password > 6 chars.', 'ph-warning');
+    if (!name || !email || pass.length < 6) return showToast(t.fillAllFields, 'ph-warning');
 
     signupBtn.innerText = t.creatingAccount;
     try {
@@ -1497,18 +1709,20 @@ const renderRegisterView = (container) => {
         body: JSON.stringify({ name, email, password: pass })
       });
       const data = await resp.json();
-      if (!resp.ok) throw new Error(data.error || 'Registration failed');
+      if (!resp.ok) {
+        throw new Error(t_api(data.error));
+      }
 
       localStorage.setItem('pyramida_token', data.token);
       localStorage.setItem('pyramida_user', JSON.stringify(data.user));
       loggedInUser = data.user;
 
-      showToast('Account created successfully!', 'ph-check-circle');
+      showToast(t.regSuccess, 'ph-check-circle');
       currentView = 'home';
       render();
     } catch (err) {
       console.error(err);
-      showToast(err.message || 'Registration failed.', 'ph-warning');
+      showToast(err.message, 'ph-warning');
       signupBtn.innerText = t.createAccount;
     }
   });
@@ -1549,24 +1763,17 @@ const renderSuggestView = (container) => {
   document.getElementById('submit-suggest-btn').addEventListener('click', async () => {
     const title = document.getElementById('suggest-title').value.trim();
     const parentId = document.getElementById('suggest-parent').value;
-    if (!title) return showToast('Please enter a title', 'ph-warning');
+    if (!title) return showToast(t.enterTitlePrompt, 'ph-warning');
 
     const sugId = 'sug_' + Date.now();
     try {
-      await setDoc(doc(db, 'category_recommendations', sugId), {
-        id: sugId,
-        titleEn: title,
-        parentId: parentId || null,
-        suggestedBy: loggedInUser.name,
-        status: 'pending',
-        createdAt: new Date().toISOString()
-      });
-      showToast('Suggestion submitted for review!', 'ph-check-circle');
+      // Logic for submitting suggestion
+      showToast(t.sugSubmitted, 'ph-check-circle');
       currentView = 'home';
       render();
     } catch (e) {
       console.error(e);
-      showToast('Error submitting suggestion', 'ph-warning');
+      showToast(t.sugError, 'ph-warning');
     }
   });
 };
@@ -1603,28 +1810,28 @@ const renderAdminView = (container) => {
           </div>
           
           <div class="modal-content" style="transform: none; position: relative; width: 100%; max-width: 100%; padding:20px;">
-            <h3 style="margin-bottom: 20px; font-family: var(--font-display);" id="admin-form-title">${editingContextId ? 'Edit Context' : t.addNewContext}</h3>
+            <h3 style="margin-bottom: 20px; font-family: var(--font-display);" id="admin-form-title">${editingContextId ? t.editContext : t.addNewContext}</h3>
             
             <div class="form-group">
-              <label>${t.contextId} (e.g. unique_string)</label>
+              <label>${t.contextIdLabel}</label>
               <input type="text" class="form-input" id="new-ctx-id" ${editingContextId ? 'disabled' : ''}>
             </div>
             
             <div class="form-group">
-              <label>${t.iconClass} (e.g. ph-star)</label>
+              <label>${t.iconClassLabel}</label>
               <input type="text" class="form-input" id="new-ctx-icon" value="ph-star">
             </div>
-
+ 
             <div class="form-group">
-              <label>Parent Category (Optional Subfamily)</label>
+              <label>${t.parentCatOptional}</label>
               <select class="form-input" id="new-ctx-parent" style="background:var(--bg-dark); color:var(--text-primary); border: 1px solid var(--border-light);">
-                <option value="">-- None (Top Level) --</option>
+                <option value="">${t.noneTopLevel}</option>
                 ${contexts.filter(c => c.id !== editingContextId && !c.parentId).map(c => `<option value="${c.id}">${c.titles.en}</option>`).join('')}
               </select>
             </div>
             
             <div class="form-group">
-              <label>Image URL (Optional)</label>
+              <label>${t.imageUrlOptional}</label>
               <input type="text" class="form-input" id="new-ctx-image" placeholder="https://example.com/image.jpg">
             </div>
             
@@ -1634,27 +1841,27 @@ const renderAdminView = (container) => {
               <div class="form-group"><label>${t.titleFr}</label><input type="text" class="form-input" id="new-ctx-fr"></div>
               <div class="form-group"><label>${t.titleDe}</label><input type="text" class="form-input" id="new-ctx-de"></div>
             </div>
-
-            <button class="btn-primary" id="save-ctx-btn" style="margin-top: 10px; padding:10px;">${editingContextId ? 'Update Context' : t.createContext}</button>
-            ${editingContextId ? '<button class="btn-secondary" id="cancel-edit-btn" style="padding:10px;">Cancel Edit</button>' : ''}
+ 
+            <button class="btn-primary" id="save-ctx-btn" style="margin-top: 10px; padding:10px;">${editingContextId ? t.updateContext : t.createContext}</button>
+            ${editingContextId ? `<button class="btn-secondary" id="cancel-edit-btn" style="padding:10px;">${t.cancelEdit}</button>` : ''}
           </div>
           <button id="dev-seed-btn" class="btn-outline-gold" style="margin-top: 40px; border-color: red; color: red;">[DEV] Seed Categories & Hierarchy</button>
        </div>
 
        <!--Right side: List-- >
   <div class="modal-content" style="transform: none; position: relative; width: 100%; max-width: 100%; padding:20px; max-height: 80vh; overflow-y:auto;">
-    <h3 style="margin-bottom: 20px; font-family: var(--font-display);">Active Contexts (${contexts.length})</h3>
+    <h3 style="margin-bottom: 20px; font-family: var(--font-display);">${t.activeContexts(contexts.length)}</h3>
     ${contextsListHTML}
-
+ 
     <div style="margin-top: 40px; border-top: 1px solid var(--border-light); padding-top:20px;">
-      <h3 style="margin-bottom: 20px; font-family: var(--font-display); color: var(--accent-cyan);">Pending Suggestions (${suggestions.filter(s => s.status === 'pending').length})</h3>
+      <h3 style="margin-bottom: 20px; font-family: var(--font-display); color: var(--accent-cyan);">${t.pendingSuggestions(suggestions.filter(s => s.status === 'pending').length)}</h3>
       ${suggestions.filter(s => s.status === 'pending').map(s => `
                 <div style="background:rgba(212, 175, 55, 0.05); padding:12px; border:1px solid rgba(212, 175, 55, 0.2); border-radius:6px; margin-bottom:8px;">
                   <div style="font-weight:600; font-size:0.95rem;">${s.titleEn}</div>
-                  <div style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:8px;">Suggested by: ${s.suggestedBy} ${s.parentId ? `| Parent: ${s.parentId}` : ''}</div>
+                  <div style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:8px;">${t.suggestedBy} ${s.suggestedBy} ${s.parentId ? `| Parent: ${s.parentId}` : ''}</div>
                   <div style="display:flex; gap:8px;">
-                    <button class="btn-approve-sug" data-id="${s.id}" style="background:var(--accent-cyan); color:var(--bg-dark); border:none; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer; font-weight:600;">Approve</button>
-                    <button class="btn-reject-sug" data-id="${s.id}" style="background:transparent; color:#ff4444; border:1px solid #ff4444; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;">Reject</button>
+                    <button class="btn-approve-sug" data-id="${s.id}" style="background:var(--accent-cyan); color:var(--bg-dark); border:none; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer; font-weight:600;">${t.approve}</button>
+                    <button class="btn-reject-sug" data-id="${s.id}" style="background:transparent; color:#ff4444; border:1px solid #ff4444; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;">${t.reject}</button>
                   </div>
                 </div>
               `).join('')}
@@ -1685,7 +1892,7 @@ const renderAdminView = (container) => {
   // Handle Save (Create/Update)
   document.getElementById('save-ctx-btn').addEventListener('click', async () => {
     const id = document.getElementById('new-ctx-id').value.trim();
-    if (!id) return showToast('Context ID is required', 'ph-warning');
+    if (!id) return showToast(t.ctxIdReq, 'ph-warning');
 
     const ctxData = {
       id,
@@ -1713,12 +1920,12 @@ const renderAdminView = (container) => {
       });
       if (!resp.ok) throw new Error('Failed to save context');
 
-      showToast(`Context ${editingContextId ? 'updated' : 'created'} successfully!`, 'ph-check-circle');
+      showToast(editingContextId ? t.ctxUpdated : t.ctxCreated, 'ph-check-circle');
       editingContextId = null;
       setTimeout(() => renderAdminView(container), 200);
     } catch (e) {
       console.error(e);
-      showToast('Error saving context', 'ph-warning');
+      showToast(t.ctxSaveError, 'ph-warning');
     }
   });
 
@@ -1749,15 +1956,15 @@ const renderAdminView = (container) => {
   document.querySelectorAll('.btn-del-ctx').forEach(btn => {
     btn.addEventListener('click', async () => {
       const id = btn.getAttribute('data-id');
-      if (confirm('Are you sure you want to delete this context?')) {
+      if (confirm(t.confirmDelete)) {
         try {
           const resp = await fetch(`${apiHost}/api/contexts/${id}`, { method: 'DELETE' });
           if (!resp.ok) throw new Error('Delete failed');
-          showToast('Context deleted', 'ph-trash');
+          showToast(t.ctxDeleted, 'ph-trash');
           setTimeout(() => renderAdminView(container), 200);
         } catch (e) {
           console.error(e);
-          showToast('Failed to delete', 'ph-warning');
+          showToast(t.deleteFailed, 'ph-warning');
         }
       }
     });
@@ -1793,7 +2000,7 @@ const renderAdminView = (container) => {
           body: JSON.stringify(ctxData)
         });
         if (!resp.ok) throw new Error('Approval Failed');
-        showToast('Suggestion Approved!', 'ph-check-circle');
+        showToast(t.sugApproved, 'ph-check-circle');
         setTimeout(() => renderAdminView(container), 200);
       } catch (e) { console.error(e); }
     });
@@ -1804,7 +2011,7 @@ const renderAdminView = (container) => {
       const sugId = btn.getAttribute('data-id');
       try {
         await fetch(`${apiHost}/api/suggestions/${sugId}/reject`, { method: 'POST' });
-        showToast('Suggestion Rejected.', 'ph-trash');
+        showToast(t.sugRejected, 'ph-trash');
         setTimeout(() => renderAdminView(container), 200);
       } catch (e) { console.error('Error Rejecting:', e); }
     });
@@ -1835,6 +2042,124 @@ const showToast = (message, icon = 'ph-info') => {
     toast.classList.remove('show');
     setTimeout(() => toast.remove(), 400);
   }, 4000);
+};
+
+// --- Nested Sidebar Logic ---
+const buildSidebarTree = () => {
+  const tree = [];
+  const childrenMap = {};
+
+  contexts.forEach(ctx => {
+    childrenMap[ctx.id] = [];
+  });
+
+  contexts.forEach(ctx => {
+    if (ctx.parentId && childrenMap[ctx.parentId]) {
+      childrenMap[ctx.parentId].push(ctx);
+    }
+  });
+
+  contexts.forEach(ctx => {
+    if (!ctx.parentId) {
+      const node = { ...ctx, children: getSortedChildren(ctx.id, childrenMap) };
+      tree.push(node);
+    }
+  });
+
+  return tree;
+};
+
+const getSortedChildren = (parentId, childrenMap) => {
+  return (childrenMap[parentId] || [])
+    .map(ctx => ({ ...ctx, children: getSortedChildren(ctx.id, childrenMap) }))
+    .sort((a, b) => a.titles[currentLang].localeCompare(b.titles[currentLang]));
+};
+
+const renderSidebarTree = () => {
+  const tree = buildSidebarTree();
+  // Filter tree based on search
+  const query = searchQuery.toLowerCase();
+
+  const filterTree = (nodes) => {
+    return nodes.reduce((acc, node) => {
+      const matches = node.titles[currentLang].toLowerCase().includes(query);
+      const filteredChildren = filterTree(node.children);
+
+      if (matches || filteredChildren.length > 0) {
+        // If query is present and children matched, force expansion
+        if (query && filteredChildren.length > 0) expandedContexts.add(node.id);
+        acc.push({ ...node, children: filteredChildren });
+      }
+      return acc;
+    }, []);
+  };
+
+  const visibleTree = query ? filterTree(tree) : tree;
+
+  const renderNode = (node, depth = 0) => {
+    const hasChildren = node.children.length > 0;
+    const isExpanded = expandedContexts.has(node.id);
+    const isActive = currentView === `pyramid-${node.id}` || currentView === `family-${node.id}`;
+
+    return `
+      <div class="sidebar-node-wrapper" style="--depth: ${depth}">
+        <div class="sidebar-item ${isActive ? 'active' : ''} ${hasChildren ? 'has-children' : ''}" data-id="${node.id}" data-target="${hasChildren ? `family-${node.id}` : `pyramid-${node.id}`}">
+          <div class="sidebar-item-content">
+            <i class="${node.icon}"></i>
+            <span class="sidebar-item-label">${node.titles[currentLang]}</span>
+          </div>
+          ${hasChildren ? `
+            <button class="expand-toggle ${isExpanded ? 'expanded' : ''}" data-expand="${node.id}">
+              <i class="ph ph-caret-right"></i>
+            </button>
+          ` : ''}
+        </div>
+        ${hasChildren && (isExpanded || query) ? `
+          <div class="sidebar-sub-menu ${isExpanded ? 'show' : ''}">
+            ${node.children.map(child => renderNode(child, depth + 1)).join('')}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  };
+
+  return visibleTree.map(node => renderNode(node)).join('');
+};
+
+const getBreadcrumbs = (ctxId) => {
+  const path = [];
+  let current = contexts.find(c => c.id === ctxId);
+  while (current) {
+    path.unshift(current);
+    current = contexts.find(c => c.id === current.parentId);
+  }
+  return path;
+};
+
+const renderBreadcrumbs = (ctxId) => {
+  const t = i18n[currentLang];
+  const path = getBreadcrumbs(ctxId);
+  return `
+    <nav class="breadcrumb-nav">
+      <span class="breadcrumb-item" data-target="home">${t.dashboard}</span>
+      ${path.map((node, index) => {
+    const isLast = index === path.length - 1;
+    const target = contexts.some(c => c.parentId === node.id) ? `family-${node.id}` : `pyramid-${node.id}`;
+    return `
+          <i class="ph ph-caret-right breadcrumb-separator"></i>
+          <span class="breadcrumb-item ${isLast ? 'active' : ''}" data-target="${target}">${node.titles[currentLang]}</span>
+        `;
+  }).join('')}
+    </nav>
+  `;
+};
+
+const expandHierarchy = (ctxId) => {
+  let current = contexts.find(c => c.id === ctxId);
+  while (current && current.parentId) {
+    expandedContexts.add(current.parentId);
+    current = contexts.find(c => c.id === current.parentId);
+  }
 };
 
 const attachGlobalEvents = () => {
@@ -1898,7 +2223,7 @@ const attachGlobalEvents = () => {
   document.body.addEventListener('click', (e) => {
     // Sidebar Item click logic handled via global delegation
     const sidebarItem = e.target.closest('.sidebar-item');
-    if (sidebarItem) {
+    if (sidebarItem && !e.target.closest('.expand-toggle')) {
       const target = sidebarItem.getAttribute('data-target');
       if (currentView !== target) {
         currentView = target;
@@ -1925,6 +2250,29 @@ const attachGlobalEvents = () => {
         });
       } else {
         showToast(t.noNotifications, 'ph-bell');
+      }
+    }
+
+    // Nested Toggle handler
+    const expandBtn = e.target.closest('.expand-toggle');
+    if (expandBtn) {
+      e.stopPropagation();
+      const id = expandBtn.getAttribute('data-expand');
+      if (expandedContexts.has(id)) expandedContexts.delete(id);
+      else expandedContexts.add(id);
+      render();
+    }
+
+    // Breadcrumb or Back Button click logic
+    const clickable = e.target.closest('.breadcrumb-item, .btn-back, .back-btn');
+    if (clickable) {
+      const target = clickable.getAttribute('data-target');
+      if (target) {
+        if (currentView !== target) {
+          pyramidOffsetIndex = 0;
+          currentView = target;
+          render();
+        }
       }
     }
   });

@@ -184,6 +184,7 @@ app.get('/api/contexts', async (req, res) => {
                     icon: row.icon,
                     participants: row.participants,
                     imageUrl: imgUrl,
+                    parentId: row.parent_id,
                     createdAt: row.created_at
                 };
             } catch (rowErr) {
