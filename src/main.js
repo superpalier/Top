@@ -1196,8 +1196,8 @@ const renderPyramidView = (container, contextInfo) => {
     const zIndex = 50 - tIndex; // Higher tiers are visually "above"
 
     // Scale node sizes proportionally per tier using viewport-friendly values
-    // Desktop: apex=180px (enhanced) → base=73px. Faces clearly visible.
-    const sizeScale = [180, 128, 119, 110, 101, 93, 85, 80, 76, 73];
+    // Desktop: apex=154px (balanced) → base=73px. Responsive hierarchy.
+    const sizeScale = [154, 128, 119, 110, 101, 93, 85, 80, 76, 73];
     const nodeSize = sizeScale[tIndex] || 73;
 
     const usersHTML = tier.map(user => `
@@ -1205,7 +1205,8 @@ const renderPyramidView = (container, contextInfo) => {
            data-id="${user.id}" 
            data-votes="${user.votes} ${t.votesCount}" 
            data-voted-text="&#x2713; ${t.voted}"
-           style="width:${nodeSize}px; height:${nodeSize}px;">
+           style="width:${tIndex === 0 ? 180 : nodeSize}px; height:${nodeSize}px;">
+        ${tIndex === 0 ? '<div class="apex-ring"></div>' : ''}
         <div class="node-rank">#${user.rank}</div>
         <img src="${user.img}" alt="${user.name}">
         <div class="node-overlay">
