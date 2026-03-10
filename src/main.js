@@ -724,32 +724,31 @@ const renderHomeView = (container) => {
     </div>
 
     <!-- Hero Section -->
-    <div style="margin-bottom:40px; padding:36px; border-radius:16px; background:linear-gradient(135deg,rgba(20,20,25,0.8),rgba(10,10,12,0.9)); border:1px solid rgba(212,175,55,0.15); box-shadow:0 20px 50px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter:blur(20px); position:relative; overflow:hidden;">
-      <div style="position:absolute;top:-50%;left:-20%;width:50%;height:200%;background:radial-gradient(circle,rgba(212,175,55,0.08) 0%,transparent 70%);transform:rotate(30deg);pointer-events:none;"></div>
-      
-      <p style="font-size:1.25rem;font-weight:600;color:var(--text-primary);max-width:700px;line-height:1.55;margin-bottom:14px;">${t.heroSubtitle}</p>
-      <p style="font-size:0.95rem;color:var(--text-secondary);max-width:680px;line-height:1.7;margin-bottom:28px;">${t.heroSubtitle2 || ''}</p>
+    <div class="hero-section">
+      <div class="hero-glow-accent"></div>
+      <p class="hero-title">${t.heroSubtitle}</p>
+      <p class="hero-sub">${t.heroSubtitle2 || ''}</p>
 
-      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:28px;">
-        <button id="open-rules-btn" style="background:transparent;border:1px solid rgba(0,240,255,0.4);color:var(--accent-cyan);padding:9px 18px;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;">
+      <div class="hero-btn-row">
+        <button id="open-rules-btn" class="btn-rules">
           <i class="ph ph-info"></i> ${t.rulesModalBtn || 'How it works →'}
         </button>
       </div>
 
-      <div style="display:flex;gap:24px;flex-wrap:wrap;">
-        <div style="display:flex;flex-direction:column;">
-          <span style="font-size:2rem;font-weight:800;color:var(--accent-cyan);font-family:var(--font-display);line-height:1;">${contexts.length}</span>
-          <span style="font-size:0.8rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-top:4px;">${t.heroContexts}</span>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-val cyan">${contexts.length}</span>
+          <span class="hero-stat-label">${t.heroContexts}</span>
         </div>
-        <div style="width:1px;background:rgba(255,255,255,0.1);"></div>
-        <div style="display:flex;flex-direction:column;">
-          <span style="font-size:2rem;font-weight:800;color:var(--text-primary);font-family:var(--font-display);line-height:1;">3,000+</span>
-          <span style="font-size:0.8rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-top:4px;">${t.heroUsers}</span>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-val">3,000+</span>
+          <span class="hero-stat-label">${t.heroUsers}</span>
         </div>
-        <div style="width:1px;background:rgba(255,255,255,0.1);"></div>
-        <div style="display:flex;flex-direction:column;">
-          <span style="font-size:2rem;font-weight:800;color:var(--text-primary);font-family:var(--font-display);line-height:1;">4.2k</span>
-          <span style="font-size:0.8rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-top:4px;">${t.heroVotes}</span>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-val">4.2k</span>
+          <span class="hero-stat-label">${t.heroVotes}</span>
         </div>
       </div>
     </div>
