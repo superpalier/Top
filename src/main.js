@@ -542,8 +542,15 @@ let initialDataFetched = false;
 // HTTP Polling for Real-time UX (Free Cloud Run Alternative to WebSockets/Snapshots)
 const pollData = async () => {
   try {
+    console.log(`[Votenaut] Polling data from ${apiHost}/api/contexts...`);
     const ctxRes = await fetch(`${apiHost}/api/contexts`);
-    if (ctxRes.ok) contexts = await ctxRes.json();
+
+    if (ctxRes.ok) {
+      contexts = await ctxRes.json();
+      console.log(`[Votenaut] Successfully fetched ${contexts.length} contexts.`);
+    } else {
+      console.error(`[Votenaut] API Error: ${ctxRes.status} ${ctxRes.statusText}`);
+    }
 
     // Fetch non-critical data
     fetch(`${apiHost}/api/votes`).then(res => res.ok ? res.json() : []).then(data => {
@@ -552,11 +559,11 @@ const pollData = async () => {
       if (oldVotesLength !== voteHistoryLedger.length && currentView.startsWith('pyramid-')) {
         render();
       }
-    }).catch(e => console.warn('Votes fetch failed:', e));
+    }).catch(e => console.warn('[Votenaut] Votes fetch failed:', e));
 
     fetch(`${apiHost}/api/suggestions`).then(res => res.ok ? res.json() : []).then(data => {
       suggestions = data;
-    }).catch(e => console.warn('Suggestions fetch failed:', e));
+    }).catch(e => console.warn('[Votenaut] Suggestions fetch failed:', e));
 
     // Handle user limits and session logic
     const today = new Date();
@@ -594,19 +601,21 @@ const pollData = async () => {
     globalVotes.count = localVotesCount;
     globalVotes.byContext = localVotesMap;
 
-    if (!initialDataFetched) {
-      initialDataFetched = true;
-      if (document.getElementById('main-content')) {
-        render(); // Force initial full render to clear skeleton
-      }
-    }
-
     // Trigger re-render for active Admin View during polling
     if (document.getElementById('main-content') && currentView === 'admin') {
       renderAdminView(document.getElementById('main-content'));
     }
   } catch (err) {
-    console.error('Polling error:', err);
+    console.error('[Votenaut] Critical Polling Error:', err);
+    if (!initialDataFetched) showToast('Network Error: Could not reach API.', 'ph-warning');
+  } finally {
+    if (!initialDataFetched) {
+      initialDataFetched = true;
+      console.log('[Votenaut] Initial data fetch attempt complete. Rendering UI.');
+      if (document.getElementById('main-content')) {
+        render(); // Force initial full render to clear skeleton
+      }
+    }
   }
 };
 
