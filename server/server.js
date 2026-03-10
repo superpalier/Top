@@ -148,37 +148,49 @@ app.get('/api/contexts', async (req, res) => {
         const result = await client.query('SELECT * FROM base_contexts ORDER BY id');
         client.release();
 
-        // Map the snake_case DB fields to the camelCase expected by the frontend
-        // Inject dynamic unique premium backgrounds if missing from DB or using old placeholders
+        const neonPalettes = [
+            "00f0ff,ff0055,7000ff", "00ffaa,00aaff,0000ff", "ffaa00,ff0055,9900ff",
+            "ff00ff,00ffff,ffff00", "00ff00,ff00ff,00ffff", "ff3366,33ccff,ffff66",
+            "ff6600,ff0066,cc00ff", "00ccff,00ffcc,ccff00", "ff00cc,cc00ff,0055ff",
+            "00ffcc,ff00cc,ffcc00", "5500ff,ff0055,00ff55", "ff5500,0055ff,55ff00"
+        ];
+
         const mappedContexts = result.rows.map(row => {
-            let imgUrl = row.image_url;
-            const parsedTitles = typeof row.titles === 'string' ? JSON.parse(row.titles) : row.titles;
-            const seedName = parsedTitles && parsedTitles.en ? parsedTitles.en : row.id;
+            try {
+                // Safely parse titles whether from JSONB (object) or TEXT (string)
+                let parsedTitles = row.titles;
+                if (typeof row.titles === 'string') {
+                    try { parsedTitles = JSON.parse(row.titles); } catch (_) { parsedTitles = { en: row.id }; }
+                }
+                if (!parsedTitles || typeof parsedTitles !== 'object') parsedTitles = { en: row.id };
 
-            if (!imgUrl || imgUrl.includes('/ctx_bg_')) {
-                // Ensure every single context has a mathematically unique, purely geometric, ad-hoc text-free image
-                // Generate deterministic neon colors based on the context name string
-                let hash = 0;
-                for (let i = 0; i < seedName.length; i++) hash = seedName.charCodeAt(i) + ((hash << 5) - hash);
-                const neonPalettes = [
-                    "00f0ff,ff0055,7000ff", "00ffaa,00aaff,0000ff", "ffaa00,ff0055,9900ff",
-                    "ff00ff,00ffff,ffff00", "00ff00,ff00ff,00ffff", "ff3366,33ccff,ffff66",
-                    "ff6600,ff0066,cc00ff", "00ccff,00ffcc,ccff00", "ff00cc,cc00ff,0055ff",
-                    "00ffcc,ff00cc,ffcc00", "5500ff,ff0055,00ff55", "ff5500,0055ff,55ff00"
-                ];
-                const colorStops = neonPalettes[Math.abs(hash) % neonPalettes.length];
-                imgUrl = `https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(seedName)}&backgroundColor=050507&shape1Color=${colorStops}&shape2Color=${colorStops}&shape3Color=${colorStops}`;
+                const seedName = parsedTitles.en || row.id;
+
+                // Always generate a unique geometric image unless a custom one is stored
+                let imgUrl = row.image_url;
+                const isGenerated = imgUrl && imgUrl.includes('dicebear.com');
+                const isOldPlaceholder = imgUrl && imgUrl.includes('/ctx_bg_');
+
+                if (!imgUrl || isOldPlaceholder || !isGenerated) {
+                    let hash = 0;
+                    for (let i = 0; i < seedName.length; i++) hash = seedName.charCodeAt(i) + ((hash << 5) - hash);
+                    const colorStops = neonPalettes[Math.abs(hash) % neonPalettes.length];
+                    imgUrl = `https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(seedName)}&backgroundColor=050507&shape1Color=${colorStops}&shape2Color=${colorStops}&shape3Color=${colorStops}`;
+                }
+
+                return {
+                    id: row.id,
+                    titles: parsedTitles,
+                    icon: row.icon,
+                    participants: row.participants,
+                    imageUrl: imgUrl,
+                    createdAt: row.created_at
+                };
+            } catch (rowErr) {
+                console.warn('Row mapping error:', rowErr.message, row.id);
+                return null; // skip broken row
             }
-
-            return {
-                id: row.id,
-                titles: parsedTitles,
-                icon: row.icon,
-                participants: row.participants,
-                imageUrl: imgUrl,
-                createdAt: row.created_at
-            };
-        });
+        }).filter(Boolean);
 
         res.json(mappedContexts);
     } catch (err) {
