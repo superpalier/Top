@@ -408,7 +408,13 @@ const i18n = {
     parentCatOptional: 'Catégorie parente (Optionnel)',
     imageUrlOptional: 'URL de l\'image (Optionnel)',
     noneTopLevel: '-- Aucun (Niveau supérieur) --',
-    noContextsFound: 'Aucun contexte trouvé.'
+    noContextsFound: 'Aucun contexte trouvé.',
+    myProfile: 'Mon Profil',
+    logout: 'Déconnexion',
+    noVotesYet: 'Aucun vote pour l\'instant.',
+    votedFor: 'A voté pour',
+    category: 'Catégorie',
+    date: 'Date'
   },
   de: {
     dashboard: 'Dashboard',
@@ -516,7 +522,13 @@ const i18n = {
     parentCatOptional: 'Übergeordnete Kategorie (Optional)',
     imageUrlOptional: 'Bild-URL (Optional)',
     noneTopLevel: '-- Keine (Oberste Ebene) --',
-    noContextsFound: 'Keine Kontexte gefunden.'
+    noContextsFound: 'Keine Kontexte gefunden.',
+    myProfile: 'Mein Profil',
+    logout: 'Abmelden',
+    noVotesYet: 'Noch keine Stimmen abgegeben.',
+    votedFor: 'Gestimmt für',
+    category: 'Kategorie',
+    date: 'Datum'
   }
 };
 
@@ -838,10 +850,15 @@ const render = () => {
           <i class="ph ph-squares-four"></i> ${t.dashboard}
         </a>
         <div id="sidebar-contexts-list" style="overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:2px; padding: 0 4px;">
-          ${renderSidebarTree()}
+        ${renderSidebarTree()}
         </div>
         ${loggedInUser ? `
-        <div style="padding: 16px; border-top: 1px solid var(--border-light); margin-top: auto;">
+        <div style="border-top: 1px solid var(--border-light); padding: 8px 0; margin-top: 5px;">
+          <a class="sidebar-item ${currentView === 'profile' ? 'active' : ''}" data-target="profile">
+            <i class="ph ph-user-circle"></i> ${t.myProfile}
+          </a>
+        </div>
+        <div style="padding: 16px; margin-top: auto;">
           <button class="btn-secondary" id="suggest-cat-btn" style="width:100%; font-size: 0.8rem; padding: 10px;"><i class="ph ph-lightbulb"></i> ${t.suggestCat}</button>
         </div>
         ` : ''}
@@ -887,6 +904,18 @@ const render = () => {
     
     <!-- Custom Toast Container -->
     <div id="toast-container"></div>
+    
+    <div id="logout-confirm-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px;">
+       <div style="max-width:400px; width:100%; background:var(--bg-card); border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:30px; text-align:center;">
+          <i class="ph ph-sign-out" style="font-size:3rem; color:var(--accent-magenta); margin-bottom:20px;"></i>
+          <h2 style="margin-bottom:12px; color:var(--text-primary);">¿Cerrar sesión?</h2>
+          <p style="color:var(--text-secondary); margin-bottom:24px;">Tus votos locales se sincronizarán la próxima vez que ingreses.</p>
+          <div style="display:flex; gap:12px;">
+             <button id="confirm-logout-btn" class="btn-primary" style="background:var(--accent-magenta); border:none;">Sí, Salir</button>
+             <button onclick="document.getElementById('logout-confirm-modal').style.display='none'" class="btn-outline-gold" style="border-color:rgba(255,255,255,0.2); color:var(--text-secondary);">Cancelar</button>
+          </div>
+       </div>
+    </div>
   `;
 
   const mainContent = document.getElementById('main-content');
@@ -927,6 +956,98 @@ const render = () => {
       newVp.scrollTop = lastScrollY;
     }
   }
+};
+
+const renderProfileView = (container) => {
+  const t = i18n[currentLang];
+  if (!loggedInUser) { currentView = 'home'; render(); return; }
+
+  // Filter votes by this user - search in ledger
+  const myVotes = voteHistoryLedger.filter(v => v.voter_username === loggedInUser.name);
+
+  container.innerHTML = `
+     <div class="view-container dashboard-fade-in" style="max-width: 900px; margin: 0 auto; padding-top: 20px;">
+       <div class="pyramid-header" style="margin-bottom: 30px;">
+         <button class="back-btn" data-target="home"><i class="ph ph-arrow-left"></i></button>
+         <div class="pyramid-context-title">${t.myProfile}</div>
+         <button class="btn-outline-gold" id="btn-logout-trigger" style="margin-left:auto; border-color:var(--accent-magenta); color:var(--accent-magenta); font-size: 0.8rem; padding: 6px 14px;">
+           <i class="ph ph-sign-out"></i> ${t.logout}
+         </button>
+       </div>
+ 
+       <div style="display:grid; grid-template-columns: 1fr 2fr; gap: 30px; align-items: start;" class="dashboard-grid">
+         <!-- User Info Card -->
+         <div class="profile-card" style="position:relative; width:100%; max-width:none; transform:none; opacity:1; pointer-events:all; box-shadow:0 10px 40px rgba(0,0,0,0.5);">
+            <div class="profile-card-header" style="height: 80px; background: var(--accent-gold); opacity: 0.15;"></div>
+            <div class="profile-card-body" style="padding-top: 40px;">
+              <div class="avatar-large" style="width:100px; height:100px; background:var(--bg-dark); border:3px solid var(--accent-gold); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:800; color:var(--accent-gold); margin: -50px auto 15px; position:relative; z-index:2;">
+                ${loggedInUser.name.substring(0, 2).toUpperCase()}
+              </div>
+              <h2 style="margin-bottom:4px; font-family:var(--font-display); color:var(--text-primary); font-size:1.4rem;">${loggedInUser.name}</h2>
+              <p style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:20px;">${loggedInUser.email}</p>
+              
+              <div style="text-align:left; border-top: 1px solid rgba(255,255,255,0.05); padding-top:20px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                   <span style="color:var(--text-secondary); font-size:0.8rem;">${t.joinDate}:</span>
+                   <span style="color:var(--text-primary); font-size:0.8rem; font-weight:600;">${new Date(loggedInUser.createdAt).toLocaleDateString()}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                   <span style="color:var(--text-secondary); font-size:0.8rem;">Total ${t.votesStatLabel}:</span>
+                   <span style="color:var(--accent-cyan); font-size:0.8rem; font-weight:600;">${myVotes.length}</span>
+                </div>
+              </div>
+            </div>
+         </div>
+ 
+         <!-- History Area -->
+         <div class="glass-card" style="padding: 24px;">
+           <h3 style="margin-bottom:20px; color:var(--text-primary); font-family:var(--font-display); display:flex; align-items:center; gap:10px;">
+             <i class="ph ph-clock-counter-clockwise" style="color:var(--accent-gold);"></i> ${t.voteHistory}
+           </h3>
+ 
+           <div class="history-list" style="display:flex; flex-direction:column; gap:12px;">
+             ${myVotes.length === 0 ? `<div style="text-align:center; color:var(--text-secondary); padding:40px;">${t.noVotesYet}</div>` :
+      myVotes.sort((a, b) => new Date(b.cast_at) - new Date(a.cast_at)).map(vote => {
+        const ctx = contexts.find(c => c.id === vote.context_id);
+        const ctxTitle = ctx ? (ctx.titles[currentLang] || ctx.titles['en']) : vote.context_id;
+        const isExpired = vote.status === 'expired';
+
+        return `
+                   <div class="history-item ${isExpired ? 'expired' : ''}" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:12px; padding:14px; display:flex; align-items:center; gap:15px; position:relative; overflow:hidden;">
+                     <div style="width:40px; height:40px; border-radius:8px; background:rgba(212,175,55,0.1); display:flex; align-items:center; justify-content:center; color:var(--accent-gold);">
+                        <i class="${ctx ? ctx.icon : 'ph ph-question'}"></i>
+                     </div>
+                     <div style="flex:1;">
+                        <div style="font-size:0.9rem; font-weight:600; color:var(--text-primary);">${ctxTitle}</div>
+                        <div style="font-size:0.75rem; color:var(--text-secondary);">${t.votedFor}: <span style="color:var(--accent-cyan); font-weight:500;">@${vote.target_user_id}</span></div>
+                     </div>
+                     <div style="text-align:right;">
+                        <div style="font-size:0.75rem; color:var(--text-secondary);">${new Date(vote.cast_at).toLocaleDateString()}</div>
+                        <span class="badge ${isExpired ? 'bg-expired' : 'bg-active'}" style="font-size:0.6rem; padding: 2px 6px; border-radius:4px; text-transform:uppercase;">${isExpired ? t.expiredVote : t.activeVote}</span>
+                     </div>
+                   </div>
+                 `;
+      }).join('')
+    }
+           </div>
+         </div>
+       </div>
+     </div>
+   `;
+
+  document.getElementById('btn-logout-trigger').addEventListener('click', () => {
+    const modal = document.getElementById('logout-confirm-modal');
+    modal.style.display = 'flex';
+  });
+
+  document.getElementById('confirm-logout-btn').addEventListener('click', () => {
+    localStorage.removeItem('votenaut_token');
+    localStorage.removeItem('votenaut_user');
+    loggedInUser = null;
+    currentView = 'home';
+    document.getElementById('logout-confirm-modal').style.display = 'none';
+    render();
+  });
 };
 
 const renderHomeView = (container) => {
@@ -2262,16 +2383,12 @@ const attachGlobalEvents = () => {
     const notifBtn = e.target.closest('#notif-btn');
     if (notifBtn && loggedInUser) {
       const unread = notifications.filter(n => n.targetUser === loggedInUser.name && !n.read);
-      if (unread.length > 0) {
-        unread.forEach(async (n) => {
-          showToast(n.message, 'ph-bell-ringing');
-          try {
-            await setDoc(doc(db, 'notifications', n.id), { read: true }, { merge: true });
-          } catch (e) { console.warn(e); }
-        });
-      } else {
-        showToast(t.noNotifications, 'ph-bell');
-      }
+      unread.forEach(n => {
+        showToast(n.message, 'ph-bell-ringing');
+        n.read = true; // Local mark as read
+      });
+    } else {
+      showToast(t.noNotifications, 'ph-bell');
     }
 
     // Nested Toggle handler
