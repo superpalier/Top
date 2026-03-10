@@ -1206,7 +1206,6 @@ const renderPyramidView = (container, contextInfo) => {
            data-votes="${user.votes} ${t.votesCount}" 
            data-voted-text="&#x2713; ${t.voted}"
            style="width:${tIndex === 0 ? 180 : nodeSize}px; height:${nodeSize}px;">
-        ${tIndex === 0 ? '<div class="apex-ring"></div>' : ''}
         <div class="node-rank">#${user.rank}</div>
         <img src="${user.img}" alt="${user.name}">
         <div class="node-overlay">
