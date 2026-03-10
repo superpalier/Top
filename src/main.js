@@ -542,11 +542,10 @@ let initialDataFetched = false;
 // HTTP Polling for Real-time UX (Free Cloud Run Alternative to WebSockets/Snapshots)
 const pollData = async () => {
   try {
-    // Fetch critical data: contexts
     const ctxRes = await fetch(`${apiHost}/api/contexts`);
     if (ctxRes.ok) contexts = await ctxRes.json();
 
-    // Fetch non-critical data individually
+    // Fetch non-critical data
     fetch(`${apiHost}/api/votes`).then(res => res.ok ? res.json() : []).then(data => {
       const oldVotesLength = voteHistoryLedger.length;
       voteHistoryLedger = data;
@@ -559,7 +558,7 @@ const pollData = async () => {
       suggestions = data;
     }).catch(e => console.warn('Suggestions fetch failed:', e));
 
-    // Re-evaluate user limits and triggers if logged in
+    // Handle user limits and session logic
     const today = new Date();
     let localVotesMap = {};
     let localVotesCount = 0;
@@ -569,28 +568,22 @@ const pollData = async () => {
         v.voter_username === loggedInUser.name &&
         v.status === 'active'
       );
-
-      // Check Daily limits
       const todaysVotes = userActiveVotes.filter(v => {
         const castDate = new Date(v.cast_at);
         return castDate.toDateString() === today.toDateString();
       });
-
       localVotesCount = todaysVotes.length;
-
       userActiveVotes.forEach(v => {
         localVotesMap[v.context_id] = v.target_user_id;
       });
     } else {
-      // Anonymous User Polling from LocalStorage
       const anonVotes = JSON.parse(localStorage.getItem('votenaut_anon_votes') || '[]');
       const todaysAnon = anonVotes.filter(v => {
         const castDate = new Date(v.castAt);
-        return castDate.toDateString() === today.toDateString() && (new Date() - castDate) < (24 * 60 * 60 * 1000); // 24 hours
+        return castDate.toDateString() === today.toDateString() && (new Date() - castDate) < (24 * 60 * 60 * 1000);
       });
       localVotesCount = todaysAnon.length;
       anonVotes.forEach(v => {
-        // ensure it's active (within 24 hours)
         const castDate = new Date(v.castAt);
         if ((new Date() - castDate) < (24 * 60 * 60 * 1000)) {
           localVotesMap[v.contextId] = v.targetUserId;
@@ -603,15 +596,9 @@ const pollData = async () => {
 
     if (!initialDataFetched) {
       initialDataFetched = true;
-      if (document.getElementById('main-content') && currentView === 'home') {
+      if (document.getElementById('main-content')) {
         render(); // Force initial full render to clear skeleton
       }
-    }
-
-    // Attempt subtle re-render if data significantly changed
-    if (document.getElementById('main-content')) {
-      // For Admin View
-      if (currentView === 'admin') renderAdminView(document.getElementById('main-content'));
     }
   } catch (err) {
     console.error('Polling error:', err);
