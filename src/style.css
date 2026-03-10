@@ -1426,7 +1426,7 @@ main {
 }
 
 .profile-card-header {
-  height: 140px;
+  height: 90px;
   background: #000000;
   /* Pure black instead of gradient */
   position: relative;
@@ -1435,12 +1435,12 @@ main {
 }
 
 .profile-card-avatar {
-  width: 180px;
-  height: 180px;
+  width: 140px;
+  height: 140px;
   border-radius: 12px;
   border: 4px solid var(--bg-dark);
   position: absolute;
-  bottom: -90px;
+  bottom: -70px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--bg-card);
@@ -1449,7 +1449,7 @@ main {
 }
 
 .profile-card-body {
-  padding: 70px 32px 32px;
+  padding: 55px 32px 24px;
   text-align: center;
 }
 
@@ -1459,14 +1459,14 @@ main {
   font-weight: 600;
   color: var(--text-primary);
   letter-spacing: -0.5px;
-  margin-top: 30px;
-  margin-bottom: 6px;
+  margin-top: 12px;
+  margin-bottom: 4px;
 }
 
 .profile-dob {
   font-size: 0.85rem;
   color: var(--text-secondary);
-  margin-bottom: 24px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1477,14 +1477,14 @@ main {
   font-size: 0.95rem;
   color: var(--text-secondary);
   line-height: 1.6;
-  margin-bottom: 30px;
+  margin-bottom: 12px;
 }
 
 .profile-socials {
   display: flex;
   justify-content: center;
   gap: 12px;
-  margin-bottom: 30px;
+  margin-bottom: 12px;
 }
 
 .social-link {
@@ -1510,28 +1510,28 @@ main {
 
 @media (max-width: 480px) {
   .profile-card-header {
-    height: 100px;
+    height: 70px;
   }
 
   .profile-card-avatar {
-    width: 120px;
-    height: 120px;
-    bottom: -60px;
+    width: 100px;
+    height: 100px;
+    bottom: -50px;
     border-width: 3px;
   }
 
   .profile-card-body {
-    padding: 70px 20px 24px;
+    padding: 55px 20px 20px;
   }
 
   .profile-name {
     font-size: 1.35rem;
-    margin-top: 5px;
+    margin-top: 8px;
   }
 
   .profile-dob {
     font-size: 0.75rem;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
   }
 
   .profile-joined {
@@ -1540,13 +1540,13 @@ main {
 
   .profile-description {
     font-size: 0.88rem;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   .profile-stats-row {
     gap: 12px !important;
     padding: 10px !important;
-    margin-bottom: 20px !important;
+    margin-bottom: 12px !important;
   }
 
   .profile-stats-row div div:first-child {
@@ -1558,19 +1558,20 @@ main {
   }
 
   .profile-socials {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     gap: 8px;
   }
 
   .social-link {
-    width: 38px;
-    height: 38px;
+    width: 34px;
+    height: 34px;
     font-size: 1.05rem;
   }
 
   .profile-actions button {
-    padding: 12px !important;
+    padding: 10px !important;
     font-size: 0.85rem !important;
+    margin-bottom: 8px !important;
   }
 }
 

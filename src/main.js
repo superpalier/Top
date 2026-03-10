@@ -845,11 +845,11 @@ const render = () => {
         </div>
         <div class="profile-card-body">
           <div class="profile-name" id="pm-name">Name</div>
-          <div class="profile-dob" style="margin-bottom: 4px;"><i class="ph ph-calendar-blank"></i> <span id="pm-dob">Date</span></div>
-          <div class="profile-joined" id="pm-joined" style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px;"><i class="ph ph-clock"></i> <span>Joined Date</span></div>
+          <div class="profile-dob"><i class="ph ph-calendar-blank"></i> <span id="pm-dob">Date</span></div>
+          <div class="profile-joined" id="pm-joined" style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 8px;"><i class="ph ph-clock"></i> <span>Joined Date</span></div>
           <div class="profile-description" id="pm-bio">Bio description...</div>
           
-          <div class="profile-stats-row" style="display:flex; justify-content:center; gap:20px; margin: 16px 0; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+          <div class="profile-stats-row" style="display:flex; justify-content:center; gap:20px; margin: 12px 0; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
             <div style="text-align:center;">
               <div style="font-size:0.7rem; color:var(--text-secondary); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;" id="pm-rank-label">Rank</div>
               <div id="pm-rank" style="font-size:1.2rem; font-weight:700; color:var(--accent-cyan);">#1</div>
