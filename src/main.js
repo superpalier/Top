@@ -377,7 +377,7 @@ const baseUsers = Array.from({ length: 3000 }).map((_, i) => {
   return {
     id: `u${i}`,
     name: name,
-    img: `https://i.pravatar.cc/150?u=${i}`,
+    img: `https://api.dicebear.com/9.x/micah/svg?seed=${name.replace(/\s/g, '') + i}&backgroundColor=transparent`,
     dob: `${rYear}-${String(rMonth).padStart(2, '0')}-${String(rDay).padStart(2, '0')}`,
     bio: baseBios[i % baseBios.length],
     socials: {
@@ -416,11 +416,11 @@ const generatePyramidData = (contextId) => {
   });
 
   // Handle Dynamic Focus and Pagination
-  // We take exactly 153 users starting from the current pyramidOffsetIndex
-  let visibleUsers = usersWithVotes.slice(pyramidOffsetIndex, pyramidOffsetIndex + 153);
+  // We take exactly 55 users starting from the current pyramidOffsetIndex
+  let visibleUsers = usersWithVotes.slice(pyramidOffsetIndex, pyramidOffsetIndex + 55);
 
-  // Group into exactly 17 visible tiers (1 + 2 + ... + 17 = 153)
-  const tiersCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
+  // Group into exactly 10 visible tiers (1 + 2 + ... + 10 = 55)
+  const tiersCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const data = [];
   let userIndex = 0;
 

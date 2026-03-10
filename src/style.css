@@ -285,13 +285,14 @@ header {
   z-index: 1000;
   position: fixed;
   top: 70px;
-  left: -100%;
+  left: -280px;
   height: calc(100vh - 70px);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
 }
 
 .lateral-sidebar.active {
-  transform: translateX(100%);
+  transform: translateX(280px);
 }
 
 @media (min-width: 768px) {
@@ -1168,6 +1169,24 @@ main {
 @media (max-width: 767px) {
   .hamburger-btn {
     display: block;
+  }
+
+  :root {
+    --node-size: 40px;
+    --tier-gap: 12px;
+  }
+
+  .pyramid-tier {
+    gap: 8px;
+  }
+
+  .lateral-sidebar {
+    width: 260px;
+    left: -260px;
+  }
+
+  .lateral-sidebar.active {
+    transform: translateX(260px);
   }
 }
 

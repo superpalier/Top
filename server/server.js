@@ -92,7 +92,7 @@ app.post('/api/register', async (req, res) => {
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
         const uid = 'u_' + Date.now();
-        const img = `https://i.pravatar.cc/150?u=${uid}`;
+        const img = `https://api.dicebear.com/9.x/micah/svg?seed=${name.replace(/\s/g, '')}&backgroundColor=transparent`;
         const role = name.toLowerCase() === 'admin' ? 'admin' : 'user';
         const createdAt = new Date().toISOString();
 
@@ -149,14 +149,25 @@ app.get('/api/contexts', async (req, res) => {
         client.release();
 
         // Map the snake_case DB fields to the camelCase expected by the frontend
-        const mappedContexts = result.rows.map(row => ({
-            id: row.id,
-            titles: row.titles,
-            icon: row.icon,
-            participants: row.participants,
-            imageUrl: row.image_url,
-            createdAt: row.created_at
-        }));
+        // Inject dynamic unique premium backgrounds if missing from DB
+        const mappedContexts = result.rows.map(row => {
+            let imgUrl = row.image_url;
+            if (!imgUrl) {
+                if (row.id === 'ctx_1') imgUrl = '/ctx_bg_1.png';
+                else if (row.id === 'ctx_2') imgUrl = '/ctx_bg_2.png';
+                else if (row.id === 'ctx_3') imgUrl = '/ctx_bg_3.png';
+                else imgUrl = `https://api.dicebear.com/9.x/shapes/svg?seed=${row.id}&backgroundColor=050507&shape1Color=00f0ff,ff0055,7000ff&shape2Color=00f0ff,ff0055,7000ff&shape3Color=00f0ff,ff0055,7000ff`;
+            }
+
+            return {
+                id: row.id,
+                titles: row.titles,
+                icon: row.icon,
+                participants: row.participants,
+                imageUrl: imgUrl,
+                createdAt: row.created_at
+            };
+        });
 
         res.json(mappedContexts);
     } catch (err) {
