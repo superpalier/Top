@@ -16,7 +16,7 @@ const i18n = {
     trendingContexts: 'Trending Contexts',
     users: 'Users',
     voted: 'Voted',
-    voteRule: 'Each person can cast <strong>3 votes</strong> per day (1 per context).',
+    voteRule: '<strong>3 votes</strong> per day. Votes last 30 days. Log in to track them.',
     votedInCat: 'Voted in this context',
     expiresIn: 'Expires 24h',
     votesAvail: (rem) => `${rem} Votes Left Today`,
@@ -62,7 +62,7 @@ const i18n = {
     createAccount: 'Create Account',
     authenticating: 'Authenticating...',
     creatingAccount: 'Creating Account...',
-    heroSubtitle: 'Visual consensus and decentralized rankings. Every vote permanently alters the hierarchy stack inside this elite enclosed ecosystem.',
+    heroSubtitle: 'Visual consensus and decentralized rankings. Vote freely (volatile 30-day votes) or Log in to track your permanent voting history and impact.',
     heroContexts: 'Contexts',
     heroUsers: 'Users',
     heroVotes: 'Votes',
@@ -78,7 +78,7 @@ const i18n = {
     trendingContexts: 'Contextos Populares',
     users: 'Usuarios',
     voted: 'Votado',
-    voteRule: 'Cada persona tiene <strong>3 votos</strong> por día (1 por contexto).',
+    voteRule: '<strong>3 votos</strong> por día. Duran 30 días. Inicia sesión para guardarlos.',
     votedInCat: 'Votaste en este contexto',
     expiresIn: 'Expira en 24h',
     votesAvail: (rem) => `${rem} Votos Restantes`,
@@ -124,7 +124,7 @@ const i18n = {
     createAccount: 'Crear Cuenta',
     authenticating: 'Autenticando...',
     creatingAccount: 'Creando cuenta...',
-    heroSubtitle: 'Consenso visual y rankings descentralizados. Cada voto altera permanentemente la estructura jerárquica dentro de este ecosistema cerrado de élite.',
+    heroSubtitle: 'Consenso visual y rankings descentralizados. Vota libremente (votos volátiles de 30 días) o Inicia sesión para llevar registro de tu historial y seguir tu impacto.',
     heroContexts: 'Contextos',
     heroUsers: 'Usuarios',
     heroVotes: 'Votos',
@@ -291,8 +291,11 @@ const pollData = async () => {
     if (suggRes.ok) suggestions = await suggRes.json();
 
     // Re-evaluate user limits and triggers if logged in
+    const today = new Date();
+    let localVotesMap = {};
+    let localVotesCount = 0;
+
     if (loggedInUser) {
-      const today = new Date();
       const userActiveVotes = voteHistoryLedger.filter(v =>
         v.voter_username === loggedInUser.name &&
         v.status === 'active'
@@ -304,14 +307,30 @@ const pollData = async () => {
         return castDate.toDateString() === today.toDateString();
       });
 
-      globalVotes.count = todaysVotes.length;
+      localVotesCount = todaysVotes.length;
 
-      let newContextMap = {};
       userActiveVotes.forEach(v => {
-        newContextMap[v.context_id] = v.target_user_id;
+        localVotesMap[v.context_id] = v.target_user_id;
       });
-      globalVotes.byContext = newContextMap;
+    } else {
+      // Anonymous User Polling from LocalStorage
+      const anonVotes = JSON.parse(localStorage.getItem('pyramida_anon_votes') || '[]');
+      const todaysAnon = anonVotes.filter(v => {
+        const castDate = new Date(v.castAt);
+        return castDate.toDateString() === today.toDateString() && (new Date() - castDate) < (30 * 24 * 60 * 60 * 1000); // Also ensure within 30 days
+      });
+      localVotesCount = todaysAnon.length;
+      anonVotes.forEach(v => {
+        // ensure it's active (within 30 days)
+        const castDate = new Date(v.castAt);
+        if ((new Date() - castDate) < (30 * 24 * 60 * 60 * 1000)) {
+          localVotesMap[v.contextId] = v.targetUserId;
+        }
+      });
     }
+
+    globalVotes.count = localVotesCount;
+    globalVotes.byContext = localVotesMap;
 
     if (!initialDataFetched) {
       initialDataFetched = true;
@@ -682,13 +701,21 @@ const renderHomeView = (container) => {
                <div class="context-title" style="font-size: 1.5rem;">${p.titles[currentLang]} (Principal)</div>
                <div class="context-stats"><i class="ph ph-users"></i> ${p.participants} ${t.users}</div>
             </div>
-            ${children.map(ctx => `
-              <div class="context-card child-card" data-id="${ctx.id}" ${ctx.imageUrl ? `style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(10,0,15,0.95)), url('${ctx.imageUrl}'); background-size: cover; background-position: center; min-height: 120px;"` : 'style="min-height: 120px;"'}>
+            ${children.map(ctx => {
+        let bgStyle = '';
+        if (ctx.imageUrl) {
+          bgStyle = `style="background-image: linear-gradient(to top, rgba(5,5,7,0.95) 0%, rgba(10,10,15,0.7) 100%), url('${ctx.imageUrl}'); background-size: cover; background-position: center; min-height: 120px;"`;
+        } else {
+          bgStyle = `style="min-height: 120px;"`;
+        }
+        return `
+              <div class="context-card child-card" data-id="${ctx.id}" ${bgStyle}>
                 <i class="${ctx.icon} context-icon" style="font-size: 1.5rem;"></i>
                 <div class="context-title" style="font-size: 1.1rem;">${ctx.titles[currentLang]}</div>
                 <div class="context-stats"><i class="ph ph-users"></i> ${ctx.participants} ${t.users}</div>
               </div>
-            `).join('')}
+            `;
+      }).join('')}
           </div>
         </div>
       `;
@@ -800,7 +827,7 @@ const renderPyramidView = (container, contextInfo) => {
 
   container.innerHTML = `
     <div class="view-container">
-      <div class="pyramid-header">
+      <div class="pyramid-header context-header">
         <button class="back-btn" id="back-btn"><i class="ph ph-arrow-left"></i></button>
         <div class="pyramid-context-title">
           <i class="${contextInfo.icon}" style="color: var(--accent-cyan); margin-right: 8px;"></i>
@@ -887,6 +914,19 @@ const renderPyramidView = (container, contextInfo) => {
     });
   }
 
+  // Add visual flare if context has an image using an inline style for the header background
+  const contextHeaderEl = document.querySelector('.context-header');
+  if (contextHeaderEl) {
+    if (contextInfo.imageUrl) {
+      // Apply a darker overlay to ensure text contrast, over the specific image
+      contextHeaderEl.style.backgroundImage = `linear-gradient(to right, rgba(5,5,7,0.95) 0%, rgba(10,10,15,0.8) 100%), url('${contextInfo.imageUrl}')`;
+      contextHeaderEl.style.backgroundSize = 'cover';
+      contextHeaderEl.style.backgroundPosition = 'center';
+    } else {
+      contextHeaderEl.style.backgroundImage = 'none';
+    }
+  }
+
   document.querySelectorAll('.user-node').forEach(node => {
     node.addEventListener('click', function () {
       const userId = this.getAttribute('data-id');
@@ -934,19 +974,15 @@ const renderPyramidView = (container, contextInfo) => {
         vBtn.className = 'btn-vote';
         vBtn.disabled = false;
         vBtn.onclick = async () => {
-          if (!loggedInUser) {
-            currentView = 'register';
-            render();
-            return;
-          }
           try {
             // Send vote strictly to our backend API
+            const headers = { 'Content-Type': 'application/json' };
+            const token = localStorage.getItem('pyramida_token');
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
             const response = await fetch(`${apiHost}/api/votes`, {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('pyramida_token')}`
-              },
+              headers,
               body: JSON.stringify({
                 targetUserId: userId,
                 contextId: contextInfo.id
@@ -959,6 +995,12 @@ const renderPyramidView = (container, contextInfo) => {
               realVotesCache[contextInfo.id][userId] = (realVotesCache[contextInfo.id][userId] || 0) + 1;
               globalVotes.count++;
               globalVotes.byContext[contextInfo.id] = userId;
+
+              if (!loggedInUser) {
+                const localHistory = JSON.parse(localStorage.getItem('pyramida_anon_votes') || '[]');
+                localHistory.push({ contextId: contextInfo.id, targetUserId: userId, castAt: new Date().toISOString() });
+                localStorage.setItem('pyramida_anon_votes', JSON.stringify(localHistory));
+              }
 
               showToast('Vote successfully cast!', 'ph-check-circle');
               render();
@@ -1073,19 +1115,14 @@ const voteAction = async (node, contextId) => {
   globalVotes.byContext[contextId] = userId;
   globalVotes.count++;
 
-  // Sync to Firestore Realtime DB immediately
-  const contextRef = doc(db, 'contexts', contextId);
-  try {
-    await setDoc(contextRef, {
-      votes: { [userId]: increment(1) }
-    }, { merge: true });
-    showToast('Vote successfully cast and synced to cloud!', 'ph-cloud-check');
-  } catch (err) {
-    console.error("Firebase write error: ", err);
-    showToast('Offline mode: Vote simulated.', 'ph-warning');
+  // Store in LocalStorage for anonymous tracking
+  if (!loggedInUser) {
+    const localHistory = JSON.parse(localStorage.getItem('pyramida_anon_votes') || '[]');
+    localHistory.push({ contextId, targetUserId: userId, castAt: new Date().toISOString() });
+    localStorage.setItem('pyramida_anon_votes', JSON.stringify(localHistory));
   }
 
-  // UI updates automatically via the onSnapshot listener, but we ensure one immediate local render
+  // Fast UI updates automatically but we ensure one immediate local render
   render();
 };
 

@@ -60,18 +60,21 @@ async function seedContexts() {
         `);
 
         console.log("Seeding 20 contexts to Supabase...");
+        const contextImages = ['/ctx_bg_1.png', '/ctx_bg_2.png', '/ctx_bg_3.png'];
+
         for (let i = 0; i < defaultContextNames.length; i++) {
             const contextId = `ctx_${i + 1}`;
             const titles = JSON.stringify(defaultContextNames[i]);
             const icon = baseIcons[i % baseIcons.length];
             const participants = Math.floor(Math.random() * 800) + 100;
+            const contextImgUrl = contextImages[i % contextImages.length];
             const createdAt = new Date().toISOString();
 
             await client.query(
                 `INSERT INTO base_contexts (id, titles, icon, participants, image_url, created_at)
                  VALUES ($1, $2, $3, $4, $5, $6)
-                 ON CONFLICT (id) DO UPDATE SET titles = EXCLUDED.titles, icon = EXCLUDED.icon`,
-                [contextId, titles, icon, participants, "", createdAt]
+                 ON CONFLICT (id) DO UPDATE SET titles = EXCLUDED.titles, icon = EXCLUDED.icon, image_url = EXCLUDED.image_url`,
+                [contextId, titles, icon, participants, contextImgUrl, createdAt]
             );
 
             console.log(`Successfully wrote ${contextId} to Supabase.`);

@@ -191,17 +191,35 @@ app.get('/api/suggestions', async (req, res) => {
     }
 });
 
-// Vote Submission Route (Requires Auth)
-app.post('/api/votes', authenticateToken, async (req, res) => {
+// Vote Submission Route (Allows Unauthenticated)
+app.post('/api/votes', async (req, res) => {
     try {
         const { targetUserId, contextId } = req.body;
         if (!targetUserId || !contextId) return res.status(400).json({ error: 'Missing fields' });
 
+        // If user is not logged in, we use their IP Address + some salt as a "volatile" ID to enforce the 3 votes per day rule
+        let voterId = 'anonymous';
+
+        // Simple authentication check if a token was provided
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+        if (token) {
+            try {
+                const decoded = jwt.verify(token, SECRET_KEY);
+                voterId = decoded.name;
+            } catch (e) {
+                // Token invalid but we allow volatile voting anyway, just track by IP
+                voterId = `anon_${req.ip || req.connection.remoteAddress}`;
+            }
+        } else {
+            voterId = `anon_${req.ip || req.connection.remoteAddress}`;
+        }
+
         const client = await pool.connect();
 
-        // Check daily limits
+        // Check daily limits for this specific voter ID
         const todayStr = new Date().toISOString().split('T')[0];
-        const userVotesParams = [req.user.name, `${todayStr}%`];
+        const userVotesParams = [voterId, `${todayStr}%`];
         const limitsCheck = await client.query(
             "SELECT count(*) FROM votes_history WHERE voter_username = $1 AND cast_at::text LIKE $2",
             userVotesParams
@@ -223,7 +241,7 @@ app.post('/api/votes', authenticateToken, async (req, res) => {
         await client.query(
             `INSERT INTO votes_history (id, voter_username, target_user_id, context_id, cast_at, expires_at, status)
        VALUES ($1, $2, $3, $4, $5, $6, 'active')`,
-            [voteId, req.user.name, targetUserId, contextId, castAt, expiresAt]
+            [voteId, voterId, targetUserId, contextId, castAt, expiresAt]
         );
 
         client.release();
