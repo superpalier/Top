@@ -907,26 +907,21 @@ const renderPyramidView = (container, contextInfo) => {
       <div class="pyramid-header context-header">
         <button class="back-btn" id="back-btn"><i class="ph ph-arrow-left"></i></button>
         <div class="pyramid-context-title">
-          <i class="${contextInfo.icon}" style="color: var(--accent-cyan); margin-right: 8px;"></i>
+          <i class="${contextInfo.icon}" style="color:var(--accent-cyan);margin-right:6px;"></i>
           ${contextInfo.titles[currentLang]}
         </div>
-        <div class="pyramid-controls" style="margin-left: auto; display:flex; gap: 8px;">
-          ${pyramidOffsetIndex > 0 ? `<button class="btn-outline-gold" id="prev-apex-btn" style="padding: 6px 14px; font-size: 0.8rem; display:flex; align-items:center; gap:6px; color:var(--text-primary); border-color:var(--text-secondary);"><i class="ph ph-caret-up"></i> ${t.prev55}</button>` : ''}
-          ${pyramidOffsetIndex + 55 < totalUsersInContext ? `<button class="btn-outline-gold" id="next-apex-btn" style="padding: 6px 14px; font-size: 0.8rem; display:flex; align-items:center; gap:6px; color:var(--text-primary); border-color:var(--text-secondary);"><i class="ph ph-caret-down"></i> ${t.next55}</button>` : ''}
-          ${pyramidOffsetIndex > 0 ? `<button class="btn-outline-gold" id="reset-apex-btn" style="padding: 6px 14px; font-size: 0.8rem; display:flex; align-items:center; gap:6px; color:var(--text-primary); border-color:var(--text-secondary);"><i class="ph ph-arrows-out-line-vertical"></i> ${t.top1}</button>` : ''}
+        <div class="pyramid-controls">
+          ${pyramidOffsetIndex > 0 ? `<button class="pyr-nav-btn" id="prev-apex-btn"><i class="ph ph-caret-up"></i><span class="btn-label">${t.prev55}</span></button>` : ''}
+          ${pyramidOffsetIndex + 55 < totalUsersInContext ? `<button class="pyr-nav-btn" id="next-apex-btn"><i class="ph ph-caret-down"></i><span class="btn-label">${t.next55}</span></button>` : ''}
+          ${pyramidOffsetIndex > 0 ? `<button class="pyr-nav-btn" id="reset-apex-btn"><i class="ph ph-house"></i><span class="btn-label">${t.top1}</span></button>` : ''}
         </div>
       </div>
-      
-      <div class="voting-info">
-        <div class="voting-rule">${t.voteRule}</div>
-        <div class="voting-status ${globalVotes.byContext[contextInfo.id] ? 'voted' : ''}">
-          ${globalVotes.byContext[contextInfo.id] ? `
-            <i class="ph-fill ph-check-circle"></i> ${t.votedInCat}
-            <div class="expiring-tag">${t.expiresIn}</div>
-          ` : `
-            <i class="ph-fill ph-plus-circle"></i> ${t.votesAvail(MAX_DAILY_VOTES - globalVotes.count)}
-          `}
-        </div>
+
+      <div class="voting-strip">
+        ${globalVotes.byContext[contextInfo.id]
+      ? `<i class="ph-fill ph-check-circle" style="color:var(--accent-cyan);"></i> <span>${t.votedInCat}</span> <span class="expiring-tag">${t.expiresIn}</span>`
+      : `<i class="ph-fill ph-lightning" style="color:var(--accent-gold);"></i> <span>${t.votesAvail(MAX_DAILY_VOTES - globalVotes.count)}</span>`
+    }
       </div>
 
       <div class="pyramid-viewport" id="pyramid-viewport" style="position: relative;">
