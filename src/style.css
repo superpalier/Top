@@ -165,6 +165,20 @@ header {
   min-width: 0;
 }
 
+/* Labels inside header buttons - hidden on mobile, visible on desktop */
+.btn-label {
+  display: inline;
+}
+
+/* Join button with icon+label */
+.btn-join {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  white-space: nowrap;
+}
+
 .custom-lang-dropdown {
   position: relative;
   font-family: var(--font-main);
@@ -1304,8 +1318,24 @@ main {
     font-size: 1.1rem;
   }
 
-  .custom-lang-dropdown {
+  /* Keep lang-dropdown visible on mobile — show only icon + caret */
+  .custom-lang-dropdown .btn-label {
     display: none;
+  }
+
+  .lang-selected {
+    padding: 7px 9px;
+    gap: 4px;
+  }
+
+  /* Hide text labels in all header buttons on mobile */
+  .btn-label {
+    display: none;
+  }
+
+  /* Icon-only join button */
+  .btn-join {
+    padding: 8px 10px;
   }
 
   main {

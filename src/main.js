@@ -511,7 +511,7 @@ const render = () => {
       </div>
       <div class="header-controls">
         <div class="custom-lang-dropdown" id="lang-dropdown">
-          <div class="lang-selected" id="lang-selected">${currentLang.toUpperCase()} <i class="ph ph-caret-down"></i></div>
+          <div class="lang-selected" id="lang-selected"><i class="ph ph-globe"></i> <span class="btn-label">${currentLang.toUpperCase()}</span> <i class="ph ph-caret-down"></i></div>
           <div class="lang-options" id="lang-options">
             <div class="lang-option" data-val="en">EN</div>
             <div class="lang-option" data-val="es">ES</div>
@@ -521,11 +521,11 @@ const render = () => {
         </div>
         
         ${loggedInUser && loggedInUser.role === 'admin' ? `
-          <button class="btn-outline-gold" id="btn-nav-admin" style="padding: 6px 12px; font-size: 0.8rem;"><i class="ph ph-shield-check"></i> ${t.adminPanel}</button>
+          <button class="btn-outline-gold btn-icon-mobile" id="btn-nav-admin" style="padding: 6px 12px; font-size: 0.8rem;"><i class="ph ph-shield-check"></i> <span class="btn-label">${t.adminPanel}</span></button>
         ` : ''}
 
         ${loggedInUser ? `
-          <div style="display:flex; align-items:center; gap:16px;">
+          <div style="display:flex; align-items:center; gap:10px;">
             <div class="notifications-btn" id="notif-btn" style="position:relative; cursor:pointer; color:var(--text-secondary); font-size:1.4rem;">
               <i class="ph ph-bell"></i>
               ${notifications.filter(n => n.targetUser === loggedInUser.name && !n.read).length > 0 ? `<span style="position:absolute; top:-4px; right:-4px; background:var(--accent-magenta); color:white; font-size:0.6rem; padding:2px 4px; border-radius:50%; font-weight:bold;">${notifications.filter(n => n.targetUser === loggedInUser.name && !n.read).length}</span>` : ''}
@@ -535,9 +535,10 @@ const render = () => {
             </div>
           </div>
         ` : `
-          <div style="display: flex; gap: 8px;">
-            <button class="btn-outline-gold" id="btn-login">${t.join}</button>
-          </div>
+          <button class="btn-outline-gold btn-join" id="btn-login">
+            <i class="ph ph-user-plus"></i>
+            <span class="btn-label">${t.join}</span>
+          </button>
         `}
       </div>
     </header>
