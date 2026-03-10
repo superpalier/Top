@@ -366,24 +366,30 @@ const baseBios = [
 ];
 
 // Generate 3000 base users dynamically to simulate massive crowds
+// randomuser.me has 100 men and 100 women = 200 total unique real photos
 const baseUsers = Array.from({ length: 3000 }).map((_, i) => {
   const name = baseNames[i % baseNames.length] + (i > baseNames.length ? ` ${i}` : '');
-  const rDay = Math.floor(Math.random() * 28) + 1;
-  const rMonth = Math.floor(Math.random() * 12) + 1;
-  const rYear = Math.floor(Math.random() * (2005 - 1980 + 1)) + 1980;
+  const rDay = Math.floor((i * 7 + 3) % 28) + 1;
+  const rMonth = Math.floor((i * 3 + 1) % 12) + 1;
+  const rYear = 1980 + (i % 26);
 
-  const generateHandle = (base) => base.toLowerCase().replace(/\s/g, '') + Math.floor(Math.random() * 999);
+  const generateHandle = (base) => base.toLowerCase().replace(/\s/g, '') + (i % 999);
+
+  // Use real portraits: alternate gender, cycle through 0-99 index
+  const gender = i % 2 === 0 ? 'women' : 'men';
+  const photoIndex = Math.floor(i / 2) % 100;
+  const img = `https://randomuser.me/api/portraits/${gender}/${photoIndex}.jpg`;
 
   return {
     id: `u${i}`,
     name: name,
-    img: `https://api.dicebear.com/9.x/micah/svg?seed=${name.replace(/\s/g, '') + i}&backgroundColor=transparent`,
+    img,
     dob: `${rYear}-${String(rMonth).padStart(2, '0')}-${String(rDay).padStart(2, '0')}`,
     bio: baseBios[i % baseBios.length],
     socials: {
-      linkedin: Math.random() > 0.3 ? `https://linkedin.com/in/${generateHandle(name)}` : null,
-      instagram: Math.random() > 0.2 ? `https://instagram.com/${generateHandle(name)}` : null,
-      tiktok: Math.random() > 0.4 ? `https://tiktok.com/@${generateHandle(name)}` : null
+      linkedin: i % 3 !== 0 ? `https://linkedin.com/in/${generateHandle(name)}` : null,
+      instagram: i % 5 !== 0 ? `https://instagram.com/${generateHandle(name)}` : null,
+      tiktok: i % 4 !== 0 ? `https://tiktok.com/@${generateHandle(name)}` : null
     }
   };
 });
