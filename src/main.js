@@ -542,23 +542,22 @@ let initialDataFetched = false;
 // HTTP Polling for Real-time UX (Free Cloud Run Alternative to WebSockets/Snapshots)
 const pollData = async () => {
   try {
-    const [ctxRes, votesRes, suggRes] = await Promise.all([
-      fetch(`${apiHost}/api/contexts`),
-      fetch(`${apiHost}/api/votes`),
-      fetch(`${apiHost}/api/suggestions`)
-    ]);
-
+    // Fetch critical data: contexts
+    const ctxRes = await fetch(`${apiHost}/api/contexts`);
     if (ctxRes.ok) contexts = await ctxRes.json();
-    if (votesRes.ok) {
-      const oldVotesLength = voteHistoryLedger.length;
-      voteHistoryLedger = await votesRes.json();
 
-      // Trigger re-render ONLY if new votes came in to avoid DOM thrashing
+    // Fetch non-critical data individually
+    fetch(`${apiHost}/api/votes`).then(res => res.ok ? res.json() : []).then(data => {
+      const oldVotesLength = voteHistoryLedger.length;
+      voteHistoryLedger = data;
       if (oldVotesLength !== voteHistoryLedger.length && currentView.startsWith('pyramid-')) {
         render();
       }
-    }
-    if (suggRes.ok) suggestions = await suggRes.json();
+    }).catch(e => console.warn('Votes fetch failed:', e));
+
+    fetch(`${apiHost}/api/suggestions`).then(res => res.ok ? res.json() : []).then(data => {
+      suggestions = data;
+    }).catch(e => console.warn('Suggestions fetch failed:', e));
 
     // Re-evaluate user limits and triggers if logged in
     const today = new Date();
@@ -936,8 +935,11 @@ const renderHomeView = (container) => {
     return;
   }
 
-  // Filter based on search
-  const filteredContexts = contexts.filter(ctx => ctx.titles[currentLang].toLowerCase().includes(searchQuery.toLowerCase()));
+  // Filter based on search - robust against missing translations
+  const filteredContexts = contexts.filter(ctx => {
+    const title = (ctx.titles[currentLang] || ctx.titles['en'] || ctx.id || '').toLowerCase();
+    return title.includes(searchQuery.toLowerCase());
+  });
 
   // Group by Parent Hierarchy
   const parents = filteredContexts.filter(c => !c.parentId);
@@ -1132,7 +1134,7 @@ const renderFamilyView = (container, parentCtx) => {
             <div class="context-card child-card family-child-card" data-id="${child.id}" style="${bgStyle}position:relative;overflow:hidden;">
               ${childTop1 ? `<img src="${childTop1.img}" alt="${childTop1.name}" class="family-child-top1-img">` : ''}
               <i class="${child.icon} context-icon" style="font-size:1.4rem;"></i>
-              <div class="context-title" style="font-size:1rem;">${child.titles[currentLang]}</div>
+              <div class="context-title" style="font-size:1rem;">${child.titles[currentLang] || child.titles['en'] || child.id}</div>
               <div class="context-stats"><i class="ph ph-users"></i> ${child.participants} ${t.users}</div>
             </div>
           `;
@@ -1151,7 +1153,7 @@ const renderFamilyView = (container, parentCtx) => {
         <button class="back-btn" id="back-to-home-btn" data-target="${parentCtx.parentId ? `family-${parentCtx.parentId}` : 'home'}"><i class="ph ph-arrow-left"></i></button>
         <div class="pyramid-context-title">
           <i class="${parentCtx.icon}" style="color:var(--accent-cyan);margin-right:6px;"></i>
-          ${parentCtx.titles[currentLang]}
+          ${parentCtx.titles[currentLang] || parentCtx.titles['en'] || parentCtx.id}
         </div>
       </div>
 
@@ -1229,7 +1231,7 @@ const renderPyramidView = (container, contextInfo) => {
         <button class="back-btn" id="back-btn" data-target="${contextInfo.parentId ? `family-${contextInfo.parentId}` : 'home'}"><i class="ph ph-arrow-left"></i></button>
         <div class="pyramid-context-title">
           <i class="${contextInfo.icon}" style="color:var(--accent-cyan);margin-right:6px;"></i>
-          ${contextInfo.titles[currentLang]}
+          ${contextInfo.titles[currentLang] || contextInfo.titles['en'] || contextInfo.id}
           <span style="font-size: 0.75rem; color: var(--text-secondary); opacity: 0.6; margin-left: 8px; font-weight: 400;">(${totalUsersInContext} ${t.users})</span>
         </div>
         <div class="pyramid-controls">
@@ -2072,7 +2074,11 @@ const buildSidebarTree = () => {
 const getSortedChildren = (parentId, childrenMap) => {
   return (childrenMap[parentId] || [])
     .map(ctx => ({ ...ctx, children: getSortedChildren(ctx.id, childrenMap) }))
-    .sort((a, b) => a.titles[currentLang].localeCompare(b.titles[currentLang]));
+    .sort((a, b) => {
+      const aTitle = (a.titles[currentLang] || a.titles['en'] || a.id || '').toLowerCase();
+      const bTitle = (b.titles[currentLang] || b.titles['en'] || b.id || '').toLowerCase();
+      return aTitle.localeCompare(bTitle);
+    });
 };
 
 const renderSidebarTree = () => {
@@ -2082,11 +2088,11 @@ const renderSidebarTree = () => {
 
   const filterTree = (nodes) => {
     return nodes.reduce((acc, node) => {
-      const matches = node.titles[currentLang].toLowerCase().includes(query);
+      const nodeTitle = (node.titles[currentLang] || node.titles['en'] || node.id || '').toLowerCase();
+      const matches = nodeTitle.includes(query);
       const filteredChildren = filterTree(node.children);
 
       if (matches || filteredChildren.length > 0) {
-        // If query is present and children matched, force expansion
         if (query && filteredChildren.length > 0) expandedContexts.add(node.id);
         acc.push({ ...node, children: filteredChildren });
       }
@@ -2106,7 +2112,7 @@ const renderSidebarTree = () => {
         <div class="sidebar-item ${isActive ? 'active' : ''} ${hasChildren ? 'has-children' : ''}" data-id="${node.id}" data-target="${hasChildren ? `family-${node.id}` : `pyramid-${node.id}`}">
           <div class="sidebar-item-content">
             <i class="${node.icon}"></i>
-            <span class="sidebar-item-label">${node.titles[currentLang]}</span>
+            <span class="sidebar-item-label">${node.titles[currentLang] || node.titles['en'] || node.id}</span>
           </div>
           ${hasChildren ? `
             <button class="expand-toggle ${isExpanded ? 'expanded' : ''}" data-expand="${node.id}">
@@ -2147,7 +2153,7 @@ const renderBreadcrumbs = (ctxId) => {
     const target = contexts.some(c => c.parentId === node.id) ? `family-${node.id}` : `pyramid-${node.id}`;
     return `
           <i class="ph ph-caret-right breadcrumb-separator"></i>
-          <span class="breadcrumb-item ${isLast ? 'active' : ''}" data-target="${target}">${node.titles[currentLang]}</span>
+          <span class="breadcrumb-item ${isLast ? 'active' : ''}" data-target="${target}">${node.titles[currentLang] || node.titles['en'] || node.id}</span>
         `;
   }).join('')}
     </nav>
