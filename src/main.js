@@ -502,11 +502,12 @@ const render = () => {
 
   app.innerHTML = `
     <header>
-      <div style="display: flex; align-items: center; gap: 15px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
         <button class="hamburger-btn" id="mobile-menu-btn"><i class="ph ph-list"></i></button>
-        <div style="display: flex; flex-direction: column;">
-          <div class="logo">Pyramida</div>
-        </div>
+        <a href="#" id="logo-home-link" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+          <img src="/voternaut_logo.png" alt="Voternaut Logo" style="height: 38px; width: 38px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(0,240,255,0.5));">
+          <div class="logo" style="font-size: 1.3rem; letter-spacing: -0.5px;">Voternaut<span style="color: var(--accent-cyan); font-size: 0.85rem; font-weight: 400;">.com</span></div>
+        </a>
       </div>
       <div class="header-controls">
         <div class="custom-lang-dropdown" id="lang-dropdown">
@@ -1646,6 +1647,9 @@ const attachGlobalEvents = () => {
 
   const btnAdmin = document.getElementById('btn-nav-admin');
   if (btnAdmin) btnAdmin.addEventListener('click', () => { currentView = 'admin'; render(); });
+
+  const logoLink = document.getElementById('logo-home-link');
+  if (logoLink) logoLink.addEventListener('click', (e) => { e.preventDefault(); pyramidOffsetIndex = 0; currentView = 'home'; render(); });
 
   // Mobile menu logic
   const mobileMenuBtn = document.getElementById('mobile-menu-btn');
