@@ -1019,14 +1019,15 @@ main {
 }
 
 .tier-0 .node-rank {
-  background: linear-gradient(135deg, var(--accent-cyan), #fff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-color: rgba(20, 20, 20, 0.95);
-  font-size: 1rem;
-  padding: 6px 12px;
-  border-color: var(--accent-cyan);
+  background: rgba(10, 9, 18, 0.92);
+  color: var(--accent-gold);
+  -webkit-text-fill-color: var(--accent-gold);
+  font-size: 1.05rem;
+  font-weight: 900;
+  padding: 5px 10px;
+  border-color: var(--accent-gold);
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 8px rgba(201, 168, 76, 0.7);
 }
 
 @keyframes apexPulse {
