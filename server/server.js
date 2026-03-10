@@ -149,19 +149,30 @@ app.get('/api/contexts', async (req, res) => {
         client.release();
 
         // Map the snake_case DB fields to the camelCase expected by the frontend
-        // Inject dynamic unique premium backgrounds if missing from DB
+        // Inject dynamic unique premium backgrounds if missing from DB or using old placeholders
         const mappedContexts = result.rows.map(row => {
             let imgUrl = row.image_url;
-            if (!imgUrl) {
-                if (row.id === 'ctx_1') imgUrl = '/ctx_bg_1.png';
-                else if (row.id === 'ctx_2') imgUrl = '/ctx_bg_2.png';
-                else if (row.id === 'ctx_3') imgUrl = '/ctx_bg_3.png';
-                else imgUrl = `https://api.dicebear.com/9.x/shapes/svg?seed=${row.id}&backgroundColor=050507&shape1Color=00f0ff,ff0055,7000ff&shape2Color=00f0ff,ff0055,7000ff&shape3Color=00f0ff,ff0055,7000ff`;
+            const parsedTitles = typeof row.titles === 'string' ? JSON.parse(row.titles) : row.titles;
+            const seedName = parsedTitles && parsedTitles.en ? parsedTitles.en : row.id;
+
+            if (!imgUrl || imgUrl.includes('/ctx_bg_')) {
+                // Ensure every single context has a mathematically unique, purely geometric, ad-hoc text-free image
+                // Generate deterministic neon colors based on the context name string
+                let hash = 0;
+                for (let i = 0; i < seedName.length; i++) hash = seedName.charCodeAt(i) + ((hash << 5) - hash);
+                const neonPalettes = [
+                    "00f0ff,ff0055,7000ff", "00ffaa,00aaff,0000ff", "ffaa00,ff0055,9900ff",
+                    "ff00ff,00ffff,ffff00", "00ff00,ff00ff,00ffff", "ff3366,33ccff,ffff66",
+                    "ff6600,ff0066,cc00ff", "00ccff,00ffcc,ccff00", "ff00cc,cc00ff,0055ff",
+                    "00ffcc,ff00cc,ffcc00", "5500ff,ff0055,00ff55", "ff5500,0055ff,55ff00"
+                ];
+                const colorStops = neonPalettes[Math.abs(hash) % neonPalettes.length];
+                imgUrl = `https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(seedName)}&backgroundColor=050507&shape1Color=${colorStops}&shape2Color=${colorStops}&shape3Color=${colorStops}`;
             }
 
             return {
                 id: row.id,
-                titles: row.titles,
+                titles: parsedTitles,
                 icon: row.icon,
                 participants: row.participants,
                 imageUrl: imgUrl,

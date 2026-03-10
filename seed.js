@@ -60,14 +60,23 @@ async function seedContexts() {
         `);
 
         console.log("Seeding 20 contexts to Supabase...");
-        const contextImages = ['/ctx_bg_1.png', '/ctx_bg_2.png', '/ctx_bg_3.png'];
-
         for (let i = 0; i < defaultContextNames.length; i++) {
             const contextId = `ctx_${i + 1}`;
             const titles = JSON.stringify(defaultContextNames[i]);
             const icon = baseIcons[i % baseIcons.length];
             const participants = Math.floor(Math.random() * 800) + 100;
-            const contextImgUrl = contextImages[i % contextImages.length];
+            const seedName = defaultContextNames[i].en;
+            let hash = 0;
+            for (let j = 0; j < seedName.length; j++) hash = seedName.charCodeAt(j) + ((hash << 5) - hash);
+            const neonPalettes = [
+                "00f0ff,ff0055,7000ff", "00ffaa,00aaff,0000ff", "ffaa00,ff0055,9900ff",
+                "ff00ff,00ffff,ffff00", "00ff00,ff00ff,00ffff", "ff3366,33ccff,ffff66",
+                "ff6600,ff0066,cc00ff", "00ccff,00ffcc,ccff00", "ff00cc,cc00ff,0055ff",
+                "00ffcc,ff00cc,ffcc00", "5500ff,ff0055,00ff55", "ff5500,0055ff,55ff00"
+            ];
+            const colorStops = neonPalettes[Math.abs(hash) % neonPalettes.length];
+            const contextImgUrl = `https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(seedName)}&backgroundColor=050507&shape1Color=${colorStops}&shape2Color=${colorStops}&shape3Color=${colorStops}`;
+
             const createdAt = new Date().toISOString();
 
             await client.query(

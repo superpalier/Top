@@ -1188,6 +1188,56 @@ main {
   .lateral-sidebar.active {
     transform: translateX(260px);
   }
+
+  /* Responsive Resizing */
+  .btn-primary,
+  .btn-vote {
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  .form-input {
+    padding: 12px 14px;
+    font-size: 0.9rem;
+  }
+
+  .context-card {
+    min-width: 200px;
+    padding: 16px;
+    min-height: 100px;
+  }
+
+  .profile-card,
+  .modal-content {
+    padding: 24px;
+    width: 95%;
+  }
+
+  .pyramid-header {
+    padding: 12px 16px;
+  }
+
+  .pyramid-context-title {
+    font-size: 1.2rem;
+  }
+
+  .header-controls {
+    gap: 10px;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+
+  .custom-lang-dropdown {
+    font-size: 0.75rem;
+  }
+
+  .lang-selected {
+    padding: 6px 10px;
+  }
 }
 
 .modal-close {
