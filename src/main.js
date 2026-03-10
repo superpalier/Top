@@ -62,7 +62,27 @@ const i18n = {
     createAccount: 'Create Account',
     authenticating: 'Authenticating...',
     creatingAccount: 'Creating Account...',
-    heroSubtitle: 'Visual consensus and decentralized rankings. <strong>Vote anonymously</strong> to alter the structure for 24 hours, or <strong>Log In</strong> to leave a lasting 30-day impact and track your history.',
+    heroSubtitle: '🏆 Who really deserves the #1 spot? <strong>You decide.</strong> Cast your vote, shake up the rankings, and see the pyramid shift in real time — no sign-up needed.',
+    heroSubtitle2: 'Vote anonymously for free (lasts 24h), or <strong>create a free account</strong> to lock in your votes for 30 days and track your full voting history.',
+    rulesModalBtn: 'How does it work? →',
+    rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ How Voternaut Works</h2>
+<p style="margin-bottom:12px;">Each <strong>Pyramid</strong> represents a category or context (e.g. Best Musician, Best Athlete). Inside each pyramid, users are ranked from #1 (Apex) to #55 based on votes received.</p>
+<h3 style="margin:16px 0 8px;color:var(--accent-gold);">⚡ Anonymous Voting (no account needed)</h3>
+<ul style="padding-left:18px;margin-bottom:12px;line-height:2;">
+  <li>Up to <strong>3 votes per day</strong> across all categories</li>
+  <li><strong>1 vote per category</strong> — choose wisely!</li>
+  <li>Your votes expire after <strong>24 hours</strong></li>
+  <li>No account, no history — just pure democracy</li>
+</ul>
+<h3 style="margin:16px 0 8px;color:var(--accent-cyan);">🔐 Registered Voting (free account)</h3>
+<ul style="padding-left:18px;margin-bottom:12px;line-height:2;">
+  <li>Same 3 votes/day limit</li>
+  <li>Votes last for <strong>30 days</strong> instead of 24h</li>
+  <li>Full <strong>voting history</strong> dashboard</li>
+  <li>Track your impact across all pyramids</li>
+</ul>
+<h3 style="margin:16px 0 8px;color:var(--accent-magenta);">🏅 The Pyramid Structure</h3>
+<p>10 tiers, 55 users per page. The Apex (#1) is the most community-endorsed person in that category. Votes shift the pyramid daily — today's #1 is tomorrow's #2!</p>`,
     heroContexts: 'Contexts',
     heroUsers: 'Users',
     heroVotes: 'Votes',
@@ -124,7 +144,27 @@ const i18n = {
     createAccount: 'Crear Cuenta',
     authenticating: 'Autenticando...',
     creatingAccount: 'Creando cuenta...',
-    heroSubtitle: 'Consenso visual y rankings descentralizados. <strong>Vota anónimo</strong> y altera la estructura por 24 horas, o <strong>Inicia sesión</strong> para dejar una huella de 30 días y seguir tu historial.',
+    heroSubtitle: '🏆 ¿Quién merece realmente el puesto #1? <strong>Tú decides.</strong> Vota, sacude el ranking y mirá cómo la pirámide se reconfigura en tiempo real — sin registro.',
+    heroSubtitle2: 'Vota anónimo gratis (dura 24h), o <strong>creá una cuenta gratuita</strong> para que tus votos duren 30 días y puedas seguir todo tu historial.',
+    rulesModalBtn: '¿Cómo funciona? →',
+    rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ Cómo funciona Voternaut</h2>
+<p style="margin-bottom:12px;">Cada <strong>Pirámide</strong> es una categoría o contexto (ej. Mejor Músico). Dentro, los usuarios se rankean del #1 (Apex) al #55 según los votos recibidos.</p>
+<h3 style="margin:16px 0 8px;color:var(--accent-gold);">⚡ Votación Anónima (sin cuenta)</h3>
+<ul style="padding-left:18px;margin-bottom:12px;line-height:2;">
+  <li>Hasta <strong>3 votos por día</strong> en total</li>
+  <li><strong>1 voto por categoría</strong> — ¡elegí bien!</li>
+  <li>Tus votos expiran en <strong>24 horas</strong></li>
+  <li>Sin cuenta, sin historial — democracia pura</li>
+</ul>
+<h3 style="margin:16px 0 8px;color:var(--accent-cyan);">🔐 Votación Registrada (cuenta gratuita)</h3>
+<ul style="padding-left:18px;margin-bottom:12px;line-height:2;">
+  <li>Mismo límite de 3 votos/día</li>
+  <li>Los votos duran <strong>30 días</strong> en lugar de 24h</li>
+  <li>Panel de <strong>historial completo</strong></li>
+  <li>Seguí tu impacto en todas las pirámides</li>
+</ul>
+<h3 style="margin:16px 0 8px;color:var(--accent-magenta);">🏅 La Estructura de la Pirámide</h3>
+<p>10 pisos, 55 usuarios por página. El Apex (#1) es el más votado por la comunidad. Los votos mueven la pirámide cada día — ¡el #1 de hoy puede ser el #2 de mañana!</p>`,
     heroContexts: 'Contextos',
     heroUsers: 'Usuarios',
     heroVotes: 'Votos',
@@ -186,7 +226,23 @@ const i18n = {
     createAccount: 'Créer un compte',
     authenticating: 'Authentification...',
     creatingAccount: 'Création du compte...',
-    heroSubtitle: "Consensus visuel et classements décentralisés. <strong>Votez anonymement</strong> pour 24 heures, ou <strong>Connectez-vous</strong> pour un impact de 30 jours.",
+    heroSubtitle: '🏆 Qui mérite vraiment la place #1 ? <strong>C\'est vous qui décidez.</strong> Votez, bousculez le classement et regardez la pyramide se transformer en direct — sans inscription.',
+    heroSubtitle2: 'Vote anonyme gratuit (valable 24h), ou <strong>créez un compte gratuit</strong> pour que vos votes durent 30 jours et accéder à votre historique complet.',
+    rulesModalBtn: 'Comment ça marche ? →',
+    rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ Comment fonctionne Voternaut</h2>
+<p style="margin-bottom:12px;">Chaque <strong>Pyramide</strong> est une catégorie (ex. Meilleur Musicien). Les utilisateurs sont classés du #1 (Apex) au #55 selon les votes reçus.</p>
+<h3 style="margin:16px 0 8px;color:var(--accent-gold);">⚡ Vote Anonyme (sans compte)</h3>
+<ul style="padding-left:18px;margin-bottom:12px;line-height:2;">
+  <li>Jusqu'à <strong>3 votes par jour</strong></li>
+  <li><strong>1 vote par catégorie</strong></li>
+  <li>Vos votes expirent après <strong>24 heures</strong></li>
+</ul>
+<h3 style="margin:16px 0 8px;color:var(--accent-cyan);">🔐 Vote Enregistré (compte gratuit)</h3>
+<ul style="padding-left:18px;margin-bottom:12px;line-height:2;">
+  <li>Même limite 3 votes/jour</li>
+  <li>Votes valables <strong>30 jours</strong></li>
+  <li>Historique complet des votes</li>
+</ul>`,
     heroContexts: 'Contextes',
     heroUsers: 'Utilisateurs',
     heroVotes: 'Votes',
@@ -659,35 +715,47 @@ const renderHomeView = (container) => {
   const parents = filteredContexts.filter(c => !c.parentId);
 
   let contextHTML = `
-    <!-- Elite Hero Section -->
-    <div style="margin-bottom: 50px; padding: 40px; border-radius: 16px; background: linear-gradient(135deg, rgba(20,20,25,0.8), rgba(10,10,12,0.9)); border: 1px solid rgba(212,175,55,0.15); box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); position: relative; overflow: hidden;">
-      <!-- Subtle internal glow -->
-      <div style="position: absolute; top: -50%; left: -20%; width: 50%; height: 200%; background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%); transform: rotate(30deg); pointer-events: none;"></div>
+    <!-- Rules Modal Overlay -->
+    <div id="rules-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; overflow-y:auto; padding:40px 20px;" onclick="if(event.target===this)this.style.display='none'">
+      <div style="max-width:600px; margin:0 auto; background:rgba(12,12,18,0.98); border:1px solid rgba(0,240,255,0.2); border-radius:20px; padding:36px 32px; position:relative; box-shadow:0 30px 80px rgba(0,0,0,0.8);">
+        <button onclick="document.getElementById('rules-modal').style.display='none'" style="position:absolute;top:16px;right:16px;background:transparent;border:none;color:var(--text-secondary);font-size:1.4rem;cursor:pointer;line-height:1;">&times;</button>
+        <div id="rules-modal-content" style="color:var(--text-primary);font-size:0.95rem;line-height:1.7;">${t.rulesDetail}</div>
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div style="margin-bottom:40px; padding:36px; border-radius:16px; background:linear-gradient(135deg,rgba(20,20,25,0.8),rgba(10,10,12,0.9)); border:1px solid rgba(212,175,55,0.15); box-shadow:0 20px 50px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter:blur(20px); position:relative; overflow:hidden;">
+      <div style="position:absolute;top:-50%;left:-20%;width:50%;height:200%;background:radial-gradient(circle,rgba(212,175,55,0.08) 0%,transparent 70%);transform:rotate(30deg);pointer-events:none;"></div>
       
-      <p style="font-size: 1.3rem; font-weight: 500; color: var(--text-primary); max-width: 700px; line-height: 1.5; margin-bottom: 30px;">
-        ${t.heroSubtitle}
-      </p>
-      
-      <div style="display: flex; gap: 24px; flex-wrap: wrap;">
-        <div style="display: flex; flex-direction: column;">
-          <span style="font-size: 2rem; font-weight: 800; color: var(--accent-cyan); font-family: var(--font-display); line-height: 1;">${contexts.length}</span>
-          <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">${t.heroContexts}</span>
+      <p style="font-size:1.25rem;font-weight:600;color:var(--text-primary);max-width:700px;line-height:1.55;margin-bottom:14px;">${t.heroSubtitle}</p>
+      <p style="font-size:0.95rem;color:var(--text-secondary);max-width:680px;line-height:1.7;margin-bottom:28px;">${t.heroSubtitle2 || ''}</p>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:28px;">
+        <button id="open-rules-btn" style="background:transparent;border:1px solid rgba(0,240,255,0.4);color:var(--accent-cyan);padding:9px 18px;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;">
+          <i class="ph ph-info"></i> ${t.rulesModalBtn || 'How it works →'}
+        </button>
+      </div>
+
+      <div style="display:flex;gap:24px;flex-wrap:wrap;">
+        <div style="display:flex;flex-direction:column;">
+          <span style="font-size:2rem;font-weight:800;color:var(--accent-cyan);font-family:var(--font-display);line-height:1;">${contexts.length}</span>
+          <span style="font-size:0.8rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-top:4px;">${t.heroContexts}</span>
         </div>
-        <div style="width: 1px; background: rgba(255,255,255,0.1);"></div>
-        <div style="display: flex; flex-direction: column;">
-          <span style="font-size: 2rem; font-weight: 800; color: var(--text-primary); font-family: var(--font-display); line-height: 1;">3,000+</span>
-          <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">${t.heroUsers}</span>
+        <div style="width:1px;background:rgba(255,255,255,0.1);"></div>
+        <div style="display:flex;flex-direction:column;">
+          <span style="font-size:2rem;font-weight:800;color:var(--text-primary);font-family:var(--font-display);line-height:1;">3,000+</span>
+          <span style="font-size:0.8rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-top:4px;">${t.heroUsers}</span>
         </div>
-        <div style="width: 1px; background: rgba(255,255,255,0.1);"></div>
-        <div style="display: flex; flex-direction: column;">
-          <span style="font-size: 2rem; font-weight: 800; color: var(--text-primary); font-family: var(--font-display); line-height: 1;">4.2k</span>
-          <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;">${t.heroVotes}</span>
+        <div style="width:1px;background:rgba(255,255,255,0.1);"></div>
+        <div style="display:flex;flex-direction:column;">
+          <span style="font-size:2rem;font-weight:800;color:var(--text-primary);font-family:var(--font-display);line-height:1;">4.2k</span>
+          <span style="font-size:0.8rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-top:4px;">${t.heroVotes}</span>
         </div>
       </div>
     </div>
     
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
-      <h2 class="section-title" style="font-size: 1.4rem; color: var(--text-primary); font-weight: 600;">${t.trendingContexts}</h2>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+      <h2 class="section-title" style="font-size:1.4rem;color:var(--text-primary);font-weight:600;">${t.trendingContexts}</h2>
     </div>
   `;
 
@@ -1053,11 +1121,27 @@ const renderPyramidView = (container, contextInfo) => {
   // Attach Drag-to-Pan logic for viewport
   const viewport = document.getElementById('pyramid-viewport');
   if (viewport) {
+    const wrapper = viewport.querySelector('.pyramid-wrapper');
+    let scale = 1;
     let isDown = false;
     let startX, startY, scrollLeft, scrollTop;
+    let lastPinchDist = null;
 
+    const applyScale = (newScale) => {
+      scale = Math.min(3, Math.max(0.4, newScale));
+      wrapper.style.transform = `scale(${scale})`;
+      wrapper.style.transformOrigin = 'top center';
+    };
+
+    const getPinchDist = (touches) => {
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.hypot(dx, dy);
+    };
+
+    // --- Pan (single finger / mouse) ---
     const onDown = (e) => {
-      // Allow dragging but don't block clicks on nodes/buttons
+      if (e.touches && e.touches.length === 2) return; // pinch handled separately
       if (e.target.closest('.user-node') || e.target.closest('button')) return;
       isDown = true;
       const pageX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
@@ -1068,11 +1152,21 @@ const renderPyramidView = (container, contextInfo) => {
       scrollTop = viewport.scrollTop;
     };
 
-    const onLeaveOrUp = () => isDown = false;
+    const onLeaveOrUp = () => { isDown = false; lastPinchDist = null; };
 
     const onMove = (e) => {
+      // Pinch-to-zoom (two fingers)
+      if (e.touches && e.touches.length === 2) {
+        e.preventDefault();
+        const dist = getPinchDist(e.touches);
+        if (lastPinchDist !== null) {
+          applyScale(scale * (dist / lastPinchDist));
+        }
+        lastPinchDist = dist;
+        return;
+      }
       if (!isDown) return;
-      e.preventDefault(); // prevents highlighting text while dragging
+      e.preventDefault();
       const pageX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
       const pageY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
       const walkX = (pageX - viewport.offsetLeft - startX) * 1.5;
@@ -1081,22 +1175,36 @@ const renderPyramidView = (container, contextInfo) => {
       viewport.scrollTop = scrollTop - walkY;
     };
 
+    // --- Mouse Wheel Zoom (Ctrl+scroll or trackpad pinch) ---
+    viewport.addEventListener('wheel', (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        applyScale(scale * (e.deltaY < 0 ? 1.1 : 0.9));
+      }
+    }, { passive: false });
+
+    // Double-click to reset zoom
+    viewport.addEventListener('dblclick', () => applyScale(1));
+
     viewport.addEventListener('mousedown', onDown);
     viewport.addEventListener('mouseleave', onLeaveOrUp);
     viewport.addEventListener('mouseup', onLeaveOrUp);
     viewport.addEventListener('mousemove', onMove);
 
-    viewport.addEventListener('touchstart', onDown, { passive: true });
+    viewport.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) lastPinchDist = getPinchDist(e.touches);
+      else onDown(e);
+    }, { passive: true });
     viewport.addEventListener('touchend', onLeaveOrUp);
     viewport.addEventListener('touchmove', onMove, { passive: false });
 
     // Auto-center the pyramid on initial load to show the Apex (Top 1)
     setTimeout(() => {
       viewport.scrollLeft = (viewport.scrollWidth - viewport.clientWidth) / 2;
-      viewport.scrollTop = 0; // Top 1 is at the top
+      viewport.scrollTop = 0;
     }, 50);
 
-    // Hide swipe prompt on native scroll
+    // Hide swipe prompt on first scroll
     viewport.addEventListener('scroll', () => {
       const prompt = document.getElementById('swipe-prompt');
       if (prompt) prompt.style.opacity = '0';
@@ -1646,6 +1754,12 @@ const attachGlobalEvents = () => {
   // Header Nav buttons
   const btnLogin = document.getElementById('btn-login');
   if (btnLogin) btnLogin.addEventListener('click', () => { currentView = 'register'; render(); });
+
+  const openRulesBtn = document.getElementById('open-rules-btn');
+  if (openRulesBtn) openRulesBtn.addEventListener('click', () => {
+    const modal = document.getElementById('rules-modal');
+    if (modal) modal.style.display = 'block';
+  });
 
   const btnAdmin = document.getElementById('btn-nav-admin');
   if (btnAdmin) btnAdmin.addEventListener('click', () => { currentView = 'admin'; render(); });
