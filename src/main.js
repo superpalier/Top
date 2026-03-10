@@ -2381,14 +2381,18 @@ const attachGlobalEvents = () => {
     }
 
     const notifBtn = e.target.closest('#notif-btn');
-    if (notifBtn && loggedInUser) {
-      const unread = notifications.filter(n => n.targetUser === loggedInUser.name && !n.read);
-      unread.forEach(n => {
-        showToast(n.message, 'ph-bell-ringing');
-        n.read = true; // Local mark as read
-      });
-    } else {
-      showToast(t.noNotifications, 'ph-bell');
+    if (notifBtn) {
+      if (loggedInUser) {
+        const unread = notifications.filter(n => n.targetUser === loggedInUser.name && !n.read);
+        if (unread.length > 0) {
+          unread.forEach(n => {
+            showToast(n.message, 'ph-bell-ringing');
+            n.read = true;
+          });
+        } else {
+          showToast(t.noNotifications, 'ph-bell');
+        }
+      }
     }
 
     // Nested Toggle handler
