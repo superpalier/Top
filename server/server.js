@@ -295,7 +295,9 @@ app.post('/api/votes', async (req, res) => {
 });
 
 // Health Check for Vercel
-res.status(200).send('Votenaut Express API running horizontally on Vercel Serverless!');
+app.get('/', (req, res) => {
+    res.status(200).send('Votenaut Express API running horizontally on Vercel Serverless!');
+});
 
 // Vercel Serverless Export
 initDb().catch(console.error);
