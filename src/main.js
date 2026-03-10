@@ -16,7 +16,7 @@ const i18n = {
     trendingContexts: 'Trending Contexts',
     users: 'Users',
     voted: 'Voted',
-    voteRule: '<strong>3 votes</strong> per day. Votes last 30 days. Log in to track them.',
+    voteRule: '<strong>3 votes</strong> per day. Anon votes last 24h. Log in to keep them for 30 days.',
     votedInCat: 'Voted in this context',
     expiresIn: 'Expires 24h',
     votesAvail: (rem) => `${rem} Votes Left Today`,
@@ -62,7 +62,7 @@ const i18n = {
     createAccount: 'Create Account',
     authenticating: 'Authenticating...',
     creatingAccount: 'Creating Account...',
-    heroSubtitle: 'Visual consensus and decentralized rankings. Vote freely (volatile 30-day votes) or Log in to track your permanent voting history and impact.',
+    heroSubtitle: 'Visual consensus and decentralized rankings. <strong>Vote anonymously</strong> to alter the structure for 24 hours, or <strong>Log In</strong> to leave a lasting 30-day impact and track your history.',
     heroContexts: 'Contexts',
     heroUsers: 'Users',
     heroVotes: 'Votes',
@@ -78,7 +78,7 @@ const i18n = {
     trendingContexts: 'Contextos Populares',
     users: 'Usuarios',
     voted: 'Votado',
-    voteRule: '<strong>3 votos</strong> por día. Duran 30 días. Inicia sesión para guardarlos.',
+    voteRule: '<strong>3 votos</strong> por día. Votos anónimos duran 24h. Loguéate para guardarlos 30 días.',
     votedInCat: 'Votaste en este contexto',
     expiresIn: 'Expira en 24h',
     votesAvail: (rem) => `${rem} Votos Restantes`,
@@ -124,7 +124,7 @@ const i18n = {
     createAccount: 'Crear Cuenta',
     authenticating: 'Autenticando...',
     creatingAccount: 'Creando cuenta...',
-    heroSubtitle: 'Consenso visual y rankings descentralizados. Vota libremente (votos volátiles de 30 días) o Inicia sesión para llevar registro de tu historial y seguir tu impacto.',
+    heroSubtitle: 'Consenso visual y rankings descentralizados. <strong>Vota anónimo</strong> y altera la estructura por 24 horas, o <strong>Inicia sesión</strong> para dejar una huella de 30 días y seguir tu historial.',
     heroContexts: 'Contextos',
     heroUsers: 'Usuarios',
     heroVotes: 'Votos',
@@ -140,7 +140,7 @@ const i18n = {
     trendingContexts: 'Contextes Tendances',
     users: 'Utilisateurs',
     voted: 'Voté',
-    voteRule: '<strong>3 votes</strong> par jour maximum (1 par contexte).',
+    voteRule: '<strong>3 votes</strong> par jour maximum. 24h d\'anonymat. Connectez-vous pour 30 jours.',
     votedInCat: 'Voté dans ce contexte',
     expiresIn: 'Expire 24h',
     votesAvail: (rem) => `${rem} Votes Restants`,
@@ -176,7 +176,7 @@ const i18n = {
     submitSug: 'Soumettre la suggestion',
     makeApex: 'Voir comme Sommet',
     voteHistory: 'Historique des Votes',
-    activeVote: 'Actif',
+    activeVote: 'Activo',
     expiredVote: 'Expiré',
     loginTab: 'Connexion',
     signUpTab: 'S\'inscrire',
@@ -186,7 +186,7 @@ const i18n = {
     createAccount: 'Créer un compte',
     authenticating: 'Authentification...',
     creatingAccount: 'Création du compte...',
-    heroSubtitle: "Consensus visuel et classements décentralisés. Chaque vote modifie en permanence la structure hiérarchique au sein de cet écosystème d'élite.",
+    heroSubtitle: "Consensus visuel et classements décentralisés. <strong>Votez anonymement</strong> pour 24 heures, ou <strong>Connectez-vous</strong> pour un impact de 30 jours.",
     heroContexts: 'Contextes',
     heroUsers: 'Utilisateurs',
     heroVotes: 'Votes',
@@ -202,7 +202,7 @@ const i18n = {
     trendingContexts: 'Angesagte Kontexte',
     users: 'Benutzer',
     voted: 'Gevotet',
-    voteRule: '<strong>3 Stimmen</strong> pro Tag maximal (1 pro Kontext).',
+    voteRule: '<strong>3 Stimmen</strong> pro Tag. Anonyme enden in 24h. Login für 30 Tage.',
     votedInCat: 'In diesem Kontext abgestimmt',
     expiresIn: 'Ablauf 24h',
     votesAvail: (rem) => `${rem} Stimmen Übrig`,
@@ -248,7 +248,7 @@ const i18n = {
     createAccount: 'Konto erstellen',
     authenticating: 'Authentifizieren...',
     creatingAccount: 'Konto wird erstellt...',
-    heroSubtitle: 'Visueller Konsens und dezentrale Rankings. Jede Stimme verändert dauerhaft die hierarchische Struktur in diesem elitären Ökosystem.',
+    heroSubtitle: 'Visueller Konsens und dezentrale Rankings. <strong>Anonym abstimmen</strong> für 24 Stunden, oder <strong>Einloggen</strong> für 30 Tage Wirkung.',
     heroContexts: 'Kontexte',
     heroUsers: 'Benutzer',
     heroVotes: 'Stimmen',
@@ -317,13 +317,13 @@ const pollData = async () => {
       const anonVotes = JSON.parse(localStorage.getItem('pyramida_anon_votes') || '[]');
       const todaysAnon = anonVotes.filter(v => {
         const castDate = new Date(v.castAt);
-        return castDate.toDateString() === today.toDateString() && (new Date() - castDate) < (30 * 24 * 60 * 60 * 1000); // Also ensure within 30 days
+        return castDate.toDateString() === today.toDateString() && (new Date() - castDate) < (24 * 60 * 60 * 1000); // 24 hours
       });
       localVotesCount = todaysAnon.length;
       anonVotes.forEach(v => {
-        // ensure it's active (within 30 days)
+        // ensure it's active (within 24 hours)
         const castDate = new Date(v.castAt);
-        if ((new Date() - castDate) < (30 * 24 * 60 * 60 * 1000)) {
+        if ((new Date() - castDate) < (24 * 60 * 60 * 1000)) {
           localVotesMap[v.contextId] = v.targetUserId;
         }
       });

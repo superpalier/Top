@@ -233,9 +233,13 @@ app.post('/api/votes', async (req, res) => {
         const voteId = 'v_' + Date.now();
         const castAt = new Date().toISOString();
 
-        // Expires exactly 30 days from now
+        // Expires exactly 24 hours for anonymous, 30 days for logged in
         const expiresAtDate = new Date();
-        expiresAtDate.setDate(expiresAtDate.getDate() + 30);
+        if (voterId.startsWith('anon_')) {
+            expiresAtDate.setHours(expiresAtDate.getHours() + 24);
+        } else {
+            expiresAtDate.setDate(expiresAtDate.getDate() + 30);
+        }
         const expiresAt = expiresAtDate.toISOString();
 
         await client.query(
