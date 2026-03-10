@@ -1192,15 +1192,52 @@ main {
   }
 }
 
+@keyframes rotateNeon {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.apex-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(100% + 16px);
+  height: calc(100% + 16px);
+  background: conic-gradient(from 0deg,
+      transparent 0%,
+      var(--accent-gold) 25%,
+      transparent 50%,
+      var(--accent-cyan) 75%,
+      transparent 100%);
+  border-radius: 20px;
+  z-index: -1;
+  animation: rotateNeon 3s linear infinite;
+  filter: blur(8px);
+}
+
+.apex-ring::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  background: var(--bg-dark);
+  border-radius: 16px;
+  z-index: -1;
+}
+
 /* Apex (Top 1) hero treatment — pulsing gold ring */
 .tier-0 .user-node {
-  border: 2px solid var(--accent-gold) !important;
+  border: 1px solid rgba(212, 175, 55, 0.4) !important;
   border-radius: 14px !important;
   transform: scale(1.1);
   animation: apexPulse 2.8s ease-in-out infinite;
-  outline: 1px solid rgba(201, 168, 76, 0.35);
-  outline-offset: 4px;
   z-index: 50;
+  overflow: visible;
+  /* Allow ring to glow outside */
 }
 
 .tier-0 .user-node::before {
