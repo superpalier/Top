@@ -593,8 +593,8 @@ const render = () => {
       <div style="display: flex; align-items: center; gap: 12px;">
         <button class="hamburger-btn" id="mobile-menu-btn"><i class="ph ph-list"></i></button>
         <a href="#" id="logo-home-link" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-          <img src="/voternaut_logo.png" alt="Voternaut Logo" style="height: 38px; width: 38px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(0,240,255,0.5));">
-          <div class="logo" style="font-size: 1.3rem; letter-spacing: -0.5px;">Voternaut<span style="color: var(--accent-cyan); font-size: 0.85rem; font-weight: 400;">.com</span></div>
+          <img src="/votenaut_logo.png" alt="Votenaut Logo" style="height: 38px; width: 38px; object-fit: contain; filter: drop-shadow(0 0 6px rgba(200,169,126,0.4));">
+          <div class="logo" style="font-size: 1.3rem; letter-spacing: -0.5px;">Votenaut<span style="color: var(--accent-magenta); font-size: 0.85rem; font-weight: 400;">.com</span></div>
         </a>
       </div>
       <div class="header-controls">

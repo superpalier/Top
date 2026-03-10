@@ -1,28 +1,28 @@
 :root {
-  /* ── 4-COLOR PREMIUM PALETTE ───────────
-     1. Deep Obsidian   #07070F  → backgrounds
-     2. Warm Gold       #C9A84C  → primary accent / CTA
-     3. Royal Indigo    #6C5CE7  → secondary accent
-     4. Teal Jade       #00C9A7  → tertiary / interactive
-  ───────────────────────────────── */
-  --bg-dark: #07070F;
-  --bg-card: rgba(12, 12, 22, 0.55);
-  --border-light: rgba(255, 255, 255, 0.06);
-  --text-primary: #F2F0F9;
-  --text-secondary: #9896B0;
+  /* ── 4-COLOR ELEGANT MUTED PALETTE ────────────────
+     1. Midnight Navy   #0C1020  → all backgrounds
+     2. Champagne Gold  #C8A97E  → primary accent (muted warm gold)
+     3. Dusty Lavender  #928FBE  → secondary (muted periwinkle)
+     4. Sage Teal       #5BA89A  → tertiary (muted sage-green teal)
+  ──────────────────────────────────── */
+  --bg-dark: #0C1020;
+  --bg-card: rgba(14, 17, 30, 0.6);
+  --border-light: rgba(255, 255, 255, 0.07);
+  --text-primary: #EAE8F2;
+  --text-secondary: #8D8BA8;
 
-  /* Primary: Warm Gold */
-  --accent-gold: #C9A84C;
-  --accent-cyan: #00C9A7;
-  /* renamed semantically as teal but kept var name for compat */
-  --accent-magenta: #6C5CE7;
-  /* now Royal Indigo */
-  --accent-violet: #9D8FE0;
-  /* lighter indigo for subtle uses */
+  --accent-gold: #C8A97E;
+  /* Champagne Gold — warm, muted */
+  --accent-cyan: #5BA89A;
+  /* Sage Teal — calming, desaturated */
+  --accent-magenta: #928FBE;
+  /* Dusty Lavender — soft, refined */
+  --accent-violet: #B0ADDA;
+  /* Light Lavender — for subtle highlights */
 
-  --glow-cyan: rgba(0, 201, 167, 0.18);
-  --glow-magenta: rgba(108, 92, 231, 0.15);
-  --glow-gold: rgba(201, 168, 76, 0.2);
+  --glow-cyan: rgba(91, 168, 154, 0.14);
+  --glow-magenta: rgba(146, 143, 190, 0.12);
+  --glow-gold: rgba(200, 169, 126, 0.18);
 
   --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-display: 'Space Grotesk', -apple-system, sans-serif;
