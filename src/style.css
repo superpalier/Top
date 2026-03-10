@@ -644,22 +644,20 @@ main {
 
 /* Users in Pyramid */
 .user-node {
-  width: var(--node-size);
-  height: var(--node-size);
+  width: var(--node-size, 60px);
+  height: var(--node-size, 60px);
   flex-shrink: 0;
   background-color: var(--bg-dark);
-  background-image: url('/avatar_placeholder.png');
   background-size: cover;
   background-position: center;
-  border-radius: 10px;
-  /* Slight rounding for elegant sharp corners */
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   cursor: pointer;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 8px 16px rgba(0, 0, 0, 0.8);
-  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 6px 12px rgba(0, 0, 0, 0.8);
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
   overflow: hidden;
 }
 

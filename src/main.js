@@ -806,16 +806,17 @@ const renderPyramidView = (container, contextInfo) => {
   let tiersHTML = pyramidData.map((tier, tIndex) => {
     const zIndex = 50 - tIndex; // Higher tiers are visually "above"
 
-    // Scale node sizes descending from Tier 0 to Tier 9
-    // Substantially increased sizes to proportionally fill the area. Apex is large (160px), base is solid (80px).
-    const sizeScale = [160, 150, 140, 130, 120, 110, 100, 90, 85, 80];
-    const nodeSize = sizeScale[tIndex] || 80;
+    // Scale node sizes proportionally per tier using viewport-friendly values
+    // Desktop: apex=90px → base=44px. CSS media queries can shrink further.
+    const sizeScale = [90, 84, 78, 72, 66, 60, 56, 52, 48, 44];
+    const nodeSize = sizeScale[tIndex] || 44;
 
     const usersHTML = tier.map(user => `
       <div class="user-node ${hasVoted && hasVoted === user.id ? 'voted' : ''}" 
            data-id="${user.id}" 
            data-votes="${user.votes} ${t.votesCount}" 
-           data-voted-text="&#x2713; ${t.voted}">
+           data-voted-text="&#x2713; ${t.voted}"
+           style="width:${nodeSize}px; height:${nodeSize}px;">
         <div class="node-rank">#${user.rank}</div>
         <img src="${user.img}" alt="${user.name}">
         <div class="node-overlay">
