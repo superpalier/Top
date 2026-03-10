@@ -905,7 +905,7 @@ const render = () => {
     <!-- Custom Toast Container -->
     <div id="toast-container"></div>
     
-    <div id="logout-confirm-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px;">
+    <div id="logout-confirm-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; padding:20px;">
        <div style="max-width:400px; width:100%; background:var(--bg-card); border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:30px; text-align:center;">
           <i class="ph ph-sign-out" style="font-size:3rem; color:var(--accent-magenta); margin-bottom:20px;"></i>
           <h2 style="margin-bottom:12px; color:var(--text-primary);">¿Cerrar sesión?</h2>
@@ -1038,15 +1038,6 @@ const renderProfileView = (container) => {
   document.getElementById('btn-logout-trigger').addEventListener('click', () => {
     const modal = document.getElementById('logout-confirm-modal');
     modal.style.display = 'flex';
-  });
-
-  document.getElementById('confirm-logout-btn').addEventListener('click', () => {
-    localStorage.removeItem('votenaut_token');
-    localStorage.removeItem('votenaut_user');
-    loggedInUser = null;
-    currentView = 'home';
-    document.getElementById('logout-confirm-modal').style.display = 'none';
-    render();
   });
 };
 
@@ -2429,6 +2420,20 @@ const attachGlobalEvents = () => {
         currentView = 'register';
         render();
       }
+    });
+  }
+
+  // Logout confirmation handler — always re-attached on render
+  const confirmLogoutBtn = document.getElementById('confirm-logout-btn');
+  if (confirmLogoutBtn) {
+    confirmLogoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('votenaut_token');
+      localStorage.removeItem('votenaut_user');
+      loggedInUser = null;
+      const logoutModal = document.getElementById('logout-confirm-modal');
+      if (logoutModal) logoutModal.style.display = 'none';
+      currentView = 'home';
+      render();
     });
   }
 
