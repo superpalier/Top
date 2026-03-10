@@ -876,9 +876,9 @@ const renderPyramidView = (container, contextInfo) => {
     const zIndex = 50 - tIndex; // Higher tiers are visually "above"
 
     // Scale node sizes proportionally per tier using viewport-friendly values
-    // Desktop: apex=90px → base=44px. CSS media queries can shrink further.
-    const sizeScale = [90, 84, 78, 72, 66, 60, 56, 52, 48, 44];
-    const nodeSize = sizeScale[tIndex] || 44;
+    // Desktop: apex=110px → base=58px. Faces always visible.
+    const sizeScale = [110, 102, 95, 88, 81, 74, 68, 64, 61, 58];
+    const nodeSize = sizeScale[tIndex] || 58;
 
     const usersHTML = tier.map(user => `
       <div class="user-node ${hasVoted && hasVoted === user.id ? 'voted' : ''}" 
@@ -913,18 +913,11 @@ const renderPyramidView = (container, contextInfo) => {
         <div class="pyramid-controls">
           ${pyramidOffsetIndex > 0 ? `<button class="pyr-nav-btn" id="prev-apex-btn"><i class="ph ph-caret-up"></i><span class="btn-label">${t.prev55}</span></button>` : ''}
           ${pyramidOffsetIndex + 55 < totalUsersInContext ? `<button class="pyr-nav-btn" id="next-apex-btn"><i class="ph ph-caret-down"></i><span class="btn-label">${t.next55}</span></button>` : ''}
-          ${pyramidOffsetIndex > 0 ? `<button class="pyr-nav-btn" id="reset-apex-btn"><i class="ph ph-house"></i><span class="btn-label">${t.top1}</span></button>` : ''}
+          ${pyramidOffsetIndex > 0 ? `<button class="pyr-nav-btn" id="reset-apex-btn"><i class="ph ph-house"></i><strong>1</strong></button>` : ''}
         </div>
       </div>
 
-      <div class="voting-strip">
-        ${globalVotes.byContext[contextInfo.id]
-      ? `<i class="ph-fill ph-check-circle" style="color:var(--accent-cyan);"></i> <span>${t.votedInCat}</span> <span class="expiring-tag">${t.expiresIn}</span>`
-      : `<i class="ph-fill ph-lightning" style="color:var(--accent-gold);"></i> <span>${t.votesAvail(MAX_DAILY_VOTES - globalVotes.count)}</span>`
-    }
-      </div>
-
-      <div class="pyramid-viewport" id="pyramid-viewport" style="position: relative;">
+      <div class="pyramid-viewport" id="pyramid-viewport" style="position:relative;">
         <!-- Swipe Prompt Overlay -->
         <div id="swipe-prompt" style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); color: var(--text-primary); padding: 12px 24px; border-radius: 30px; border: 1px solid rgba(212,175,55,0.3); font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 8px; z-index: 100; pointer-events: none; opacity: 1; transition: opacity 0.5s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
           <i class="ph ph-hand-swipe-up" style="font-size: 1.2rem; color: var(--accent-gold);"></i> ${t.swipePrompt}
