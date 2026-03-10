@@ -1592,17 +1592,26 @@ const renderAdminView = (container) => {
 const showToast = (message, icon = 'ph-info') => {
   const container = document.getElementById('toast-container');
   if (!container) return;
+
   const toast = document.createElement('div');
   toast.className = 'custom-toast';
-  toast.innerHTML = `< i class="ph-fill ${icon}" ></i > <span>${message}</span>`;
+
+  // Build icon element safely via DOM (no innerHTML needed for icon)
+  const iconEl = document.createElement('i');
+  iconEl.className = `ph-fill ${icon}`;
+
+  // Use textContent for message so raw HTML never leaks as visible text
+  const msgEl = document.createElement('span');
+  msgEl.textContent = message;
+
+  toast.appendChild(iconEl);
+  toast.appendChild(msgEl);
   container.appendChild(toast);
 
-  // trigger animation
   setTimeout(() => toast.classList.add('show'), 10);
-
   setTimeout(() => {
     toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 400); // Wait for transition
+    setTimeout(() => toast.remove(), 400);
   }, 4000);
 };
 
