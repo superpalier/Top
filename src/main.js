@@ -68,8 +68,8 @@ const i18n = {
     createAccount: 'Create Account',
     authenticating: 'Authenticating...',
     creatingAccount: 'Creating Account...',
-    heroSubtitle: 'Who rules the Pyramid? <strong>You decide.</strong>',
-    heroSubtitle2: 'Vote anonymously or forge an account to seal your legacy.',
+    heroSubtitle: 'Who rules the Pyramid?<br/><span style="color:var(--accent-cyan);">You decide.</span>',
+    heroSubtitle2: 'Vote anonymously<br/>or forge an account<br/>to seal your legacy.',
     rulesModalBtn: 'How does it work? →',
     rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ How Votenaut Works</h2>
 <p style="margin-bottom:12px;">Each <strong>Pyramid</strong> represents a category or context (e.g. Best Musician, Best Athlete). Inside each pyramid, users are ranked from #1 (Apex) to #55 based on votes received.</p>
@@ -206,8 +206,8 @@ const i18n = {
     createAccount: 'Crear Cuenta',
     authenticating: 'Autenticando...',
     creatingAccount: 'Creando cuenta...',
-    heroSubtitle: '¿Quién domina la Pirámide? <strong>Tú decides.</strong>',
-    heroSubtitle2: 'Vota en el anonimato o forja una cuenta para sellar tu legado.',
+    heroSubtitle: '¿Quién domina la Pirámide?<br/><span style="color:var(--accent-cyan);">Tú decides.</span>',
+    heroSubtitle2: 'Vota en el anonimato<br/>o forja una cuenta<br/>para sellar tu legado.',
     rulesModalBtn: '¿Cómo funciona? →',
     rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ Cómo funciona Votenaut</h2>
 <p style="margin-bottom:12px;">Cada <strong>Pirámide</strong> es una categoría o contexto (ej. Mejor Músico). Dentro, los usuarios se rankean del #1 (Apex) al #55 según los votos recibidos.</p>

@@ -1306,12 +1306,9 @@ main {
   margin-top: -20px;
   background: transparent;
   border-radius: 12px;
-  /* Top 1 Clipping Fix: Convert to Flex Column so children margins don't collapse with the scrollbar bounds */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  /* Removed mask-image completely as it visually clips the top 5-10% of the container, decapitating the Top 1 user */
+  /* Top 1 Clipping Fix: Reverted to display block. Flex column on an overflow container inherently clips the top boundary if content overflows. */
+  display: block;
+  text-align: center;
 }
 
 .pyramid-viewport:active {
@@ -1324,10 +1321,10 @@ main {
   min-width: 100%;
   height: max-content;
   min-height: 100%;
-  /* CRITICAL FIX: The top padding acts as the protective air-gap for the Top 1 Crown.
-     With viewport now being flex flex-start, this padding will physically push the top tier down from the 0,0 origin. */
+  /* CRITICAL FIX: The top padding acts as the protective air-gap for the Top 1 Crown. */
   padding: 120px 20px 100px 20px;
-  flex-shrink: 0;
+  margin: 0 auto;
+  /* Horizontally center within the block viewport */
   display: flex;
   flex-direction: column;
   align-items: center;
