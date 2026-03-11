@@ -9,7 +9,8 @@ import { Resend } from 'resend';
 
 dotenv.config();
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resendApiKey = process.env.RESEND_API_KEY;
+const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
 const app = express();
 const PORT = process.env.PORT || 8080;
