@@ -68,8 +68,8 @@ const i18n = {
     createAccount: 'Create Account',
     authenticating: 'Authenticating...',
     creatingAccount: 'Creating Account...',
-    heroSubtitle: 'Who rules the Pyramid?<br/><span style="color:var(--accent-cyan);">You decide.</span>',
-    heroSubtitle2: 'Vote anonymously<br/>or forge an account<br/>to seal your legacy.',
+    heroSubtitle: 'Who rules the Pyramid?<span style="display:block; margin-top:20px; color:var(--accent-cyan);">You decide.</span>',
+    heroSubtitle2: '<span style="display:block; margin-bottom:12px;">Vote anonymously</span><span style="display:block; margin-bottom:12px;">or forge an account</span><span style="display:block;">to seal your legacy.</span>',
     rulesModalBtn: 'How does it work? →',
     rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ How Votenaut Works</h2>
 <p style="margin-bottom:12px;">Each <strong>Pyramid</strong> represents a category or context (e.g. Best Musician, Best Athlete). Inside each pyramid, users are ranked from #1 (Apex) to #55 based on votes received.</p>
@@ -206,8 +206,8 @@ const i18n = {
     createAccount: 'Crear Cuenta',
     authenticating: 'Autenticando...',
     creatingAccount: 'Creando cuenta...',
-    heroSubtitle: '¿Quién domina la Pirámide?<br/><span style="color:var(--accent-cyan);">Tú decides.</span>',
-    heroSubtitle2: 'Vota en el anonimato<br/>o forja una cuenta<br/>para sellar tu legado.',
+    heroSubtitle: '¿Quién domina la Pirámide?<span style="display:block; margin-top:20px; color:var(--accent-cyan);">Tú decides.</span>',
+    heroSubtitle2: '<span style="display:block; margin-bottom:12px;">Vota en el anonimato</span><span style="display:block; margin-bottom:12px;">o forja una cuenta</span><span style="display:block;">para sellar tu legado.</span>',
     rulesModalBtn: '¿Cómo funciona? →',
     rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ Cómo funciona Votenaut</h2>
 <p style="margin-bottom:12px;">Cada <strong>Pirámide</strong> es una categoría o contexto (ej. Mejor Músico). Dentro, los usuarios se rankean del #1 (Apex) al #55 según los votos recibidos.</p>
@@ -905,6 +905,7 @@ const render = () => {
   // We are relying entirely on the polling loop (pollData) to trigger renders 
   // and manage state smoothly to avoid Firebase costs.
   if (currentView !== previousView) {
+    forceScrollReset = true;
     previousView = currentView;
   }
 
