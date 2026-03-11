@@ -33,6 +33,15 @@ const initDb = async () => {
         console.log('Connected to PostgreSQL Database.');
 
         await client.query(`
+      CREATE TABLE IF NOT EXISTS contexts (
+        id VARCHAR(255) PRIMARY KEY,
+        icon VARCHAR(255) DEFAULT 'ph ph-star',
+        titles JSONB NOT NULL DEFAULT '{}',
+        parent_id VARCHAR(255),
+        image_url VARCHAR(255),
+        createdAt TIMESTAMP NOT NULL
+      );
+
       CREATE TABLE IF NOT EXISTS users (
         uid VARCHAR(255) PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
@@ -285,6 +294,74 @@ app.post('/api/reset-password', async (req, res) => {
     } catch (err) {
         console.error('[Votenaut] Reset password error:', err);
         res.status(500).json({ error: 'Error al restablecer la contraseña.' });
+    }
+});
+
+// Contexts CRUD
+app.get('/api/contexts', async (req, res) => {
+    try {
+        if (!process.env.DATABASE_URL) return res.json([]);
+        const client = await pool.connect();
+        const result = await client.query('SELECT * FROM contexts ORDER BY createdat ASC');
+        client.release();
+        // Map snake_case DB fields to camelCase for frontend compatibility
+        const contexts = result.rows.map(row => ({
+            id: row.id,
+            icon: row.icon,
+            titles: row.titles,
+            parentId: row.parent_id,
+            imageUrl: row.image_url,
+            createdAt: row.createdat
+        }));
+        res.json(contexts);
+    } catch (err) {
+        console.warn('Contexts fetch error:', err.message);
+        res.json([]);
+    }
+});
+
+app.post('/api/contexts', async (req, res) => {
+    try {
+        const { id, icon, titles, parentId, imageUrl } = req.body;
+        if (!id || !titles) return res.status(400).json({ error: 'id and titles are required.' });
+        const client = await pool.connect();
+        await client.query(
+            'INSERT INTO contexts (id, icon, titles, parent_id, image_url, createdat) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (id) DO UPDATE SET icon=$2, titles=$3, parent_id=$4, image_url=$5',
+            [id, icon || 'ph ph-star', JSON.stringify(titles), parentId || null, imageUrl || null, new Date().toISOString()]
+        );
+        client.release();
+        res.status(201).json({ success: true });
+    } catch (err) {
+        console.error('Context save error:', err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.put('/api/contexts/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { icon, titles, parentId, imageUrl } = req.body;
+        const client = await pool.connect();
+        await client.query(
+            'UPDATE contexts SET icon=$1, titles=$2, parent_id=$3, image_url=$4 WHERE id=$5',
+            [icon || 'ph ph-star', JSON.stringify(titles), parentId || null, imageUrl || null, id]
+        );
+        client.release();
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.delete('/api/contexts/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const client = await pool.connect();
+        await client.query('DELETE FROM contexts WHERE id=$1', [id]);
+        client.release();
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 });
 
