@@ -1091,13 +1091,13 @@ const renderProfileView = (container) => {
          <div class="profile-card" style="position:relative; width:100%; max-width:none; transform:none; opacity:1; pointer-events:all; box-shadow:0 10px 40px rgba(0,0,0,0.5);">
             <div class="profile-card-header" style="height: 80px; background: var(--accent-gold); opacity: 0.15;"></div>
              <div class="profile-card-body" style="padding-top: 40px;">
-               <div class="avatar-large" style="width:100px; height:100px; background:var(--bg-card); border:3px solid var(--accent-gold); border-radius:50%; overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:2.5rem; font-weight:800; color:var(--accent-gold); margin: -50px auto 15px; position:relative; z-index:2; box-shadow:0 4px 20px rgba(212,175,55,0.3);">
+               <div class="avatar-large" style="width:160px; height:160px; background:var(--bg-card); border:4px solid var(--accent-gold); border-radius:50%; overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:3rem; font-weight:800; color:var(--accent-gold); margin: -80px auto 20px; position:relative; z-index:2; box-shadow:0 8px 30px rgba(212,175,55,0.4);">
                  ${loggedInUser.img
-      ? `<img src="${loggedInUser.img}" alt="${loggedInUser.name}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`
+      ? `<img src="${loggedInUser.img}" alt="${loggedInUser.name}" style="width:100%; height:100%; object-fit:cover; border-radius:50%; filter: none !important; -webkit-filter: none !important;">`
       : loggedInUser.name.substring(0, 2).toUpperCase()
     }
                </div>
-              <h2 style="margin-bottom:4px; font-family:var(--font-display); color:var(--text-primary); font-size:1.4rem;">${loggedInUser.name}</h2>
+              <h2 style="margin-bottom:4px; font-family:var(--font-display); color:var(--text-primary); font-size:1.6rem;">${loggedInUser.name}</h2>
               <p style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:20px;">${loggedInUser.email}</p>
               
               <div style="text-align:left; border-top: 1px solid rgba(255,255,255,0.05); padding-top:20px;">
