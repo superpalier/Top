@@ -1,10 +1,8 @@
 import './style.css';
 import { initAscensionCanvas } from './canvas-bg.js';
-import { initMagneticCursor } from './magnetic-cursor.js';
 
 // Boot Project Ascension Systems
 initAscensionCanvas();
-initMagneticCursor();
 
 const apiHost = import.meta.env.PROD ? '' : 'http://localhost:8080';
 

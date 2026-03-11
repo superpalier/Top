@@ -1,28 +1,28 @@
 :root {
-  /* ── GROWTH & POWER PALETTE (BIOLOGY + THERMAL) ────────────────
-     1. Cosmos Blue      #0B101E  → deep, vast canvas (reduced eye strain)
-     2. Bio-Green        #00FF88  → growth, voting, natural selection
-     3. Solar Orange     #FF4500  → heat, power, active states
-     4. Sun Gold         #FFD700  → strictly reserved for Apex #1
+  /* ── SUPREME OBSIDIAN & LIQUID SILVER PALETTE ────────────────
+     1. Void Black       #050507  → Absolute dark with onyx warmth.
+     2. Liquid Silver    #E2E8F0  → High contrast primary actions.
+     3. Vermilion        #FF3333  → Sharp dramatic active states.
+     4. Aurum Gold       #FBBF24  → Exclusively reserved for the Apex #1.
   ──────────────────────────────────── */
-  --bg-dark: #0B101E;
-  --bg-card: rgba(11, 16, 30, 0.45);
-  --border-light: transparent;
-  --border-glow: rgba(0, 255, 136, 0.15);
+  --bg-dark: #050507;
+  --bg-card: rgba(5, 5, 7, 0.65);
+  --border-light: rgba(226, 232, 240, 0.08);
+  --border-glow: rgba(226, 232, 240, 0.15);
 
   --text-primary: #FFFFFF;
   --text-secondary: #8A94B3;
 
-  --accent-gold: #FFD700;
-  --accent-cyan: #00FF88;
-  /* Overriding 'cyan' variable name to green for backwards compat without full rename */
-  --accent-magenta: #FF4500;
-  /* Overriding 'magenta' to Orange */
-  --accent-violet: #FF4500;
+  --accent-gold: #FBBF24;
+  --accent-cyan: #E2E8F0;
+  /* Mapped to Liquid Silver */
+  --accent-magenta: #FF3333;
+  /* Mapped to Vermilion */
+  --accent-violet: #FF3333;
 
-  --glow-cyan: rgba(0, 255, 136, 0.3);
-  --glow-magenta: rgba(255, 69, 0, 0.25);
-  --glow-gold: rgba(255, 215, 0, 0.4);
+  --glow-cyan: rgba(226, 232, 240, 0.3);
+  --glow-magenta: rgba(255, 51, 51, 0.25);
+  --glow-gold: rgba(251, 191, 36, 0.4);
 
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
   --font-display: 'Outfit', system-ui, sans-serif;
@@ -54,18 +54,16 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
-  cursor: none;
-  /* Hide default cursor for Ascension */
 }
 
-/* Ensure interactive elements hide default cursor */
+/* Re-enable native cursor */
 a,
 button,
 input,
 .user-node,
 .context-card,
 .sidebar-item {
-  cursor: none !important;
+  cursor: pointer;
 }
 
 /* --- Elite Dashboard Background --- */
@@ -1301,8 +1299,8 @@ main {
   min-width: 100%;
   height: max-content;
   min-height: 100%;
-  /* 100px top padding ensures the crown and Apex node are not obscured by headers */
-  padding: 100px 20px 100px 20px;
+  /* CRITICAL FIX: 200px top padding ensures the crown and Apex node are not obscured by headers */
+  padding: 200px 20px 100px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1522,12 +1520,14 @@ main {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.9;
-  transition: opacity 0.4s ease;
+  opacity: 1;
+  /* Fixed: Removed opacity dimming to restore original photo lighting */
+  transition: transform 0.4s ease;
 }
 
 .user-node:hover img {
-  opacity: 1;
+  transform: scale(1.05);
+  /* Subtle zoom instead of opacity change */
 }
 
 .user-node:hover {
