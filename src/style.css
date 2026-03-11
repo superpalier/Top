@@ -1,27 +1,27 @@
 :root {
-  /* ── RADICAL ENGAGEMENT PALETTE ────────────────
-     1. Abyss Black      #030305  → infinite depth
-     2. Hyper-Neon Cyan  #00F0FF  → primary CTA / action
-     3. Electric Violet  #8A2BE2  → secondary / hover
-     4. Pure Gold        #FFD700  → strictly reserved for #1
+  /* ── GROWTH & POWER PALETTE (BIOLOGY + THERMAL) ────────────────
+     1. Cosmos Blue      #0B101E  → deep, vast canvas (reduced eye strain)
+     2. Bio-Green        #00FF88  → growth, voting, natural selection
+     3. Solar Orange     #FF4500  → heat, power, active states
+     4. Sun Gold         #FFD700  → strictly reserved for Apex #1
   ──────────────────────────────────── */
-  --bg-dark: #030305;
-  --bg-card: rgba(10, 10, 15, 0.35);
-  /* Almost invisible glass */
+  --bg-dark: #0B101E;
+  --bg-card: rgba(11, 16, 30, 0.45);
   --border-light: transparent;
-  /* No visible lines, rely on shadow */
-  --border-glow: rgba(0, 240, 255, 0.1);
+  --border-glow: rgba(0, 255, 136, 0.15);
 
   --text-primary: #FFFFFF;
-  --text-secondary: #71718A;
+  --text-secondary: #8A94B3;
 
   --accent-gold: #FFD700;
-  --accent-cyan: #00F0FF;
-  --accent-magenta: #FF00FF;
-  --accent-violet: #8A2BE2;
+  --accent-cyan: #00FF88;
+  /* Overriding 'cyan' variable name to green for backwards compat without full rename */
+  --accent-magenta: #FF4500;
+  /* Overriding 'magenta' to Orange */
+  --accent-violet: #FF4500;
 
-  --glow-cyan: rgba(0, 240, 255, 0.3);
-  --glow-magenta: rgba(255, 0, 255, 0.2);
+  --glow-cyan: rgba(0, 255, 136, 0.3);
+  --glow-magenta: rgba(255, 69, 0, 0.25);
   --glow-gold: rgba(255, 215, 0, 0.4);
 
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
@@ -63,11 +63,11 @@ body {
   z-index: -2;
   overflow: hidden;
   background-color: var(--bg-dark);
-  /* Absolute black void with minimal light leaks */
+  /* Biological deep space gradient */
   background-image:
-    radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.02), transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(138, 43, 226, 0.02), transparent 40%),
-    linear-gradient(to bottom, #030305 0%, #010102 100%),
+    radial-gradient(circle at 10% 20%, rgba(0, 255, 136, 0.03), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(255, 69, 0, 0.03), transparent 40%),
+    linear-gradient(to bottom, #0B101E 0%, #050811 100%),
     url('/clean_bg.png');
   /* Maintain texture */
   background-size: cover;
@@ -148,8 +148,8 @@ header {
   z-index: 100;
   border: 1px solid rgba(255, 255, 255, 0.03);
   /* Whisper thin */
-  background: rgba(3, 3, 5, 0.5);
-  /* Abyss black translucent */
+  background: rgba(11, 16, 30, 0.65);
+  /* Cosmos blue translucent */
   box-shadow:
     0 40px 100px rgba(0, 0, 0, 0.9),
     inset 0 1px 0 rgba(255, 255, 255, 0.03);
@@ -266,12 +266,12 @@ header {
 }
 
 .btn-outline-gold {
-  background: rgba(0, 240, 255, 0.05);
-  /* Switched away from gold */
+  background: rgba(0, 255, 136, 0.05);
+  /* Bio-Green */
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: var(--accent-cyan);
-  border: 1px solid rgba(0, 240, 255, 0.3);
+  border: 1px solid rgba(0, 255, 136, 0.3);
   padding: 12px 24px;
   border-radius: 40px;
   /* Extreme pill shape */
@@ -285,14 +285,14 @@ header {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 255, 136, 0.1);
 }
 
 .btn-outline-gold:hover {
   background: var(--accent-cyan);
   border-color: var(--accent-cyan);
   color: #000;
-  box-shadow: 0 10px 30px rgba(0, 240, 255, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
   transform: translateY(-4px);
 }
 
@@ -612,23 +612,23 @@ header {
 }
 
 .sidebar-item:hover i {
-  color: var(--accent-gold);
+  color: var(--accent-cyan);
   opacity: 1;
 }
 
 .sidebar-item.active {
-  background: linear-gradient(90deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.02));
-  color: var(--accent-gold);
-  border-color: rgba(212, 175, 55, 0.2);
+  background: linear-gradient(90deg, rgba(0, 255, 136, 0.15), rgba(0, 255, 136, 0.02));
+  color: var(--accent-cyan);
+  border-color: rgba(0, 255, 136, 0.2);
   box-shadow:
-    inset 3px 0 0 var(--accent-gold),
+    inset 3px 0 0 var(--accent-cyan),
     0 4px 15px rgba(0, 0, 0, 0.2);
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
 }
 
 .sidebar-item.active i {
-  color: var(--accent-gold);
+  color: var(--accent-cyan);
   opacity: 1;
 }
 
@@ -733,7 +733,7 @@ main {
 }
 
 .breadcrumb-item:hover {
-  color: var(--accent-gold);
+  color: var(--accent-cyan);
 }
 
 .breadcrumb-item.active {
@@ -1182,7 +1182,10 @@ main {
 
 .voting-status.voted {
   color: var(--accent-magenta);
-  background: rgba(167, 139, 250, 0.05);
+  /* This is now Solar Flare Orange */
+  background: rgba(255, 69, 0, 0.08);
+  /* Faint orange glow */
+  border-color: rgba(255, 69, 0, 0.2);
 }
 
 /* Expiring tag */
@@ -1375,7 +1378,9 @@ main {
 }
 
 .user-node.voted {
-  box-shadow: inset 0 0 0 1px var(--accent-magenta), 0 0 10px rgba(139, 0, 0, 0.2) !important;
+  box-shadow:
+    inset 0 0 0 1px var(--accent-magenta),
+    0 0 15px rgba(255, 69, 0, 0.3) !important;
 }
 
 .user-node.voted::before {
