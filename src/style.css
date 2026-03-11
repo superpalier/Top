@@ -1,34 +1,36 @@
 :root {
-  /* ── 4-COLOR LUXURY MUTED PALETTE ────────────────
-     1. Midnight Navy   #070A11  → deep, rich background
-     2. Champagne Gold  #D4AF37  → absolute premium accent
-     3. Dusty Lavender  #A39EC4  → softly contrasting text/secondary
-     4. Sage Teal       #61B9A8  → subtle energy pops
+  /* ── RADICAL ENGAGEMENT PALETTE ────────────────
+     1. Abyss Black      #030305  → infinite depth
+     2. Hyper-Neon Cyan  #00F0FF  → primary CTA / action
+     3. Electric Violet  #8A2BE2  → secondary / hover
+     4. Pure Gold        #FFD700  → strictly reserved for #1
   ──────────────────────────────────── */
-  --bg-dark: #070A11;
-  --bg-card: rgba(12, 16, 28, 0.45);
-  --border-light: rgba(255, 255, 255, 0.05);
-  --border-glow: rgba(255, 255, 255, 0.12);
+  --bg-dark: #030305;
+  --bg-card: rgba(10, 10, 15, 0.35);
+  /* Almost invisible glass */
+  --border-light: transparent;
+  /* No visible lines, rely on shadow */
+  --border-glow: rgba(0, 240, 255, 0.1);
 
-  --text-primary: #F0F0F5;
-  --text-secondary: #9094AA;
+  --text-primary: #FFFFFF;
+  --text-secondary: #71718A;
 
-  --accent-gold: #D4AF37;
-  --accent-cyan: #61B9A8;
-  --accent-magenta: #A39EC4;
-  --accent-violet: #C2BFDF;
+  --accent-gold: #FFD700;
+  --accent-cyan: #00F0FF;
+  --accent-magenta: #FF00FF;
+  --accent-violet: #8A2BE2;
 
-  --glow-cyan: rgba(97, 185, 168, 0.15);
-  --glow-magenta: rgba(163, 158, 196, 0.15);
-  --glow-gold: rgba(212, 175, 55, 0.20);
+  --glow-cyan: rgba(0, 240, 255, 0.3);
+  --glow-magenta: rgba(255, 0, 255, 0.2);
+  --glow-gold: rgba(255, 215, 0, 0.4);
 
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
   --font-display: 'Outfit', system-ui, sans-serif;
 
-  /* Global scaling constraint */
-  --fluid-header-1: clamp(2rem, 5vw, 3.5rem);
-  --fluid-header-2: clamp(1.4rem, 3vw, 2.2rem);
-  --fluid-body: clamp(0.9rem, 2vw, 1.05rem);
+  /* Massive scaling for impact */
+  --fluid-header-1: clamp(2.5rem, 6vw, 4.5rem);
+  --fluid-header-2: clamp(1.8rem, 4vw, 2.8rem);
+  --fluid-body: clamp(1rem, 2vw, 1.15rem);
 }
 
 * {
@@ -61,11 +63,11 @@ body {
   z-index: -2;
   overflow: hidden;
   background-color: var(--bg-dark);
-  /* Mesh-like luxury dark gradient */
+  /* Absolute black void with minimal light leaks */
   background-image:
-    radial-gradient(circle at 15% 50%, rgba(97, 185, 168, 0.03), transparent 25%),
-    radial-gradient(circle at 85% 30%, rgba(163, 158, 196, 0.03), transparent 25%),
-    linear-gradient(to bottom, rgba(5, 7, 11, 0.95) 0%, rgba(10, 14, 22, 0.98) 100%),
+    radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.02), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(138, 43, 226, 0.02), transparent 40%),
+    linear-gradient(to bottom, #030305 0%, #010102 100%),
     url('/clean_bg.png');
   /* Maintain texture */
   background-size: cover;
@@ -127,24 +129,31 @@ body {
   flex-direction: column;
 }
 
-/* Header */
+/* Floating Header Pill */
 header {
-  padding: 16px 28px;
+  margin: 24px 32px 0 32px;
+  /* Floating space */
+  border-radius: 24px;
+  /* Pill shape */
+  padding: 16px 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   flex-wrap: nowrap;
-  backdrop-filter: blur(32px) saturate(200%);
-  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  backdrop-filter: blur(48px) saturate(200%);
+  -webkit-backdrop-filter: blur(48px) saturate(200%);
   position: sticky;
-  top: 0;
+  top: 24px;
   z-index: 100;
-  border-bottom: 1px solid var(--border-light);
-  background: rgba(7, 10, 17, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  /* Whisper thin */
+  background: rgba(3, 3, 5, 0.5);
+  /* Abyss black translucent */
   box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.5),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+    0 40px 100px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  transition: padding 0.3s ease;
 }
 
 .child-card .context-icon {
@@ -162,12 +171,13 @@ header {
 
 .logo {
   font-family: var(--font-display);
-  font-size: clamp(1.4rem, 4vw, 1.8rem);
-  font-weight: 800;
+  font-size: clamp(1.6rem, 5vw, 2.2rem);
+  font-weight: 900;
+  /* Max weight */
   color: var(--text-primary);
-  letter-spacing: -0.5px;
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  letter-spacing: -1.5px;
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .logo:hover {
@@ -256,50 +266,55 @@ header {
 }
 
 .btn-outline-gold {
-  background: rgba(212, 175, 55, 0.05);
+  background: rgba(0, 240, 255, 0.05);
+  /* Switched away from gold */
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: var(--accent-gold);
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  padding: 10px 20px;
-  border-radius: 30px;
-  /* Luxury pill shape */
+  color: var(--accent-cyan);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  padding: 12px 24px;
+  border-radius: 40px;
+  /* Extreme pill shape */
   font-family: var(--font-main);
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-weight: 700;
+  font-size: 0.95rem;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  letter-spacing: 0.5px;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 1px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.1);
 }
 
 .btn-outline-gold:hover {
-  background: rgba(212, 175, 55, 0.15);
-  border-color: var(--accent-gold);
-  color: #fff;
-  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.25);
-  transform: translateY(-2px);
+  background: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  color: #000;
+  box-shadow: 0 10px 30px rgba(0, 240, 255, 0.4);
+  transform: translateY(-4px);
 }
 
 /* ── Hero Section ───────────────────────────────────── */
 .hero-section {
-  margin-bottom: 32px;
-  padding: 40px 32px;
-  border-radius: 24px;
-  background: linear-gradient(145deg, rgba(20, 24, 40, 0.7), rgba(10, 14, 25, 0.9));
-  border: 1px solid var(--border-light);
-  border-top: 1px solid var(--border-glow);
+  margin-bottom: 24px;
+  padding: 80px 48px;
+  /* Extreme Negative Space */
+  border-radius: 32px;
+  background: rgba(8, 10, 15, 0.6);
+  border: none;
+  /* No explicit borders */
   box-shadow:
-    0 30px 60px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+    0 60px 120px rgba(0, 0, 0, 0.9),
+    /* Deepest possible shadow */
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  /* Whisper of light */
+  backdrop-filter: blur(48px);
+  -webkit-backdrop-filter: blur(48px);
   position: relative;
   overflow: hidden;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .hero-glow-accent {
@@ -344,24 +359,26 @@ header {
 .btn-rules {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(97, 185, 168, 0.05);
-  border: 1px solid rgba(97, 185, 168, 0.3);
-  color: var(--accent-cyan);
-  padding: 10px 20px;
-  border-radius: 30px;
-  font-size: 0.9rem;
-  font-weight: 600;
+  gap: 12px;
+  background: rgba(138, 43, 226, 0.1);
+  /* Electric Violet base */
+  border: none;
+  color: #D8B4FE;
+  padding: 14px 28px;
+  border-radius: 40px;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
+  box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.05);
 }
 
 .btn-rules:hover {
-  background: rgba(97, 185, 168, 0.15);
-  border-color: var(--accent-cyan);
-  box-shadow: 0 8px 25px rgba(97, 185, 168, 0.25);
-  transform: translateY(-2px);
+  background: rgba(138, 43, 226, 0.4);
+  color: #FFF;
+  box-shadow: 0 15px 30px rgba(138, 43, 226, 0.3);
+  transform: translateY(-4px) scale(1.02);
 }
 
 .hero-stats {
@@ -670,14 +687,16 @@ header {
 
 main {
   flex: 1;
-  padding: 32px;
+  padding: 64px 48px 120px 48px;
+  /* Extreme negative space */
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  height: calc(100vh - 70px);
+  gap: 80px;
+  /* Massive gaps between sections */
+  height: calc(100vh - 72px);
   overflow-y: auto;
   overflow-x: hidden;
-  animation: viewTransition 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  animation: viewTransition 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes viewTransition {
@@ -751,17 +770,20 @@ main {
 
 /* --- Hierarchy Groups --- */
 .hierarchy-group {
-  margin-bottom: 55px;
   background: var(--bg-card);
-  backdrop-filter: blur(32px) saturate(200%);
-  -webkit-backdrop-filter: blur(32px) saturate(200%);
-  padding: 40px 32px;
-  border-radius: 24px;
-  border: 1px solid var(--border-light);
-  border-top: 1px solid var(--border-glow);
+  backdrop-filter: blur(48px) saturate(250%);
+  -webkit-backdrop-filter: blur(48px) saturate(250%);
+  padding: 64px 48px;
+  /* Massive inner padding */
+  border-radius: 32px;
+  /* Super smooth corners */
+  border: none;
+  /* Brutalism: No lines */
   box-shadow:
-    0 40px 80px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 80px 160px rgba(0, 0, 0, 0.95),
+    /* Deep abyss shadow */
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  /* Subtle top light */
 }
 
 .context-grid {
@@ -771,36 +793,38 @@ main {
 }
 
 .context-card {
-  background: rgba(15, 20, 35, 0.4);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid var(--border-light);
-  border-top: 1px solid var(--border-glow);
-  border-radius: 16px;
-  padding: 32px 24px;
+  background: rgba(15, 18, 28, 0.5);
+  /* Deep translucent */
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border: none;
+  border-radius: 24px;
+  padding: 40px 32px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  gap: 18px;
+  gap: 24px;
   cursor: pointer;
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Slower, spring-like */
   position: relative;
   overflow: hidden;
   box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 30px 60px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .context-card:hover,
 .context-card:active {
-  transform: translateY(-8px) scale(1.02);
-  border-color: var(--border-glow);
+  transform: translateY(-12px) scale(1.02);
+  /* Higher float */
   box-shadow:
-    0 30px 60px rgba(0, 0, 0, 0.7),
-    0 0 30px var(--glow-cyan),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  background: rgba(20, 26, 45, 0.5);
+    0 50px 100px rgba(0, 0, 0, 0.9),
+    0 0 60px rgba(0, 240, 255, 0.15),
+    inset 0 1px 0 rgba(0, 240, 255, 0.3);
+  /* Neon rim light */
+  background: rgba(18, 22, 35, 0.7);
 }
 
 .context-card::after {
@@ -820,22 +844,29 @@ main {
 }
 
 .context-icon {
-  font-size: 2.2rem;
+  font-size: 2.8rem;
+  /* Massive icons */
   color: var(--text-primary);
-  /* Starts neutral */
-  opacity: 0.9;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s;
+  opacity: 0.8;
+  padding: 18px;
+  background: rgba(0, 0, 0, 0.4);
+  /* Ink well base */
+  border-radius: 16px;
+  border: none;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .context-card:hover .context-icon {
   color: var(--accent-cyan);
-  border-color: var(--accent-cyan);
-  background: rgba(0, 240, 255, 0.05);
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+  background: rgba(0, 240, 255, 0.08);
+  /* Glowing active well */
+  box-shadow:
+    0 0 30px rgba(0, 240, 255, 0.4),
+    inset 0 2px 0 rgba(0, 240, 255, 0.5);
+  /* Neon liquid top reflection */
+  transform: scale(1.1) rotate(-5deg);
+  /* Playful micro-interaction */
 }
 
 .context-title {
@@ -1178,16 +1209,21 @@ main {
   background-color: var(--bg-dark);
   background-size: cover;
   background-position: center;
-  border-radius: 12px;
+  border-radius: 16px;
+  /* slightly rounder */
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   cursor: pointer;
   box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.15),
-    0 10px 20px rgba(0, 0, 0, 0.8);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    0 15px 30px rgba(0, 0, 0, 0.95),
+    /* Abyss shadow */
+    inset 0 0 20px rgba(0, 0, 0, 0.8);
+  /* Inner dark vignette */
+  border: none;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Spingy feel */
   overflow: hidden;
 }
 
@@ -1195,31 +1231,30 @@ main {
   position: absolute;
   top: 0;
   left: 0;
-  background: rgba(8, 8, 10, 0.9);
+  background: var(--bg-dark);
+  /* Pure abyss */
   color: var(--text-primary);
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 0.8rem;
-  padding: 4px 8px;
-  border-bottom-right-radius: 8px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  font-weight: 900;
+  font-size: 0.85rem;
+  padding: 6px 10px;
+  border-bottom-right-radius: 12px;
   z-index: 5;
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border: none;
+  /* No border */
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.9);
   pointer-events: none;
 }
 
 .tier-0 .node-rank {
-  background: rgba(10, 9, 18, 0.92);
+  background: #000;
   color: var(--accent-gold);
   -webkit-text-fill-color: var(--accent-gold);
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 900;
-  padding: 5px 10px;
-  border-color: var(--accent-gold);
+  padding: 8px 14px;
   letter-spacing: 0.5px;
-  text-shadow: 0 0 8px rgba(201, 168, 76, 0.7);
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
 }
 
 @keyframes apexPulse {
@@ -1227,18 +1262,18 @@ main {
   0%,
   100% {
     box-shadow:
-      0 0 20px rgba(212, 175, 55, 0.4),
-      0 0 40px rgba(212, 175, 55, 0.2),
-      0 10px 40px rgba(0, 0, 0, 0.9);
-    border-color: rgba(212, 175, 55, 0.7) !important;
+      0 0 30px rgba(255, 215, 0, 0.4),
+      0 0 60px rgba(255, 215, 0, 0.2),
+      0 20px 60px rgba(0, 0, 0, 0.95);
+    border-color: rgba(255, 215, 0, 0.7) !important;
   }
 
   50% {
     box-shadow:
-      0 0 30px rgba(212, 175, 55, 0.8),
-      0 0 60px rgba(212, 175, 55, 0.4),
-      0 10px 40px rgba(0, 0, 0, 0.9);
-    border-color: rgba(212, 175, 55, 1) !important;
+      0 0 40px rgba(255, 215, 0, 0.8),
+      0 0 80px rgba(255, 215, 0, 0.4),
+      0 20px 60px rgba(0, 0, 0, 0.95);
+    border-color: rgba(255, 215, 0, 1) !important;
   }
 }
 
@@ -1260,13 +1295,13 @@ main {
 
 /* Apex (Top 1) hero treatment — pulsing gold ring */
 .tier-0 .user-node {
-  border: 2px solid var(--accent-gold) !important;
-  border-radius: 14px !important;
-  transform: scale(1.1);
+  border: 4px solid var(--accent-gold) !important;
+  border-radius: 18px !important;
+  transform: scale(1.15);
   animation: apexPulse 3s ease-in-out infinite;
   z-index: 50;
   overflow: visible;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95);
 }
 
 .tier-0 .user-node::before {
@@ -1311,10 +1346,11 @@ main {
 }
 
 .user-node:hover {
-  transform: scale(1.15) translateY(-8px);
+  transform: scale(1.2) translateY(-10px);
   box-shadow:
-    inset 0 1px 1px var(--tier-color),
-    0 15px 35px rgba(0, 0, 0, 0.9);
+    0 30px 60px rgba(0, 0, 0, 0.95),
+    0 0 40px var(--tier-color);
+  /* Hover makes the tier color explode outwards */
   z-index: 10;
 }
 
@@ -1465,19 +1501,19 @@ main {
 }
 
 .profile-card {
-  background: #060608;
-  /* Pure deep black for modals */
-  border: 1px solid rgba(212, 175, 55, 0.2);
-  /* Thin gold border all around */
-  border-top: 2px solid var(--accent-cyan);
-  /* Gold accent line */
-  border-radius: 12px;
-  /* Sharper */
+  background: var(--bg-card);
+  backdrop-filter: blur(48px) saturate(200%);
+  -webkit-backdrop-filter: blur(48px) saturate(200%);
+  border: none;
+  /* No borders */
+  border-radius: 24px;
   width: 90%;
-  max-width: 420px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95);
-  transform: translateY(20px) scale(0.95);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 440px;
+  box-shadow:
+    0 50px 100px rgba(0, 0, 0, 0.95),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transform: translateY(40px) scale(0.95);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
   position: relative;
 }
@@ -1487,25 +1523,26 @@ main {
 }
 
 .profile-card-header {
-  height: 90px;
-  background: #000000;
-  /* Pure black instead of gradient */
+  height: 120px;
+  /* More extreme negative space */
+  background: rgba(3, 3, 5, 0.8);
   position: relative;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.15);
-  /* Thin gold line */
+  border: none;
 }
 
 .profile-card-avatar {
   width: 140px;
   height: 140px;
-  border-radius: 12px;
+  border-radius: 24px;
+  /* Squarish round */
   border: 4px solid var(--bg-dark);
+  /* Blend perfectly with void */
   position: absolute;
   bottom: -70px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--bg-card);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  background: #000;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.85);
   object-fit: cover;
 }
 
@@ -1661,20 +1698,21 @@ main {
 }
 
 .modal-content {
-  background: rgba(12, 16, 28, 0.6);
-  border: 1px solid var(--border-light);
-  border-top: 1px solid var(--border-glow);
-  border-radius: 28px;
-  padding: 40px;
+  background: rgba(8, 10, 15, 0.6);
+  backdrop-filter: blur(48px) saturate(250%);
+  -webkit-backdrop-filter: blur(48px) saturate(250%);
+  border: none;
+  border-radius: 32px;
+  /* Smoother curve */
+  padding: 56px 48px;
+  /* Massive inner padding */
   width: 90%;
-  max-width: 420px;
+  max-width: 460px;
   box-shadow:
-    0 40px 80px rgba(0, 0, 0, 0.8),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  transform: translateY(30px) scale(0.95);
+    0 60px 120px rgba(0, 0, 0, 0.95),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transform: translateY(40px) scale(0.95);
   transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
 }
 
 .modal-overlay.active .modal-content {
@@ -1694,24 +1732,28 @@ main {
 
 .form-input {
   width: 100%;
-  background: rgba(5, 7, 11, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(3, 3, 5, 0.6);
+  border: none;
+  /* Removed */
   color: var(--text-primary);
-  border-radius: 14px;
-  padding: 16px 18px;
+  border-radius: 16px;
+  padding: 20px 24px;
+  /* Fatter input */
   font-family: var(--font-main);
-  font-size: 1rem;
+  font-size: 1.05rem;
+  font-weight: 500;
   outline: none;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
 .form-input:focus {
-  border-color: var(--accent-cyan);
-  background: rgba(10, 14, 22, 0.6);
+  background: rgba(5, 7, 10, 0.8);
   box-shadow:
-    inset 0 2px 10px rgba(0, 0, 0, 0.3),
-    0 0 0 3px var(--glow-cyan);
+    inset 0 4px 15px rgba(0, 0, 0, 0.9),
+    0 0 0 2px var(--accent-cyan),
+    /* Pure focus ring without borders */
+    0 0 20px rgba(0, 240, 255, 0.15);
 }
 
 /* Dashboard & Profile View */
@@ -1744,23 +1786,24 @@ main {
 }
 
 .glass-card {
-  background: rgba(12, 16, 28, 0.45);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid var(--border-light);
-  border-top: 1px solid var(--border-glow);
-  border-radius: 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(48px) saturate(250%);
+  -webkit-backdrop-filter: blur(48px) saturate(250%);
+  border: none;
+  border-radius: 32px;
+  padding: 40px;
   box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 40px 80px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .profile-card {
   background: var(--bg-card);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
+  border: none;
+  border-radius: 32px;
   overflow: hidden;
   text-align: center;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
 }
 
 .profile-card-header {
@@ -1843,30 +1886,38 @@ main {
 .btn-primary,
 .btn-vote {
   width: 100%;
-  background: linear-gradient(135deg, var(--accent-cyan), #429d8e);
-  color: var(--bg-dark);
+  background: var(--accent-cyan);
+  /* Pure solid neon */
+  color: #000;
+  /* Maximum contrast against cyan */
   border: none;
-  padding: 18px;
-  border-radius: 14px;
+  padding: 20px;
+  /* Thicker button */
+  border-radius: 40px;
+  /* Absolute pill */
   font-family: var(--font-display);
   font-weight: 800;
   font-size: 1.15rem;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow:
-    0 10px 20px var(--glow-cyan),
+    0 15px 30px rgba(0, 240, 255, 0.2),
+    /* Neon bloom */
     inset 0 1px 0 rgba(255, 255, 255, 0.4);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
 }
 
 .btn-primary:hover,
 .btn-vote:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
+  /* Float higher */
   box-shadow:
-    0 15px 30px rgba(97, 185, 168, 0.4),
+    0 25px 50px rgba(0, 240, 255, 0.4),
+    /* Massive bloom open */
     inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  background: linear-gradient(135deg, #71cdbc, #4ebdae);
+  background: #33F5FF;
+  /* Brighter neon */
 }
 
 .btn-primary:disabled,
@@ -1881,28 +1932,30 @@ main {
 .btn-secondary,
 .btn-close {
   width: 100%;
-  background: rgba(163, 158, 196, 0.05);
-  color: var(--accent-magenta);
-  border: 1px solid rgba(163, 158, 196, 0.3);
-  padding: 16px;
-  border-radius: 14px;
+  background: rgba(138, 43, 226, 0.08);
+  /* Faint electric violet */
+  color: #D8B4FE;
+  /* Soft violet text */
+  border: none;
+  /* Borderless brutalism */
+  padding: 18px;
+  border-radius: 40px;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.05rem;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  margin-top: 12px;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-top: 16px;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
 }
 
 .btn-secondary:hover,
 .btn-close:hover {
-  background: rgba(163, 158, 196, 0.15);
+  background: rgba(138, 43, 226, 0.3);
   color: #fff;
-  border-color: var(--accent-magenta);
-  box-shadow: 0 8px 25px var(--glow-magenta);
-  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(138, 43, 226, 0.3);
+  transform: translateY(-4px);
 }
 
 .profile-actions {
@@ -1913,28 +1966,36 @@ main {
 /* Custom Notifications */
 .custom-toast {
   position: fixed;
-  bottom: 40px;
+  bottom: 60px;
+  /* Float higher */
   left: 50%;
   transform: translateX(-50%) translateY(100px);
-  background: rgba(12, 16, 28, 0.8);
-  border: 1px solid var(--border-light);
-  border-top: 1px solid var(--border-glow);
+  background: rgba(3, 3, 5, 0.9);
+  /* Deep abyss */
+  border: none;
   color: var(--text-primary);
-  padding: 18px 28px;
-  border-radius: 20px;
+  padding: 24px 36px;
+  /* Huge padding */
+  border-radius: 40px;
+  /* Pill */
   box-shadow:
-    0 30px 60px rgba(0, 0, 0, 0.6),
+    0 40px 80px rgba(0, 0, 0, 0.95),
+    /* Extreme shadow */
+    0 0 30px rgba(138, 43, 226, 0.2),
+    /* Violet subtle glow */
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  /* Top light */
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
   z-index: 9999;
   opacity: 0;
   transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: var(--font-main);
-  font-size: 1rem;
-  backdrop-filter: blur(32px) saturate(200%);
-  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  font-weight: 600;
+  font-size: 1.05rem;
+  backdrop-filter: blur(48px) saturate(250%);
+  -webkit-backdrop-filter: blur(48px) saturate(250%);
 }
 
 .custom-toast.show {
