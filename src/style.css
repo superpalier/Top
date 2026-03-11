@@ -1329,9 +1329,9 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  perspective: 1000px;
   gap: var(--tier-gap);
   cursor: grab;
+  /* Perspective removed to prevent Webkit matrix explosion with VanillaTilt */
 }
 
 .pyramid-tier {
@@ -1344,12 +1344,11 @@ main {
   /* Even vertical spacing, no more overlapping */
   position: relative;
   z-index: var(--z-index);
-  transform-style: preserve-3d;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .pyramid-tier:hover {
-  transform: translateZ(20px) scale(1.02);
+  transform: translateY(-2px) scale(1.02);
   z-index: 100 !important;
 }
 
@@ -1506,9 +1505,9 @@ main {
   border-radius: 18px !important;
   transform: scale(1.15);
   animation: apexPulse 3s ease-in-out infinite;
-  z-index: 50;
   overflow: visible;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95);
+  /* z-index removed to avoid 3D stacking context collisions */
 }
 
 .tier-0 .user-node::before {
