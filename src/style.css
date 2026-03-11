@@ -1302,12 +1302,12 @@ main {
   margin-top: -20px;
   background: transparent;
   border-radius: 12px;
-  mask-image: linear-gradient(to bottom, transparent, black 10%, black 94%, transparent),
-    linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 94%, transparent),
-    linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
+  /* Top 1 Clipping Fix: Convert to Flex Column so children margins don't collapse with the scrollbar bounds */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  /* Removed mask-image completely as it visually clips the top 5-10% of the container, decapitating the Top 1 user */
 }
 
 .pyramid-viewport:active {
@@ -1320,13 +1320,14 @@ main {
   min-width: 100%;
   height: max-content;
   min-height: 100%;
-  /* 140px top padding ensures the crown and Apex node are not obscured by headers */
-  padding: 140px 20px 100px 20px;
+  /* CRITICAL FIX: The top padding acts as the protective air-gap for the Top 1 Crown.
+     With viewport now being flex flex-start, this padding will physically push the top tier down from the 0,0 origin. */
+  padding: 120px 20px 100px 20px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  /* Changed from flex-end to fix Top 1 clipping on scroll bounds */
   perspective: 1000px;
   gap: var(--tier-gap);
   cursor: grab;

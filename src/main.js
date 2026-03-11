@@ -68,8 +68,8 @@ const i18n = {
     createAccount: 'Create Account',
     authenticating: 'Authenticating...',
     creatingAccount: 'Creating Account...',
-    heroSubtitle: '🏆 Who really deserves the #1 spot? <strong>You decide.</strong> Cast your vote, shake up the rankings, and see the pyramid shift in real time — no sign-up needed.',
-    heroSubtitle2: 'Vote anonymously for free (lasts 24h), or <strong>create a free account</strong> to lock in your votes for 30 days and track your full voting history.',
+    heroSubtitle: 'Who rules the Pyramid? <strong>You decide.</strong>',
+    heroSubtitle2: 'Vote anonymously or forge an account to seal your legacy.',
     rulesModalBtn: 'How does it work? →',
     rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ How Votenaut Works</h2>
 <p style="margin-bottom:12px;">Each <strong>Pyramid</strong> represents a category or context (e.g. Best Musician, Best Athlete). Inside each pyramid, users are ranked from #1 (Apex) to #55 based on votes received.</p>
@@ -206,8 +206,8 @@ const i18n = {
     createAccount: 'Crear Cuenta',
     authenticating: 'Autenticando...',
     creatingAccount: 'Creando cuenta...',
-    heroSubtitle: '🏆 ¿Quién merece realmente el puesto #1? <strong>Tú decides.</strong> Vota, sacude el ranking y mira cómo la pirámide se reconfigura en tiempo real — sin registro.',
-    heroSubtitle2: 'Vota anónimo gratis (dura 24h), o <strong>crea una cuenta gratuita</strong> para que tus votos duren 30 días y puedas seguir todo tu historial.',
+    heroSubtitle: '¿Quién domina la Pirámide? <strong>Tú decides.</strong>',
+    heroSubtitle2: 'Vota en el anonimato o forja una cuenta para sellar tu legado.',
     rulesModalBtn: '¿Cómo funciona? →',
     rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ Cómo funciona Votenaut</h2>
 <p style="margin-bottom:12px;">Cada <strong>Pirámide</strong> es una categoría o contexto (ej. Mejor Músico). Dentro, los usuarios se rankean del #1 (Apex) al #55 según los votos recibidos.</p>
@@ -1210,33 +1210,40 @@ const renderHomeView = (container) => {
     </div>
 
     <!-- Hero Section -->
-    <div class="hero-section">
-      <div class="hero-glow-accent"></div>
-      <p class="hero-title">${t.heroSubtitle}</p>
-      <p class="hero-sub">${t.heroSubtitle2 || ''}</p>
+    <div class="hero-section" style="padding: 60px 0; text-align: center; position: relative;">
+      <div class="hero-glow-accent" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 200vw; height: 300px; background: radial-gradient(circle, rgba(0, 255, 255, 0.1) 0%, transparent 60%); z-index: 0; pointer-events: none;"></div>
+      
+      <i class="ph-fill ph-target" style="font-size: 4rem; color: var(--accent-magenta); margin-bottom: 20px; display: inline-block; filter: drop-shadow(0 0 20px var(--glow-magenta));"></i>
+      
+      <p class="hero-title" style="font-size: 2.8rem; font-family: var(--font-display); font-weight: 900; line-height: 1.1; margin-bottom: 24px; color: var(--text-primary); text-transform: uppercase; letter-spacing: -1px; z-index: 1; position: relative;">
+        ${t.heroSubtitle}
+      </p>
+      
+      <p class="hero-sub" style="font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 40px auto; line-height: 1.5; z-index: 1; position: relative;">
+        ${t.heroSubtitle2}
+      </p>
 
-      <div class="hero-btn-row">
-        <button id="open-rules-btn" class="btn-rules">
-          <i class="ph ph-info"></i> ${t.rulesModalBtn || 'How it works →'}
+      <div class="hero-btn-row" style="display: flex; justify-content: center; z-index: 1; position: relative;">
+        <button id="open-rules-btn" class="btn-rules" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; padding: 12px 24px; color: var(--text-primary); font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px;">
+           ${t.rulesModalBtn || 'How it works →'}
         </button>
       </div>
-
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <span class="hero-stat-val cyan">${contexts.length}</span>
-          <span class="hero-stat-label">${t.heroContexts}</span>
+    </div>
+    
+    <!-- Stats Row -->
+    <div class="hero-stats" style="display: flex; justify-content: center; gap: 40px; margin-bottom: 60px; padding: 30px 0; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05);">
+        <div class="hero-stat" style="text-align: center;">
+          <div class="hero-stat-val cyan" style="font-size: 2rem; font-weight: 900; color: var(--accent-cyan); font-family: var(--font-display);">${contexts.length}</div>
+          <div class="hero-stat-label" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-secondary); margin-top: 4px;">${t.heroContexts}</div>
         </div>
-        <div class="hero-stat-divider"></div>
-        <div class="hero-stat">
-          <span class="hero-stat-val">3,000+</span>
-          <span class="hero-stat-label">${t.heroUsers}</span>
+        <div class="hero-stat" style="text-align: center;">
+          <div class="hero-stat-val" style="font-size: 2rem; font-weight: 900; color: var(--text-primary); font-family: var(--font-display);">3,000+</div>
+          <div class="hero-stat-label" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-secondary); margin-top: 4px;">${t.heroUsers}</div>
         </div>
-        <div class="hero-stat-divider"></div>
-        <div class="hero-stat">
-          <span class="hero-stat-val">4.2k</span>
-          <span class="hero-stat-label">${t.heroVotes}</span>
+        <div class="hero-stat" style="text-align: center;">
+          <div class="hero-stat-val" style="font-size: 2rem; font-weight: 900; color: var(--text-primary); font-family: var(--font-display);">4.2k</div>
+          <div class="hero-stat-label" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-secondary); margin-top: 4px;">${t.heroVotes}</div>
         </div>
-      </div>
     </div>
     
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
