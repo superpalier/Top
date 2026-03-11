@@ -1210,39 +1210,34 @@ const renderHomeView = (container) => {
     </div>
 
     <!-- Hero Section -->
-    <div class="hero-section" style="padding: 60px 0; text-align: center; position: relative;">
-      <div class="hero-glow-accent" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 200vw; height: 300px; background: radial-gradient(circle, rgba(0, 255, 255, 0.1) 0%, transparent 60%); z-index: 0; pointer-events: none;"></div>
+    <div class="hero-container">
+      <div class="hero-glow-accent"></div>
       
-      <i class="ph-fill ph-target" style="font-size: 4rem; color: var(--accent-magenta); margin-bottom: 20px; display: inline-block; filter: drop-shadow(0 0 20px var(--glow-magenta));"></i>
+      <i class="ph-fill ph-target hero-icon"></i>
       
-      <p class="hero-title" style="font-size: 2.8rem; font-family: var(--font-display); font-weight: 900; line-height: 1.1; margin-bottom: 24px; color: var(--text-primary); text-transform: uppercase; letter-spacing: -1px; z-index: 1; position: relative;">
-        ${t.heroSubtitle}
-      </p>
-      
-      <p class="hero-sub" style="font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 40px auto; line-height: 1.5; z-index: 1; position: relative;">
-        ${t.heroSubtitle2}
-      </p>
+      <p class="hero-title">${t.heroSubtitle}</p>
+      <p class="hero-sub">${t.heroSubtitle2}</p>
 
-      <div class="hero-btn-row" style="display: flex; justify-content: center; z-index: 1; position: relative;">
-        <button id="open-rules-btn" class="btn-rules" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; padding: 12px 24px; color: var(--text-primary); font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px;">
+      <div class="hero-btn-wrapper">
+        <button id="open-rules-btn" class="btn-rules-neo">
            ${t.rulesModalBtn || 'How it works →'}
         </button>
       </div>
     </div>
     
     <!-- Stats Row -->
-    <div class="hero-stats" style="display: flex; justify-content: center; gap: 40px; margin-bottom: 60px; padding: 30px 0; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05);">
-        <div class="hero-stat" style="text-align: center;">
-          <div class="hero-stat-val cyan" style="font-size: 2rem; font-weight: 900; color: var(--accent-cyan); font-family: var(--font-display);">${contexts.length}</div>
-          <div class="hero-stat-label" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-secondary); margin-top: 4px;">${t.heroContexts}</div>
+    <div class="stats-container">
+        <div class="stat-box">
+          <div class="stat-val cyan">${contexts.length}</div>
+          <div class="stat-label">${t.heroContexts}</div>
         </div>
-        <div class="hero-stat" style="text-align: center;">
-          <div class="hero-stat-val" style="font-size: 2rem; font-weight: 900; color: var(--text-primary); font-family: var(--font-display);">3,000+</div>
-          <div class="hero-stat-label" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-secondary); margin-top: 4px;">${t.heroUsers}</div>
+        <div class="stat-box">
+          <div class="stat-val">3,000+</div>
+          <div class="stat-label">${t.heroUsers}</div>
         </div>
-        <div class="hero-stat" style="text-align: center;">
-          <div class="hero-stat-val" style="font-size: 2rem; font-weight: 900; color: var(--text-primary); font-family: var(--font-display);">4.2k</div>
-          <div class="hero-stat-label" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-secondary); margin-top: 4px;">${t.heroVotes}</div>
+        <div class="stat-box">
+          <div class="stat-val">4.2k</div>
+          <div class="stat-label">${t.heroVotes}</div>
         </div>
     </div>
     
