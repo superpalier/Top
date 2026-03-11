@@ -1,27 +1,27 @@
 :root {
-  /* ── SUPERNOVA ASCENDANCY PALETTE (VIVID CYBER-ENERGY) ────────────────
-     1. Deep Space Violet #0B0014  → Energetic dark background.
-     2. Electric Cyan     #00F0FF  → Hyper-visible primary actions.
-     3. Plasma Pink       #FF007F  → High emotion / activity.
-     4. Helios Gold       #FFD700  → Exclusively reserved for the Apex #1.
+  /* ── HYPER SUPERNOVA CYBERPUNK PALETTE (MAXIMUM CONTRAST) ────────────────
+     1. Absolute Pitch Black #000000  → The perfect contrast canvas for neon.
+     2. Electric Cyan        #00FFFF  → Hyper-visible primary actions.
+     3. Laser Magenta        #FF00FF  → High emotion / activity.
+     4. Pure Neon Gold       #FFE600  → Exclusively reserved for the Apex #1.
   ──────────────────────────────────── */
-  --bg-dark: #0B0014;
-  --bg-card: rgba(20, 0, 40, 0.45);
-  --border-light: rgba(0, 240, 255, 0.15);
-  --border-glow: rgba(0, 240, 255, 0.3);
+  --bg-dark: #000000;
+  --bg-card: rgba(10, 10, 10, 0.7);
+  --border-light: rgba(0, 255, 255, 0.5);
+  --border-glow: rgba(0, 255, 255, 0.8);
 
   --text-primary: #FFFFFF;
-  --text-secondary: #B088D1;
+  --text-secondary: #00FFFF;
 
-  --accent-gold: #FFD700;
-  --accent-cyan: #00F0FF;
-  --accent-magenta: #FF007F;
-  --accent-violet: #FF5E00;
-  /* Plasma Orange */
+  --accent-gold: #FFE600;
+  --accent-cyan: #00FFFF;
+  --accent-magenta: #FF00FF;
+  --accent-violet: #FF0055;
+  /* Hot Pink/Red */
 
-  --glow-cyan: rgba(0, 240, 255, 0.4);
-  --glow-magenta: rgba(255, 0, 127, 0.4);
-  --glow-gold: rgba(255, 215, 0, 0.5);
+  --glow-cyan: rgba(0, 255, 255, 0.6);
+  --glow-magenta: rgba(255, 0, 255, 0.6);
+  --glow-gold: rgba(255, 230, 0, 0.8);
 
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
   --font-display: 'Outfit', system-ui, sans-serif;
@@ -2094,22 +2094,22 @@ main {
   /* Pure solid neon */
   color: #000;
   /* Maximum contrast against cyan */
-  border: none;
+  border: 2px solid var(--accent-cyan);
   padding: 20px;
   /* Thicker button */
   border-radius: 40px;
   /* Absolute pill */
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.15rem;
+  font-weight: 900;
+  font-size: 1.25rem;
   cursor: pointer;
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow:
-    0 15px 30px rgba(0, 240, 255, 0.2),
-    /* Neon bloom */
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    0 15px 40px rgba(0, 255, 255, 0.6),
+    /* Intense Neon bloom */
+    inset 0 0 20px rgba(255, 255, 255, 0.8);
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
 }
 
 .btn-primary:hover,
@@ -2117,10 +2117,12 @@ main {
   transform: translateY(-6px);
   /* Float higher */
   box-shadow:
-    0 25px 50px rgba(0, 240, 255, 0.4),
+    0 25px 60px rgba(0, 255, 255, 1),
     /* Massive bloom open */
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  background: #33F5FF;
+    0 0 40px rgba(0, 255, 255, 0.8),
+    inset 0 0 20px rgba(255, 255, 255, 1);
+  background: #FFFFFF;
+  color: #000;
   /* Brighter neon */
 }
 
