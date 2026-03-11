@@ -51,6 +51,21 @@ body {
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  cursor: none;
+  /* Hide default cursor for Ascension */
+}
+
+/* Ensure interactive elements hide default cursor */
+a,
+button,
+input,
+.user-node,
+.context-card,
+.sidebar-item {
+  cursor: none !important;
 }
 
 /* --- Elite Dashboard Background --- */
@@ -263,6 +278,173 @@ header {
 .lang-option:hover {
   background: rgba(255, 255, 255, 0.05);
   color: var(--accent-cyan);
+}
+
+/* Keyframes for breathing glow */
+@keyframes breathing-glow {
+  0% {
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(0, 255, 136, 0.7);
+  }
+
+  100% {
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+  }
+}
+
+/* Keyframes for spring reveal */
+@keyframes spring-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Apply spring-reveal to cards and nodes with cascading delays */
+.card,
+.user-node,
+.context-card,
+.sidebar-item {
+  animation: spring-reveal 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  opacity: 0;
+  /* Start hidden */
+}
+
+/* Cascading delays for cards */
+.card:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.card:nth-child(2) {
+  animation-delay: 0.10s;
+}
+
+.card:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.card:nth-child(4) {
+  animation-delay: 0.20s;
+}
+
+.card:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+.card:nth-child(6) {
+  animation-delay: 0.30s;
+}
+
+.card:nth-child(7) {
+  animation-delay: 0.35s;
+}
+
+.card:nth-child(8) {
+  animation-delay: 0.40s;
+}
+
+.card:nth-child(9) {
+  animation-delay: 0.45s;
+}
+
+.card:nth-child(10) {
+  animation-delay: 0.50s;
+}
+
+/* Cascading delays for user nodes */
+.user-node:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.user-node:nth-child(2) {
+  animation-delay: 0.10s;
+}
+
+.user-node:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.user-node:nth-child(4) {
+  animation-delay: 0.20s;
+}
+
+.user-node:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+/* Cascading delays for context cards */
+.context-card:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.context-card:nth-child(2) {
+  animation-delay: 0.10s;
+}
+
+.context-card:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+/* Cascading delays for sidebar items */
+.sidebar-item:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.sidebar-item:nth-child(2) {
+  animation-delay: 0.10s;
+}
+
+.sidebar-item:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.sidebar-item:nth-child(4) {
+  animation-delay: 0.20s;
+}
+
+.sidebar-item:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+.btn-primary,
+.btn-vote {
+  width: 100%;
+  background: var(--accent-cyan);
+  /* Bio-Green */
+  color: #000;
+  border: none;
+  padding: 20px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+  /* Massive Bio-Green bloom */
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s, filter 0.3s;
+  animation: breathing-glow 3s infinite alternate;
+}
+
+.btn-primary:active,
+.btn-vote:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}
+
+.btn-vote.disabled {
+  background: rgba(255, 255, 255, 0.05);
+  /* Stealth gray for empty void */
+  color: var(--text-secondary);
+  box-shadow: none;
+  cursor: not-allowed;
+  animation: none;
 }
 
 .btn-outline-gold {
@@ -2303,4 +2485,140 @@ main {
   .pyramid-controls {
     flex-wrap: wrap;
   }
+}
+
+/* ========================================
+   ASCENSION MAGNETIC CURSOR
+   ======================================== */
+#magnetic-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background: var(--accent-cyan);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, opacity 0.3s;
+}
+
+#magnetic-cursor-ring {
+  position: fixed;
+  top: -20px;
+  left: -20px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(0, 255, 136, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: width 0.3s, height 0.3s, background 0.3s, border-color 0.3s;
+}
+
+#magnetic-cursor-ring.magnetic-active {
+  width: 60px;
+  height: 60px;
+  top: -30px;
+  left: -30px;
+  background: rgba(0, 255, 136, 0.1);
+  border-color: var(--accent-cyan);
+}
+
+#magnetic-cursor-dot.magnetic-hide {
+  opacity: 0;
+}
+
+/* ========================================
+   ASCENSION MOTION KEYFRAMES
+   ======================================== */
+
+@keyframes spring-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes breathing-glow {
+  0% {
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+  }
+
+  100% {
+    box-shadow: 0 0 40px rgba(0, 255, 136, 0.8);
+  }
+}
+
+.context-card,
+.user-node,
+.history-item {
+  animation: spring-reveal 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+/* Cascade Staggering for lists */
+.context-grid .context-card:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.context-grid .context-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.context-grid .context-card:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.context-grid .context-card:nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+.context-grid .context-card:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+.context-grid .context-card:nth-child(6) {
+  animation-delay: 0.3s;
+}
+
+.context-grid .context-card:nth-child(7) {
+  animation-delay: 0.35s;
+}
+
+.context-grid .context-card:nth-child(8) {
+  animation-delay: 0.4s;
+}
+
+.context-grid .context-card:nth-child(9) {
+  animation-delay: 0.45s;
+}
+
+.context-grid .context-card:nth-child(10) {
+  animation-delay: 0.5s;
+}
+
+.pyramid-tier .user-node:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.pyramid-tier .user-node:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.pyramid-tier .user-node:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.pyramid-tier .user-node:nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+.pyramid-tier .user-node:nth-child(5) {
+  animation-delay: 0.25s;
 }

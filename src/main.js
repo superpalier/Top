@@ -1,6 +1,10 @@
-import './style.css'
-
 import './style.css';
+import { initAscensionCanvas } from './canvas-bg.js';
+import { initMagneticCursor } from './magnetic-cursor.js';
+
+// Boot Project Ascension Systems
+initAscensionCanvas();
+initMagneticCursor();
 
 const apiHost = import.meta.env.PROD ? '' : 'http://localhost:8080';
 
@@ -1066,6 +1070,18 @@ const render = () => {
       newVp.scrollLeft = lastScrollX;
       newVp.scrollTop = lastScrollY;
     }
+  }
+
+  // Project Ascension: Holographic 3D Physics
+  if (window.VanillaTilt) {
+    VanillaTilt.init(document.querySelectorAll('.context-card, .user-node, .history-item'), {
+      max: 12,
+      speed: 600,
+      glare: true,
+      "max-glare": 0.15,
+      scale: 1.02,
+      perspective: 1000
+    });
   }
 };
 
