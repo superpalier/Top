@@ -65,7 +65,7 @@ input,
   cursor: pointer;
 }
 
-/* --- Elite Dashboard Background --- */
+/* --- Hyper Vivid Dashboard Background --- */
 .ambient-background {
   position: fixed;
   top: 0;
@@ -75,17 +75,39 @@ input,
   z-index: -2;
   overflow: hidden;
   background-color: var(--bg-dark);
-  /* Biological deep space gradient */
-  background-image:
-    radial-gradient(circle at 10% 20%, rgba(0, 255, 136, 0.03), transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(255, 69, 0, 0.03), transparent 40%),
-    linear-gradient(to bottom, #0B101E 0%, #050811 100%),
-    url('/clean_bg.png');
-  /* Maintain texture */
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  /* Intense animated neon plasma */
+  background: linear-gradient(45deg, #000000, #0a0022, #001122, #110011);
+  background-size: 400% 400%;
+  animation: plasmaGlow 8s ease infinite;
   pointer-events: none;
+}
+
+@keyframes plasmaGlow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.ambient-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(circle at 15% 50%, rgba(0, 255, 255, 0.4), transparent 50%),
+    radial-gradient(circle at 85% 30%, rgba(255, 0, 255, 0.3), transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(255, 230, 0, 0.2), transparent 50%);
+  animation: slowBreathe 6s ease-in-out infinite alternate;
 }
 
 /* Subtle breathing animation for elite "alive" feeling */
