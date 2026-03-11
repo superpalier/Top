@@ -1814,15 +1814,26 @@ const renderRegisterView = (container) => {
     }
   });
 
-  // Forgot Password
+  // Forgot Password — real API call
   document.getElementById('forgot-pwd-link').addEventListener('click', async (e) => {
     e.preventDefault();
     const email = document.getElementById('login-email').value.trim();
     if (!email) return showToast(t.resetReq, 'ph-warning');
     try {
-      // await sendPasswordResetEmail(auth, email); // Firebase legacy, but let's keep logic
-      showToast(t.resetSent, 'ph-envelope');
-    } catch (err) { showToast(t.resetError, 'ph-warning'); }
+      const resp = await fetch(`${apiHost}/api/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      if (resp.ok) {
+        showToast(t.resetSent, 'ph-envelope');
+      } else {
+        const data = await resp.json();
+        showToast(data.error || t.resetError, 'ph-warning');
+      }
+    } catch (err) {
+      showToast(t.resetError, 'ph-warning');
+    }
   });
 
   // Sign Up Logic
@@ -2462,5 +2473,52 @@ const attachGlobalEvents = () => {
   }
 };
 
-// Init
-render();
+// Init — check for password reset token in URL
+const urlParams = new URLSearchParams(window.location.search);
+const resetToken = urlParams.get('reset_token');
+
+if (resetToken) {
+  // Show inline reset password overlay before full app render
+  document.getElementById('app').innerHTML = `
+    <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; background:var(--bg-dark);">
+      <div style="max-width:400px; width:100%; background:var(--bg-card); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:36px; text-align:center;">
+        <div style="font-size:2.5rem; margin-bottom:12px;">🔐</div>
+        <h2 style="color:var(--accent-gold); margin-bottom:8px; font-family:var(--font-display);">Nueva Contraseña</h2>
+        <p style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:24px;">Ingresa tu nueva contraseña. El enlace expira en 1 hora.</p>
+        <input type="password" id="new-pwd-input" class="form-input" placeholder="Nueva contraseña (min 6 chars)" style="margin-bottom:12px;">
+        <input type="password" id="new-pwd-confirm" class="form-input" placeholder="Confirmar contraseña" style="margin-bottom:20px;">
+        <button id="do-reset-btn" class="btn-primary" style="width:100%;">Restablecer Contraseña</button>
+        <div id="reset-msg" style="margin-top:16px; font-size:0.85rem; color:var(--text-secondary);"></div>
+      </div>
+    </div>
+  `;
+  document.getElementById('do-reset-btn').addEventListener('click', async () => {
+    const newPwd = document.getElementById('new-pwd-input').value;
+    const confirm = document.getElementById('new-pwd-confirm').value;
+    const msgEl = document.getElementById('reset-msg');
+    if (newPwd.length < 6) { msgEl.textContent = 'La contraseña debe tener al menos 6 caracteres.'; return; }
+    if (newPwd !== confirm) { msgEl.textContent = 'Las contraseñas no coinciden.'; return; }
+    document.getElementById('do-reset-btn').textContent = 'Guardando...';
+    try {
+      const resp = await fetch(`${apiHost}/api/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: resetToken, newPassword: newPwd })
+      });
+      const data = await resp.json();
+      if (resp.ok) {
+        msgEl.style.color = '#00f0ff';
+        msgEl.textContent = '✓ Contraseña actualizada. Redirigiendo...';
+        setTimeout(() => { window.location.href = '/'; }, 2000);
+      } else {
+        msgEl.textContent = data.error || 'Error al restablecer la contraseña.';
+        document.getElementById('do-reset-btn').textContent = 'Restablecer Contraseña';
+      }
+    } catch (err) {
+      msgEl.textContent = 'Error de red. Intenta de nuevo.';
+      document.getElementById('do-reset-btn').textContent = 'Restablecer Contraseña';
+    }
+  });
+} else {
+  render();
+}

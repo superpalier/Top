@@ -5,8 +5,11 @@ const { Pool } = pg;
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { Resend } from 'resend';
 
 dotenv.config();
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -200,6 +203,88 @@ app.get('/api/contexts', async (req, res) => {
     } catch (err) {
         console.warn('DB Error:', err.message);
         res.status(500).json({ error: err.message });
+    }
+});
+
+// Forgot Password Route
+app.post('/api/forgot-password', async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) return res.status(400).json({ error: 'Email is required.' });
+
+        if (!process.env.DATABASE_URL) {
+            return res.status(200).json({ message: 'If the email exists, a reset link was sent.' });
+        }
+
+        const client = await pool.connect();
+        const result = await client.query('SELECT * FROM users WHERE email = $1', [email]);
+        client.release();
+
+        if (result.rows.length === 0) {
+            // Don't reveal whether the email exists for security
+            return res.status(200).json({ message: 'If the email exists, a reset link was sent.' });
+        }
+
+        const user = result.rows[0];
+
+        // Generate a short-lived reset token (valid 1 hour)
+        const resetToken = jwt.sign({ uid: user.uid, email: user.email, purpose: 'reset' }, SECRET_KEY, { expiresIn: '1h' });
+        const resetLink = `https://votenaut.vercel.app/?reset_token=${resetToken}`;
+
+        if (!process.env.RESEND_API_KEY) {
+            console.warn('[Votenaut] RESEND_API_KEY not set. Cannot send email.');
+            return res.status(500).json({ error: 'Email service not configured.' });
+        }
+
+        await resend.emails.send({
+            from: 'Votenaut <noreply@votenaut.com>',
+            to: [email],
+            subject: 'Recupera tu contraseña - Votenaut',
+            html: `
+                <div style="font-family:sans-serif; max-width:480px; margin:0 auto; padding:32px; background:#0a0e1a; border-radius:16px; color:#e0e0e0;">
+                    <h1 style="color:#d4af37; font-size:1.6rem; margin-bottom:8px;">🔐 Recuperar Contraseña</h1>
+                    <p style="color:#a0a0b0;">Hola <strong>${user.name}</strong>,</p>
+                    <p style="color:#a0a0b0;">Recibimos una solicitud para restablecer tu contraseña en Votenaut.</p>
+                    <p style="color:#a0a0b0;">Haz clic en el botón de abajo. El enlace expira en <strong>1 hora</strong>.</p>
+                    <a href="${resetLink}" style="display:inline-block; margin:24px 0; padding:14px 28px; background:#d4af37; color:#0a0e1a; font-weight:700; border-radius:10px; text-decoration:none;">Restablecer Contraseña</a>
+                    <p style="color:#606070; font-size:0.8rem;">Si no solicitaste esto, ignora este correo. Tu cuenta está segura.</p>
+                    <hr style="border-color:#ffffff11; margin:24px 0;">
+                    <p style="color:#404050; font-size:0.75rem;">© 2026 Votenaut · <a href="https://votenaut.vercel.app" style="color:#d4af37;">votenaut.vercel.app</a></p>
+                </div>
+            `
+        });
+
+        res.status(200).json({ message: 'If the email exists, a reset link was sent.' });
+    } catch (err) {
+        console.error('[Votenaut] Forgot password error:', err);
+        res.status(500).json({ error: 'Error sending email.' });
+    }
+});
+
+// Reset Password Route (consume token)
+app.post('/api/reset-password', async (req, res) => {
+    try {
+        const { token, newPassword } = req.body;
+        if (!token || !newPassword) return res.status(400).json({ error: 'Token and new password required.' });
+
+        let decoded;
+        try {
+            decoded = jwt.verify(token, SECRET_KEY);
+        } catch (e) {
+            return res.status(400).json({ error: 'Token inválido o expirado.' });
+        }
+
+        if (decoded.purpose !== 'reset') return res.status(400).json({ error: 'Token inválido.' });
+
+        const hashed = await bcrypt.hash(newPassword, 10);
+        const client = await pool.connect();
+        await client.query('UPDATE users SET password = $1 WHERE uid = $2', [hashed, decoded.uid]);
+        client.release();
+
+        res.status(200).json({ message: 'Contraseña actualizada correctamente.' });
+    } catch (err) {
+        console.error('[Votenaut] Reset password error:', err);
+        res.status(500).json({ error: 'Error al restablecer la contraseña.' });
     }
 });
 
