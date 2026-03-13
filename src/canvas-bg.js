@@ -34,7 +34,7 @@ export function initAscensionCanvas() {
             this.baseX = this.x;
             this.baseY = this.y;
             this.density = (Math.random() * 20) + 1;
-            this.color = Math.random() > 0.8 ? '#FF4500' : '#00FF88'; // 80% Bio-Green, 20% Solar Orange
+            this.color = Math.random() > 0.8 ? '#ffcf00' : (Math.random() > 0.5 ? '#e02aff' : '#00f0ff'); // Solar Gold, Ethereal Magenta, Luminous Cyan
             this.vX = (Math.random() - 0.5) * 0.5;
             this.vY = (Math.random() - 0.5) * 0.5;
         }
@@ -93,7 +93,7 @@ export function initAscensionCanvas() {
 
                 if (distance < 100) {
                     opacityValue = 1 - (distance / 100);
-                    ctx.strokeStyle = `rgba(0, 255, 136, ${opacityValue * 0.15})`; // Faint interconnectivity
+                    ctx.strokeStyle = `rgba(0, 240, 255, ${opacityValue * 0.15})`; // Luminous Cyan interconnectivity
                     ctx.lineWidth = 1;
                     ctx.beginPath();
                     ctx.moveTo(particles[a].x, particles[a].y);
