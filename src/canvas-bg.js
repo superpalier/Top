@@ -34,7 +34,7 @@ export function initAscensionCanvas() {
             this.baseX = this.x;
             this.baseY = this.y;
             this.density = (Math.random() * 20) + 1;
-            this.color = Math.random() > 0.8 ? '#ffcf00' : (Math.random() > 0.5 ? '#e02aff' : '#00f0ff'); // Solar Gold, Ethereal Magenta, Luminous Cyan
+            this.color = Math.random() > 0.8 ? '#ffaa00' : (Math.random() > 0.5 ? '#ff00ea' : '#0070ff'); // Sun Flare, Hyper Pink, Electric Blue
             this.vX = (Math.random() - 0.5) * 0.5;
             this.vY = (Math.random() - 0.5) * 0.5;
         }
@@ -93,7 +93,7 @@ export function initAscensionCanvas() {
 
                 if (distance < 100) {
                     opacityValue = 1 - (distance / 100);
-                    ctx.strokeStyle = `rgba(0, 240, 255, ${opacityValue * 0.15})`; // Luminous Cyan interconnectivity
+                    ctx.strokeStyle = `rgba(0, 112, 255, ${opacityValue * 0.25})`; // Electric Blue interconnectivity
                     ctx.lineWidth = 1;
                     ctx.beginPath();
                     ctx.moveTo(particles[a].x, particles[a].y);
