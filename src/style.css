@@ -1,26 +1,27 @@
 :root {
-  /* ── VIBRANT WHITE ENERGY PALETTE ─────────────────────────────
-     1. Pure Energy White   #ffffff  → Bright, clean canvas.
-     2. Electric Blue       #0070ff  → High-contrast primary.
-     3. Hyper Pink          #ff00ea  → Energetic accent.
-     4. Sun Flare Gold      #ffaa00  → Apex #1 radiance.
+  /* ── PRECISION ENERGY PALETTE (EDITORIAL & HIGH-ENERGY) ──────────
+     1. Stark White         #ffffff  → Pure clinical base.
+     2. Electric Cyan       #00c3ff  → Sophisticated high-energy cyan.
+     3. Hyper Magenta       #ff00ea  → Vibrant accent.
+     4. Sun Flare Gold      #ff9900  → High-contrast gold for the Apex.
+     5. Deep Space Gray     #0a0f1d  → Editorial-grade dark for text.
   ────────────────────────────────────────────────────────────── */
   --bg-dark: #ffffff;
-  --bg-card: rgba(255, 255, 255, 0.85);
-  --border-light: rgba(0, 0, 0, 0.08);
-  --border-glow: rgba(0, 112, 255, 0.3);
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --border-light: rgba(10, 15, 29, 0.08); /* Darker thin lines */
+  --border-glow: rgba(0, 195, 255, 0.3);
 
-  --text-primary: #101520;
-  --text-secondary: #506075;
+  --text-primary: #0a0f1d;
+  --text-secondary: #586a82;
 
-  --accent-gold: #ffaa00;
-  --accent-cyan: #0070ff;
+  --accent-gold: #ff9900;
+  --accent-cyan: #00c3ff;
   --accent-magenta: #ff00ea;
-  --accent-violet: #8800ff;
+  --accent-violet: #7700ff;
 
-  --glow-cyan: rgba(0, 112, 255, 0.2);
+  --glow-cyan: rgba(0, 195, 255, 0.2);
   --glow-magenta: rgba(255, 0, 234, 0.2);
-  --glow-gold: rgba(255, 170, 0, 0.3);
+  --glow-gold: rgba(255, 153, 0, 0.3);
 
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
   --font-display: 'Outfit', system-ui, sans-serif;
@@ -109,21 +110,32 @@ input,
   animation: slowBreathe 10s ease-in-out infinite alternate;
 }
 
+.ambient-background::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle, rgba(0, 195, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 /* Subtle breathing animation for elite "alive" feeling */
 @keyframes slowBreathe {
   0% {
-    transform: scale(1);
-    filter: brightness(0.9);
+    transform: scale(1) translateY(0);
+    filter: brightness(0.98);
   }
 
   50% {
-    transform: scale(1.02);
+    transform: scale(1.02) translateY(2px);
     filter: brightness(1.02);
   }
 
   100% {
-    transform: scale(1);
-    filter: brightness(0.9);
+    transform: scale(1) translateY(0);
+    filter: brightness(0.98);
   }
 }
 
@@ -137,7 +149,7 @@ input,
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(circle at center, transparent 40%, rgba(255, 255, 255, 0.5) 100%);
+  background: radial-gradient(circle at center, transparent 20%, rgba(255, 255, 255, 0.6) 100%);
 }
 
 /* Globally Hide Scrollbars for App-like feel */
@@ -726,15 +738,15 @@ header {
   padding: 32px 16px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   z-index: 1000;
   position: fixed;
   top: 72px;
   /* Header height */
   left: -280px;
   height: calc(100vh - 72px);
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 20px 0 50px rgba(0, 0, 0, 0.8), inset -1px 0 0 rgba(255, 255, 255, 0.05);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 10px 0 40px rgba(0, 0, 0, 0.05); /* Lighter shadow */
 }
 
 .lateral-sidebar.active {
@@ -997,38 +1009,30 @@ main {
 }
 
 .context-card {
-  background: rgba(15, 18, 28, 0.5);
-  /* Deep translucent */
-  backdrop-filter: blur(32px) saturate(200%);
-  -webkit-backdrop-filter: blur(32px) saturate(200%);
-  border: none;
-  border-radius: 24px;
-  padding: 40px 32px;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-light);
+  border-radius: 12px; /* Precision corner */
+  padding: 32px 24px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  gap: 24px;
+  gap: 20px;
   cursor: pointer;
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  /* Slower, spring-like */
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
-  box-shadow:
-    0 30px 60px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
 .context-card:hover,
 .context-card:active {
-  transform: translateY(-12px) scale(1.02);
-  /* Higher float */
-  box-shadow:
-    0 50px 100px rgba(0, 0, 0, 0.9),
-    0 0 60px rgba(0, 240, 255, 0.15),
-    inset 0 1px 0 rgba(0, 240, 255, 0.3);
-  /* Neon rim light */
-  background: rgba(18, 22, 35, 0.7);
+  transform: translateY(-4px);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 10px 30px rgba(0, 195, 255, 0.1);
+  background: #ffffff;
 }
 
 .context-card::after {
@@ -1408,27 +1412,22 @@ main {
 
 /* Users in Pyramid */
 .user-node {
-  width: var(--node-size, 60px);
-  height: var(--node-size, 60px);
+  width: var(--node-size, 64px);
+  height: var(--node-size, 64px);
   flex-shrink: 0;
-  background-color: var(--bg-dark);
+  background-color: #f1f3f5;
   background-size: cover;
   background-position: center;
-  border-radius: 16px;
-  /* slightly rounder */
+  border-radius: 12px;
+  /* Squarish for precision */
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   cursor: pointer;
-  box-shadow:
-    0 15px 30px rgba(0, 0, 0, 0.95),
-    /* Abyss shadow */
-    inset 0 0 20px rgba(0, 0, 0, 0.8);
-  /* Inner dark vignette */
-  border: none;
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  /* Spingy feel */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-light);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
 }
 
@@ -1452,14 +1451,14 @@ main {
 }
 
 .tier-0 .node-rank {
-  background: #000;
+  background: var(--text-primary);
   color: var(--accent-gold);
   -webkit-text-fill-color: var(--accent-gold);
   font-size: 1.1rem;
   font-weight: 900;
   padding: 8px 14px;
   letter-spacing: 0.5px;
-  text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+  text-shadow: 0 0 10px rgba(255, 153, 0, 0.4);
 }
 
 @keyframes apexPulse {
@@ -1498,26 +1497,28 @@ main {
 
 /* Removed old ring */
 
-/* Apex (Top 1) hero treatment — pulsing gold ring */
+/* Apex (Top 1) hero treatment — pulsing radiant ring */
 .tier-0 .user-node {
   border: 4px solid var(--accent-gold) !important;
-  border-radius: 18px !important;
-  transform: scale(1.15);
+  border-radius: 20px !important;
+  transform: scale(1.2);
   animation: apexPulse 3s ease-in-out infinite;
   overflow: visible;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95);
-  /* z-index removed to avoid 3D stacking context collisions */
+  box-shadow: 
+    0 15px 40px rgba(255, 153, 0, 0.25),
+    0 25px 60px rgba(0, 0, 0, 0.1);
+  z-index: 100; /* Ensure it stays above everything */
 }
 
 .tier-0 .user-node::before {
   content: '👑';
   position: absolute;
-  top: -22px;
+  top: -30px; /* Elevated further */
   left: 50%;
   transform: translateX(-50%);
-  font-size: 1.3rem;
-  z-index: 10;
-  filter: drop-shadow(0 0 6px rgba(201, 168, 76, 0.9));
+  font-size: 1.6rem; /* Slightly larger */
+  z-index: 101;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
   pointer-events: none;
   line-height: 1;
   animation: crownFloat 2.8s ease-in-out infinite;
@@ -2113,39 +2114,25 @@ main {
 .btn-vote {
   width: 100%;
   background: var(--accent-cyan);
-  /* Pure solid neon */
-  color: #000;
-  /* Maximum contrast against cyan */
-  border: 2px solid var(--accent-cyan);
-  padding: 20px;
-  /* Thicker button */
-  border-radius: 40px;
-  /* Absolute pill */
+  color: #fff;
+  border: none;
+  padding: 18px;
+  border-radius: 12px;
   font-family: var(--font-display);
-  font-weight: 900;
-  font-size: 1.25rem;
+  font-weight: 700;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow:
-    0 15px 40px rgba(0, 255, 255, 0.6),
-    /* Intense Neon bloom */
-    inset 0 0 20px rgba(255, 255, 255, 0.8);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 30px rgba(0, 195, 255, 0.3);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
 }
 
 .btn-primary:hover,
 .btn-vote:hover {
-  transform: translateY(-6px);
-  /* Float higher */
-  box-shadow:
-    0 25px 60px rgba(0, 255, 255, 1),
-    /* Massive bloom open */
-    0 0 40px rgba(0, 255, 255, 0.8),
-    inset 0 0 20px rgba(255, 255, 255, 1);
-  background: #FFFFFF;
-  color: #000;
-  /* Brighter neon */
+  transform: translateY(-3px);
+  background: #00b0e6;
+  box-shadow: 0 12px 40px rgba(0, 195, 255, 0.4);
 }
 
 .btn-primary:disabled,
