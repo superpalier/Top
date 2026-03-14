@@ -1260,26 +1260,43 @@ const renderHomeView = (container) => {
             ${p.titles[currentLang] || p.titles['en'] || p.id}
           </h3>
           <div class="context-grid">
-            <div class="context-card main-parent-card" data-id="${p.id}" ${p.imageUrl ? `style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(10,0,15,0.95)), url('${p.imageUrl}'); background-size: cover; background-position: center;"` : ''}>
-               <i class="${p.icon} context-icon" style="opacity: 0.5;"></i>
-               <div class="context-title" style="font-size: 1.5rem;">${p.titles[currentLang] || p.titles['en'] || p.id}</div>
-               <div class="context-stats"><i class="ph ph-users"></i> ${p.participants} ${t.users}</div>
-            </div>
+            ${(() => {
+    const top1 = generatePyramidData(p.id).data[0]?.[0];
+    return `
+              <div class="context-card main-parent-card" data-id="${p.id}" ${p.imageUrl ? `style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(10,0,15,0.95)), url('${p.imageUrl}'); background-size: cover; background-position: center;"` : ''}>
+                 ${top1 ? `
+                   <div class="context-top1-preview">
+                     <img src="${top1.img}" alt="${top1.name}">
+                     <span class="context-top1-crown">👑</span>
+                   </div>
+                 ` : ''}
+                 <i class="${p.icon} context-icon" style="opacity: 0.5;"></i>
+                 <div class="context-title" style="font-size: 1.5rem;">${p.titles[currentLang] || p.titles['en'] || p.id}</div>
+                 <div class="context-stats"><i class="ph ph-users"></i> ${p.participants} ${t.users}</div>
+              </div>
+            `;
+  })()}
             ${children.map(ctx => {
-        let bgStyle = '';
-        if (ctx.imageUrl) {
-          bgStyle = `style="background-image: linear-gradient(to top, rgba(5,5,7,0.95) 0%, rgba(10,10,15,0.7) 100%), url('${ctx.imageUrl}'); background-size: cover; background-position: center; min-height: 120px;"`;
-        } else {
-          bgStyle = `style="min-height: 120px;"`;
-        }
-        return `
+    const top1 = generatePyramidData(ctx.id).data[0]?.[0];
+    let bgStyle = '';
+    if (ctx.imageUrl) {
+      bgStyle = `style="background-image: linear-gradient(to top, rgba(5,5,7,0.95) 0%, rgba(10,10,15,0.7) 100%), url('${ctx.imageUrl}'); background-size: cover; background-position: center; min-height: 120px;"`;
+    } else {
+      bgStyle = `style="min-height: 120px;"`;
+    }
+    return `
               <div class="context-card child-card" data-id="${ctx.id}" ${bgStyle}>
+                ${top1 ? `
+                  <div class="context-top1-preview" style="width:32px; height:32px; right:8px; top:8px; border-width:1px;">
+                    <img src="${top1.img}" alt="${top1.name}">
+                  </div>
+                ` : ''}
                 <i class="${ctx.icon} context-icon" style="font-size: 1.5rem;"></i>
                 <div class="context-title" style="font-size: 1.1rem;">${ctx.titles[currentLang] || ctx.titles['en'] || ctx.id}</div>
                 <div class="context-stats"><i class="ph ph-users"></i> ${ctx.participants} ${t.users}</div>
               </div>
             `;
-      }).join('')}
+  }).join('')}
           </div>
         </div>
       `;
@@ -1391,7 +1408,11 @@ const renderFamilyView = (container, parentCtx) => {
       : '';
     return `
             <div class="context-card child-card family-child-card" data-id="${child.id}" style="${bgStyle}position:relative;overflow:hidden;">
-              ${childTop1 ? `<img src="${childTop1.img}" alt="${childTop1.name}" class="family-child-top1-img">` : ''}
+              ${childTop1 ? `
+                <div class="context-top1-preview" style="width:36px; height:36px; right:10px; top:10px; border-width:1px;">
+                  <img src="${childTop1.img}" alt="${childTop1.name}">
+                </div>
+              ` : ''}
               <i class="${child.icon} context-icon" style="font-size:1.4rem;"></i>
               <div class="context-title" style="font-size:1rem;">${child.titles[currentLang] || child.titles['en'] || child.id}</div>
               <div class="context-stats"><i class="ph ph-users"></i> ${child.participants} ${t.users}</div>
