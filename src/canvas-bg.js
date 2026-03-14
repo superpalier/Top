@@ -34,7 +34,10 @@ export function initAscensionCanvas() {
             this.baseX = this.x;
             this.baseY = this.y;
             this.density = (Math.random() * 20) + 1;
-            this.color = Math.random() > 0.8 ? '#ffaa00' : (Math.random() > 0.5 ? '#ff00ea' : '#0070ff'); // Sun Flare, Hyper Pink, Electric Blue
+            // Colors synchronized with CSS :root
+            const hues = [210, 310, 42]; // Blue, Magenta, Gold
+            const selectedHue = hues[Math.floor(Math.random() * hues.length)];
+            this.color = `hsla(${selectedHue}, 100%, 55%, 0.8)`;
             this.vX = (Math.random() - 0.5) * 0.3; // Slower for editorial feel
             this.vY = (Math.random() - 0.5) * 0.3;
         }
@@ -93,7 +96,7 @@ export function initAscensionCanvas() {
 
                 if (distance < 100) {
                     opacityValue = 1 - (distance / 100);
-                    ctx.strokeStyle = `rgba(0, 195, 255, ${opacityValue * 0.12})`; // Thinner, more precise lines
+                    ctx.strokeStyle = `hsla(210, 100%, 50%, ${opacityValue * 0.1})`; // Precise HSL lines
                     ctx.lineWidth = 1;
                     ctx.beginPath();
                     ctx.moveTo(particles[a].x, particles[a].y);
