@@ -1411,6 +1411,7 @@ const renderFamilyView = (container, parentCtx) => {
               ${childTop1 ? `
                 <div class="context-top1-preview" style="width:36px; height:36px; right:10px; top:10px; border-width:1px;">
                   <img src="${childTop1.img}" alt="${childTop1.name}">
+                  <span class="context-top1-crown" style="font-size:0.7rem; top:-4px; right:-4px;">👑</span>
                 </div>
               ` : ''}
               <i class="${child.icon} context-icon" style="font-size:1.4rem;"></i>

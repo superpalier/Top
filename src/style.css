@@ -1502,16 +1502,19 @@ main {
 
 /* Apex (Top 1) hero treatment — pulsing radiant ring */
 .tier-0 .user-node {
-  border: 4px solid var(--accent-gold) !important;
+  border: 5px solid var(--accent-gold) !important;
   border-radius: 20px !important;
-  transform: scale(1.2);
+  transform: scale(1.15) translateZ(0); /* translateZ(0) to fix blur without full 3D matrix */
   animation: apexPulse 3s ease-in-out infinite;
-  opacity: 1 !important; /* Fix: Overriding spring-reveal opacity:0 */
+  opacity: 1 !important;
+  background-color: #0c0c0e !important; /* Dark background to pop on white theme */
   overflow: visible;
   box-shadow: 
-    0 15px 40px rgba(255, 153, 0, 0.25),
-    0 25px 60px rgba(0, 0, 0, 0.1);
-  z-index: 100; /* Ensure it stays above everything */
+    0 20px 50px rgba(212, 175, 55, 0.4),
+    0 30px 70px rgba(0, 0, 0, 0.2);
+  z-index: 100 !important;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: subpixel-antialiased;
 }
 
 .tier-0 .user-node::before {
@@ -1549,8 +1552,9 @@ main {
   height: 100%;
   object-fit: cover;
   opacity: 1;
-  /* Fixed: Removed opacity dimming to restore original photo lighting */
   transition: transform 0.4s ease;
+  image-rendering: -webkit-optimize-contrast; /* Sharpen images */
+  backface-visibility: hidden;
 }
 
 .user-node:hover img {
@@ -2620,3 +2624,7 @@ main {
 .pyramid-tier .user-node:nth-child(5) {
   animation-delay: 0.25s;
 }
+/* Context Card Top 1 Preview */
+.context-top1-preview { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: 12px; border: 2px solid var(--accent-gold); overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 5; background: #0c0c0e; }
+.context-top1-preview img { width: 100%; height: 100%; object-fit: cover; image-rendering: -webkit-optimize-contrast; }
+.context-top1-crown { position: absolute; top: -6px; right: -6px; font-size: 1rem; z-index: 10; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
