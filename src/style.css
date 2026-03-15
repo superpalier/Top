@@ -1556,7 +1556,7 @@ main {
 /* Apex (Top 1) hero treatment — pulsing radiant ring */
 .tier-0 .user-node {
   border: 5px solid var(--accent-gold) !important;
-  border-radius: 22px !important;
+  border-radius: 50% !important; /* Perfect circle for Apex */
   transform: scale(1.15) translateZ(0); 
   animation: apexPulse 3s ease-in-out infinite;
   opacity: 1 !important;
@@ -1590,7 +1590,7 @@ main {
   left: 0;
   right: 0;
   /* Reduced gradient height so it only shadows the text, letting the face be fully lit */
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 35%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 40%); /* Subtle face-lighting gradient */
   padding: 16px 4px 4px 4px;
   display: flex;
   flex-direction: column;
