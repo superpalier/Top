@@ -235,9 +235,11 @@ header {
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 1px solid var(--border-light);
-  background: hsla(0, 0%, 100%, 0.85);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  border-bottom: 2px solid hsla(var(--h-emerald), 80%, 45%, 0.2); /* Vibrant brand rim */
+  background: hsla(0, 0%, 100%, 0.9);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.02),
+    0 0 40px hsla(var(--h-indigo), 40%, 15%, 0.03);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -1483,11 +1485,13 @@ main {
   background-color: white;
   background-size: cover;
   background-position: center;
+  border-radius: 50%; /* Ensuring circular avatars */
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  border: 1px solid var(--border-light);
+  box-shadow: 0 10px 25px rgba(var(--h-indigo), 15%, 40%, 0.15); /* Vibrant indigo shadow */
+  border: 2px solid white;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: hidden;
+  overflow: visible; /* Prevent clipping of Rank badge if needed */
+  filter: saturate(1.1) contrast(1.05); /* Make profile photos pop */
 }
 
 .node-rank {
