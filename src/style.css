@@ -235,11 +235,11 @@ header {
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 2px solid hsla(var(--h-emerald), 80%, 45%, 0.2); /* Vibrant brand rim */
-  background: hsla(0, 0%, 100%, 0.9);
+  border-bottom: 3px solid hsla(var(--h-emerald), 80%, 45%, 0.6); /* More present emerald rim */
+  background: hsla(0, 0%, 100%, 0.95);
   box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.02),
-    0 0 40px hsla(var(--h-indigo), 40%, 15%, 0.03);
+    0 10px 30px rgba(0, 0, 0, 0.04),
+    0 0 60px hsla(var(--h-indigo), 40%, 15%, 0.05);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -1101,19 +1101,9 @@ main {
   background: var(--accent-indigo);
   color: white;
   transform: scale(1.1) rotate(-5deg);
-  box-shadow: 0 8px 20px rgba(var(--h-indigo), 70%, 50%, 0.3);
-}
-
-.context-card:hover .context-icon {
-  color: var(--accent-cyan);
-  background: rgba(0, 240, 255, 0.08);
-  /* Glowing active well */
-  box-shadow:
-    0 0 30px rgba(0, 240, 255, 0.4),
-    inset 0 2px 0 rgba(0, 240, 255, 0.5);
-  /* Neon liquid top reflection */
-  transform: scale(1.1) rotate(-5deg);
-  /* Playful micro-interaction */
+  box-shadow: 
+    0 10px 30px hsla(var(--h-indigo), 70%, 50%, 0.4),
+    inset 0 2px 0 rgba(255, 255, 255, 0.4);
 }
 
 .context-title {
@@ -1355,9 +1345,10 @@ main {
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(212, 175, 55, 0.6);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   z-index: 2;
+  filter: brightness(1.1) contrast(1.05); /* Brighten category images */
 }
 
 /* 3D-Like Pyramid Container */
@@ -1485,13 +1476,20 @@ main {
   background-color: white;
   background-size: cover;
   background-position: center;
-  border-radius: 50%; /* Ensuring circular avatars */
+  border-radius: 9999px !important; /* Force strict circularity */
   cursor: pointer;
-  box-shadow: 0 10px 25px rgba(var(--h-indigo), 15%, 40%, 0.15); /* Vibrant indigo shadow */
-  border: 2px solid white;
+  box-shadow: 0 10px 25px rgba(var(--h-indigo), 25%, 40%, 0.2); /* More vibrant shadow */
+  border: 3px solid white; /* Thicker white ring */
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: visible; /* Prevent clipping of Rank badge if needed */
-  filter: saturate(1.1) contrast(1.05); /* Make profile photos pop */
+  overflow: visible;
+  filter: saturate(1.2) contrast(1.1); /* Even more pop */
+}
+
+.user-node img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .node-rank {

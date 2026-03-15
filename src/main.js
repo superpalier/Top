@@ -1485,7 +1485,7 @@ const renderPyramidView = (container, contextInfo) => {
            data-id="${user.id}" 
            data-votes="${user.votes} ${t.votesCount}" 
            data-voted-text="&#x2713; ${t.voted}"
-           style="width:${tIndex === 0 ? 180 : nodeSize}px; height:${nodeSize}px;">
+           style="width:${tIndex === 0 ? 180 : nodeSize}px; height:${tIndex === 0 ? 180 : nodeSize}px;">
         <div class="node-rank">#${user.rank}</div>
         <img src="${user.img}" alt="${user.name}">
         <div class="node-overlay">
