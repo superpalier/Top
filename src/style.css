@@ -15,10 +15,10 @@
   --h-emerald: 140;  /* Energetic Accent */
   --h-gold: 42;      /* Achievement Color */
   
-  --bg-dark: #fbfbfc; /* Soft Pearl Surface */
-  --bg-card: hsla(0, 0%, 100%, 0.9);
-  --border-light: hsla(var(--h-indigo), 20%, 30%, 0.08);
-  --border-glow: hsla(var(--h-emerald), 80%, 45%, 0.3);
+  --bg-dark: hsl(215, 20%, 94%); /* Deeper Indigo-Grey Tint for depth */
+  --bg-card: hsla(0, 0%, 100%, 1); /* Pure white cards for contrast */
+  --border-light: hsla(var(--h-indigo), 20%, 30%, 0.12);
+  --border-glow: hsla(var(--h-emerald), 80%, 45%, 0.4);
 
   --text-primary: hsl(var(--h-indigo), 40%, 15%);
   --text-secondary: hsl(var(--h-indigo), 15%, 45%);
@@ -93,11 +93,10 @@ input,
   height: 100vh;
   z-index: -2;
   overflow: hidden;
-  background-color: var(--bg-dark);
-  /* Intense animated neon plasma */
-  background: linear-gradient(45deg, #ffffff, #f0f7ff, #fff0f5, #f5f0ff);
+  /* Muted sophisticated gradient for the stage background */
+  background: linear-gradient(135deg, #f0f4f8, #e8edf3, #f5f7fa, #edf1f7);
   background-size: 400% 400%;
-  animation: plasmaGlow 15s ease infinite;
+  animation: plasmaGlow 20s ease infinite;
   pointer-events: none;
 }
 
@@ -196,19 +195,36 @@ input,
 
 #app {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   min-height: 100vh;
   position: relative;
   display: flex;
   flex-direction: column;
+  background: hsl(215, 20%, 98%); /* Base stage tint */
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 1024px) {
+  #app {
+    width: calc(100% - var(--space-6));
+    margin: var(--space-4) auto;
+    min-height: calc(100vh - var(--space-8));
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+    box-shadow: 
+      0 40px 100px rgba(0, 0, 0, 0.08),
+      0 10px 40px rgba(0, 0, 0, 0.03),
+      inset 0 0 0 1px hsla(0, 0%, 100%, 0.5); /* Inner light rim */
+    overflow: hidden;
+  }
 }
 
 /* Floating Header Pill */
 header {
-  margin: var(--space-3) var(--space-4) 0 var(--space-4);
-  border-radius: var(--radius-lg);
-  padding: var(--space-2) var(--space-4);
+  margin: 0; /* Adjusted for #app Stage */
+  border-radius: 0;
+  padding: var(--space-3) var(--space-5);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -217,13 +233,11 @@ header {
   backdrop-filter: blur(40px) saturate(160%);
   -webkit-backdrop-filter: blur(40px) saturate(160%);
   position: sticky;
-  top: var(--space-3);
+  top: 0;
   z-index: 100;
-  border: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
   background: hsla(0, 0%, 100%, 0.85);
-  box-shadow:
-    0 var(--space-2) var(--space-7) hsla(0, 0%, 0%, 0.05),
-    inset 0 1px 0 hsla(0, 0%, 100%, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -743,6 +757,7 @@ header {
   flex: 1;
   width: 100%;
   overflow: hidden;
+  background: transparent; /* Inherits slightly tinted #app background */
 }
 
 /* Lateral Sidebar */
@@ -1025,9 +1040,9 @@ main {
 }
 
 .context-card {
-  background: var(--bg-card);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
+  background: white; /* Strong pop against tinted app-container */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
   padding: 24px;
@@ -1041,8 +1056,8 @@ main {
   position: relative;
   overflow: hidden;
   box-shadow: 
-    0 4px 20px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    0 4px 15px rgba(0, 0, 0, 0.03),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
 .context-card:hover {
@@ -1351,13 +1366,13 @@ main {
   cursor: grab;
   position: relative;
   z-index: 3;
-  margin-top: 0; /* Removed disjointed negative margin */
-  background: rgba(255, 255, 255, 0.3);
+  margin-top: 0;
+  background: hsl(215, 20%, 98%); /* Subtle depth for the viewport content area */
   border-radius: var(--radius-lg);
   display: block;
   text-align: center;
   border: 1px solid var(--border-light);
-  box-shadow: inset 0 0 40px rgba(0,0,0,0.02);
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.03);
 }
 
 .pyramid-viewport:active {
