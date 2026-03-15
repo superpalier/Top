@@ -180,7 +180,7 @@ async function seedContexts() {
                 "00ffcc,ff00cc,ffcc00", "5500ff,ff0055,00ff55", "ff5500,0055ff,55ff00"
             ];
             const colorStops = neonPalettes[Math.abs(hash) % neonPalettes.length];
-            const contextImgUrl = `https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(seedName)}&backgroundColor=050507&shape1Color=${colorStops}&shape2Color=${colorStops}&shape3Color=${colorStops}`;
+            const contextImgUrl = `https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(seedName)}&backgroundColor=f0f4f8&shape1Color=${colorStops}&shape2Color=${colorStops}&shape3Color=${colorStops}`;
 
             const createdAt = new Date().toISOString();
 
