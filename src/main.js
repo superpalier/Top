@@ -1511,9 +1511,9 @@ const renderPyramidView = (container, contextInfo) => {
       <div class="pyramid-header context-header">
         <button class="back-btn" id="back-btn" data-target="${contextInfo.parentId ? `family-${contextInfo.parentId}` : 'home'}"><i class="ph ph-arrow-left"></i></button>
         <div class="pyramid-context-title">
-          <i class="${contextInfo.icon}" style="color:var(--accent-cyan);margin-right:6px;"></i>
+          <i class="${contextInfo.icon}" style="color:var(--accent-emerald); font-size: 1.6rem;"></i>
           ${contextInfo.titles[currentLang] || contextInfo.titles['en'] || contextInfo.id}
-          <span style="font-size: 0.75rem; color: var(--text-secondary); opacity: 0.6; margin-left: 8px; font-weight: 400;">(${totalUsersInContext} ${t.users})</span>
+          <span style="font-size: 0.85rem; color: var(--text-secondary); opacity: 0.5; margin-left: auto; font-weight: 500; background: var(--border-light); padding: 4px 10px; border-radius: 20px;">${totalUsersInContext} ${t.users}</span>
         </div>
         <div class="pyramid-controls">
           ${pyramidOffsetIndex > 0 ? `<button class="pyr-nav-btn" id="prev-apex-btn"><i class="ph ph-caret-up"></i><span class="btn-label">${t.prev55}</span></button>` : ''}

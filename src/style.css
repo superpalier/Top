@@ -10,27 +10,26 @@
   --space-8: 80px;
   --space-9: 128px;
 
-  /* ── HARMONIOUS HSL COLOR SYSTEM ───────────────────────────── */
-  --h-primary: 210; /* Blue Hue */
-  --h-accent: 310;  /* Magenta Hue */
-  --h-gold: 42;     /* Gold Hue */
+  /* ── SOPHISTICATED PROFESSIONAL HSL PALETTE ────────────────── */
+  --h-indigo: 215;   /* Professional Base */
+  --h-emerald: 140;  /* Energetic Accent */
+  --h-gold: 42;      /* Achievement Color */
   
-  --bg-dark: hsl(0, 0%, 100%);
-  --bg-card: hsla(0, 0%, 100%, 0.8);
-  --border-light: hsla(220, 20%, 10%, 0.08);
-  --border-glow: hsla(var(--h-primary), 100%, 50%, 0.3);
+  --bg-dark: #fbfbfc; /* Soft Pearl Surface */
+  --bg-card: hsla(0, 0%, 100%, 0.9);
+  --border-light: hsla(var(--h-indigo), 20%, 30%, 0.08);
+  --border-glow: hsla(var(--h-emerald), 80%, 45%, 0.3);
 
-  --text-primary: hsl(220, 40%, 8%);
-  --text-secondary: hsl(220, 15%, 40%);
+  --text-primary: hsl(var(--h-indigo), 40%, 15%);
+  --text-secondary: hsl(var(--h-indigo), 15%, 45%);
 
-  --accent-gold: hsl(var(--h-gold), 100%, 50%);
-  --accent-cyan: hsl(var(--h-primary), 100%, 50%);
-  --accent-magenta: hsl(var(--h-accent), 100%, 50%);
-  --accent-violet: hsl(270, 100%, 60%);
+  --accent-gold: hsl(var(--h-gold), 100%, 45%);
+  --accent-emerald: hsl(var(--h-emerald), 80%, 45%);
+  --accent-indigo: hsl(var(--h-indigo), 70%, 50%);
+  --accent-magenta: hsl(310, 70%, 55%);
 
-  --glow-cyan: hsla(var(--h-primary), 100%, 50%, 0.2);
-  --glow-magenta: hsla(var(--h-accent), 100%, 50%, 0.2);
-  --glow-gold: hsla(var(--h-gold), 100%, 50%, 0.3);
+  --glow-emerald: hsla(var(--h-emerald), 80%, 45%, 0.2);
+  --glow-gold: hsla(var(--h-gold), 100%, 45%, 0.3);
 
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
   --font-display: 'Outfit', system-ui, sans-serif;
@@ -79,7 +78,9 @@ button,
 input,
 .user-node,
 .context-card,
-.sidebar-item {
+.sidebar-item,
+.back-btn,
+.pyr-nav-btn {
   cursor: pointer;
 }
 
@@ -472,19 +473,27 @@ header {
 .btn-primary,
 .btn-vote {
   width: 100%;
-  background: var(--accent-cyan);
-  /* Bio-Green */
-  color: #000;
+  background: var(--accent-indigo);
+  color: white;
   border: none;
-  padding: 20px;
-  font-size: 1.1rem;
-  font-weight: 800;
+  padding: 18px 24px;
+  font-size: 1.05rem;
+  font-weight: 700;
   border-radius: 12px;
   cursor: pointer;
-  box-shadow: 0 0 30px rgba(0, 240, 255, 0.4);
-  /* Massive Luminous Cyan bloom */
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s, filter 0.3s;
-  animation: breathing-glow 3s infinite alternate;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 15px hsla(var(--h-indigo), 50%, 30%, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-primary:hover,
+.btn-vote:hover {
+  transform: translateY(-2px);
+  background: hsl(var(--h-indigo), 70%, 45%);
+  box-shadow: 0 10px 25px hsla(var(--h-indigo), 50%, 30%, 0.25);
 }
 
 .btn-primary:active,
@@ -559,25 +568,29 @@ header {
 .hero-title {
   font-size: var(--fs-hero);
   font-family: var(--font-display);
-  font-weight: 900;
-  line-height: 1.1;
+  font-weight: 800;
+  line-height: 1.05;
   margin-bottom: var(--space-2);
   color: var(--text-primary);
-  text-transform: uppercase;
-  letter-spacing: -1.5px;
+  letter-spacing: -2px;
   z-index: 1;
   position: relative;
-  max-width: 900px;
+  max-width: 1000px;
+  background: linear-gradient(135deg, var(--text-primary), var(--accent-indigo));
+  background-clip: text; /* Standard property for compatibility */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .hero-sub {
-  font-size: var(--fs-md);
+  font-size: 1.15rem;
   color: var(--text-secondary);
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto var(--space-5) auto;
-  line-height: 1.6;
+  line-height: 1.7;
   z-index: 1;
   position: relative;
+  font-weight: 450;
 }
 
 .btn-rules-neo {
@@ -735,22 +748,21 @@ header {
 /* Lateral Sidebar */
 .lateral-sidebar {
   width: 280px;
-  background: rgba(7, 10, 17, 0.65);
-  backdrop-filter: blur(32px) saturate(200%);
-  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   border-right: 1px solid var(--border-light);
   padding: 32px 16px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
   z-index: 1000;
   position: fixed;
   top: 72px;
-  /* Header height */
   left: -280px;
   height: calc(100vh - 72px);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 10px 0 40px rgba(0, 0, 0, 0.05); /* Lighter shadow */
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.02);
 }
 
 .lateral-sidebar.active {
@@ -1014,29 +1026,32 @@ main {
 
 .context-card {
   background: var(--bg-card);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
-  padding: var(--space-4) var(--space-3);
+  padding: 24px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  gap: var(--space-3);
+  gap: 12px;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 var(--space-1) var(--space-4) hsla(0, 0%, 0%, 0.03);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-.context-card:hover,
-.context-card:active {
-  transform: translateY(-4px);
-  border-color: var(--accent-cyan);
-  box-shadow: 0 10px 30px rgba(0, 195, 255, 0.1);
-  background: #ffffff;
+.context-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  border-color: var(--accent-indigo);
+  box-shadow: 
+    0 20px 40px rgba(var(--h-indigo), 20%, 30%, 0.08),
+    0 4px 10px rgba(0, 0, 0, 0.02);
+  background: white;
 }
 
 .context-card::after {
@@ -1113,42 +1128,56 @@ main {
 .pyramid-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 6px;
-  min-height: 44px;
+  gap: 16px;
+  margin-top: 12px;
+  margin-bottom: 24px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  min-height: 56px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
 }
 
 .back-btn {
-  background: transparent;
+  background: white;
   border: 1px solid var(--border-light);
   color: var(--text-primary);
-  width: 36px;
-  height: 36px;
-  min-width: 36px;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .back-btn:hover {
-  background: var(--bg-card);
-  border-color: var(--text-primary);
+  background: var(--accent-indigo);
+  color: white;
+  border-color: var(--accent-indigo);
+  transform: translateX(-2px);
 }
 
 .pyramid-context-title {
   font-family: var(--font-display);
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: -0.3px;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   flex: 1;
   min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .pyramid-controls {
@@ -1200,14 +1229,25 @@ main {
 .family-apex-card {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 24px;
-  margin: 16px 0 8px;
-  background: linear-gradient(135deg, rgba(20, 20, 25, 0.9), rgba(10, 10, 12, 0.95));
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  border-radius: 16px;
-  box-shadow: 0 0 30px rgba(212, 175, 55, 0.15), 0 10px 30px rgba(0, 0, 0, 0.6);
-  flex-wrap: wrap;
+  gap: 24px;
+  padding: 32px;
+  margin: 24px 0;
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.family-apex-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--accent-gold);
 }
 
 .family-apex-photo-wrap {
@@ -1301,21 +1341,23 @@ main {
 }
 
 /* 3D-Like Pyramid Container */
+/* Professional Pyramid Viewport */
 .pyramid-viewport {
   width: 100%;
-  height: 80vh;
-  min-height: 400px;
-  max-height: 900px;
+  height: 75vh;
+  min-height: 500px;
+  max-height: 1000px;
   overflow: auto;
   cursor: grab;
   position: relative;
   z-index: 3;
-  margin-top: -20px;
-  background: transparent;
-  border-radius: 12px;
-  /* Top 1 Clipping Fix: Reverted to display block. Flex column on an overflow container inherently clips the top boundary if content overflows. */
+  margin-top: 0; /* Removed disjointed negative margin */
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-lg);
   display: block;
   text-align: center;
+  border: 1px solid var(--border-light);
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.02);
 }
 
 .pyramid-viewport:active {
@@ -1379,15 +1421,16 @@ main {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 8px 14px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--accent-cyan);
+  gap: 8px;
+  background: hsla(var(--h-indigo), 10%, 20%, 0.04);
+  padding: 10px 18px;
+  border-radius: var(--radius-round);
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--accent-emerald);
   align-self: center;
   border: 1px solid var(--border-light);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
 }
 
 .voting-status.voted {
@@ -1419,7 +1462,7 @@ main {
   width: var(--node-size, 64px);
   height: var(--node-size, 64px);
   flex-shrink: 0;
-  background-color: hsl(220, 10%, 95%);
+  background-color: white;
   background-size: cover;
   background-position: center;
   border-radius: var(--radius-md);
@@ -1428,7 +1471,7 @@ main {
   justify-content: center;
   position: relative;
   cursor: pointer;
-  box-shadow: 0 var(--space-1) var(--space-3) hsla(0, 0%, 0%, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   border: 1px solid var(--border-light);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
@@ -1438,30 +1481,25 @@ main {
   position: absolute;
   top: 0;
   left: 0;
-  background: var(--bg-dark);
-  /* Pure abyss */
-  color: var(--text-primary);
+  background: var(--text-primary);
+  color: white;
   font-family: var(--font-display);
-  font-weight: 900;
-  font-size: 0.85rem;
-  padding: 6px 10px;
-  border-bottom-right-radius: 12px;
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-bottom-right-radius: 10px;
   z-index: 5;
-  border: none;
-  /* No border */
-  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.9);
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
   pointer-events: none;
 }
 
 .tier-0 .node-rank {
-  background: var(--text-primary);
-  color: var(--accent-gold);
-  -webkit-text-fill-color: var(--accent-gold);
-  font-size: 1.1rem;
+  background: var(--accent-gold);
+  color: white;
+  font-size: 1rem;
   font-weight: 900;
-  padding: 8px 14px;
+  padding: 6px 12px;
   letter-spacing: 0.5px;
-  text-shadow: 0 0 10px rgba(255, 153, 0, 0.4);
 }
 
 @keyframes apexPulse {
@@ -1503,15 +1541,15 @@ main {
 /* Apex (Top 1) hero treatment — pulsing radiant ring */
 .tier-0 .user-node {
   border: 5px solid var(--accent-gold) !important;
-  border-radius: 20px !important;
-  transform: scale(1.15) translateZ(0); /* translateZ(0) to fix blur without full 3D matrix */
+  border-radius: 22px !important;
+  transform: scale(1.15) translateZ(0); 
   animation: apexPulse 3s ease-in-out infinite;
   opacity: 1 !important;
-  background-color: #0c0c0e !important; /* Dark background to pop on white theme */
+  background-color: var(--text-primary) !important; 
   overflow: visible;
   box-shadow: 
-    0 20px 50px rgba(212, 175, 55, 0.4),
-    0 30px 70px rgba(0, 0, 0, 0.2);
+    0 20px 40px rgba(var(--h-gold), 30%, 0.2),
+    0 30px 60px rgba(0, 0, 0, 0.15);
   z-index: 100 !important;
   backface-visibility: hidden;
   -webkit-font-smoothing: subpixel-antialiased;
