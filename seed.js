@@ -181,10 +181,9 @@ async function seedContexts() {
             ];
             const colorStops = neonPalettes[Math.abs(hash) % neonPalettes.length];
             const keywords = seedName.split(' ');
-            const mainKeyword = keywords[keywords.length - 1]; // Use last word for specificity
-            const contextImgUrl = `https://images.unsplash.com/photo-${Math.abs(hash) % 10000}?auto=format&fit=crop&q=80&w=800&q=80&sig=${Math.abs(hash)}`;
-            // Fallback to a keyword-based placeholder since we don't have direct unsplash photo IDs
-            const conceptualImgUrl = `https://loremflickr.com/800/600/${encodeURIComponent(mainKeyword)}?lock=${Math.abs(hash)}`;
+            const mainKeyword = keywords.length > 1 ? keywords.slice(-2).join(',') : keywords[0]; 
+            // Using a more reliable "all" tag and ensuring it's not just "abstract"
+            const conceptualImgUrl = `https://loremflickr.com/800/600/${encodeURIComponent(mainKeyword)},vibrant,concept/all?lock=${Math.abs(hash)}`;
 
             const createdAt = new Date().toISOString();
 
