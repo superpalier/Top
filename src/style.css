@@ -48,7 +48,7 @@
   --radius-lg: 24px;
   --radius-round: 100px;
 
-  --tier-gap: 40px; /* Increased vertical spacing between tiers */
+  --tier-gap: 60px; /* Aggressive vertical spacing for better structure */
 }
 
 * {

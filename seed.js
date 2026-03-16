@@ -136,7 +136,18 @@ const defaultContexts = [
     { id: 'street_photography', titles: { en: 'Street Photography', es: 'Fotografía Callejera', fr: 'Photo de Rue', de: 'Straßenfotografie' }, icon: 'ph-camera', parentId: 'photography' },
     { id: 'ancient_rome', titles: { en: 'Ancient Rome', es: 'Roma Antigua', fr: 'Rome Antique', de: 'Altes Rom' }, icon: 'ph-columns', parentId: 'history' },
     { id: 'existentialism', titles: { en: 'Existentialism', es: 'Existencialismo', fr: 'Existentialisme', de: 'Existenzialismus' }, icon: 'ph-mask-sad', parentId: 'philosophy' },
-    { id: 'renewable_energy', titles: { en: 'Renewable Energy', es: 'Energía Renovable', fr: 'Énergie Renouvelable', de: 'Erneuerbare Energien' }, icon: 'ph-sun', parentId: 'nature' }
+    { id: 'renewable_energy', titles: { en: 'Renewable Energy', es: 'Energía Renovable', fr: 'Énergie Renouvelable', de: 'Erneuerbare Energien' }, icon: 'ph-sun', parentId: 'nature' },
+    
+    // --- NEW DIVERSE CATEGORIES ---
+    { id: 'supercars', titles: { en: 'Supercars', es: 'Superdeportivos', fr: 'Supercars', de: 'Supersportwagen' }, icon: 'ph-car', parentId: 'f1' },
+    { id: 'cyberpunk', titles: { en: 'Cyberpunk Aesthetic', es: 'Estética Cyberpunk', fr: 'Cyberpunk', de: 'Cyberpunk' }, icon: 'ph-lightning', parentId: 'digital_art' },
+    { id: 'coffee', titles: { en: 'Coffee Culture', es: 'Cultura del Café', fr: 'Café', de: 'Kaffeekultur' }, icon: 'ph-coffee', parentId: 'lifestyle' },
+    { id: 'origami', titles: { en: 'Origami', es: 'Origami', fr: 'Origami', de: 'Origami' }, icon: 'ph-bird', parentId: 'art' },
+    { id: 'ocean_depths', titles: { en: 'Deep Ocean', es: 'Océano Profundo', fr: 'Abysses', de: 'Tiefsee' }, icon: 'ph-fish', parentId: 'oceans' },
+    { id: 'vintage_tech', titles: { en: 'Vintage Tech', es: 'Tecnología Vintage', fr: 'Vieux Tech', de: 'Vintage Tech' }, icon: 'ph-monitor', parentId: 'tech' },
+    { id: 'mediterranean', titles: { en: 'Mediterranean Cuisine', es: 'Cocina Mediterránea', fr: 'Méditerranéenne', de: 'Mediterran' }, icon: 'ph-bowl-food', parentId: 'gastronomy' },
+    { id: 'urban_exploration', titles: { en: 'Urban Exploration', es: 'Exploración Urbana', fr: 'Urbex', de: 'Urban Exploration' }, icon: 'ph-flashlight', parentId: 'lifestyle' },
+    { id: 'jazz_vocals', titles: { en: 'Jazz Vocals', es: 'Jazz Vocal', fr: 'Jazz Vocal', de: 'Jazzgesang' }, icon: 'ph-microphone-stage', parentId: 'jazz' }
 ];
 
 async function seedContexts() {
@@ -182,8 +193,8 @@ async function seedContexts() {
             const colorStops = neonPalettes[Math.abs(hash) % neonPalettes.length];
             const keywords = seedName.split(' ');
             const mainKeyword = keywords.length > 1 ? keywords.slice(-2).join(',') : keywords[0]; 
-            // Using a more reliable "all" tag and ensuring it's not just "abstract"
-            const conceptualImgUrl = `https://loremflickr.com/800/600/${encodeURIComponent(mainKeyword)},vibrant,concept/all?lock=${Math.abs(hash)}`;
+            // Aggressive colorful keywords for high-impact visuals
+            const conceptualImgUrl = `https://loremflickr.com/800/600/${encodeURIComponent(mainKeyword)},vibrant,highquality,professional/all?lock=${Math.abs(hash)}`;
 
             const createdAt = new Date().toISOString();
 
