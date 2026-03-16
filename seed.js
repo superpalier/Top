@@ -170,7 +170,7 @@ async function seedContexts() {
     try {
         console.log("Ensuring 'base_contexts' table and all columns exist...");
         await client.query(`
-            CREATE TABLE IF NOT EXISTS base_contexts (
+            CREATE TABLE IF NOT EXISTS contexts (
                 id VARCHAR(255) PRIMARY KEY,
                 titles JSONB NOT NULL,
                 icon VARCHAR(255),
@@ -180,12 +180,12 @@ async function seedContexts() {
                 created_at TIMESTAMP
             );
             -- Explicitly ensure columns exist for older tables
-            ALTER TABLE base_contexts ADD COLUMN IF NOT EXISTS parent_id VARCHAR(255);
-            ALTER TABLE base_contexts ADD COLUMN IF NOT EXISTS image_url VARCHAR(255);
-            ALTER TABLE base_contexts ADD COLUMN IF NOT EXISTS created_at TIMESTAMP;
+            ALTER TABLE contexts ADD COLUMN IF NOT EXISTS parent_id VARCHAR(255);
+            ALTER TABLE contexts ADD COLUMN IF NOT EXISTS image_url VARCHAR(255);
+            ALTER TABLE contexts ADD COLUMN IF NOT EXISTS created_at TIMESTAMP;
             
             -- Clean up old numeric placeholders if they exist
-            DELETE FROM base_contexts WHERE id ~ '^ctx_[0-9]+$';
+            DELETE FROM contexts WHERE id ~ '^ctx_[0-9]+$';
         `);
 
         console.log("Seeding hierarchical contexts to Supabase...");
@@ -221,7 +221,7 @@ async function seedContexts() {
             const createdAt = new Date().toISOString();
 
             await client.query(
-                `INSERT INTO base_contexts (id, titles, icon, participants, image_url, parent_id, created_at)
+                `INSERT INTO contexts (id, titles, icon, participants, image_url, parent_id, created_at)
                  VALUES ($1, $2, $3, $4, $5, $6, $7)
                  ON CONFLICT (id) DO UPDATE SET titles = EXCLUDED.titles, icon = EXCLUDED.icon, image_url = EXCLUDED.image_url, parent_id = EXCLUDED.parent_id`,
                 [contextId, titles, icon, participants, conceptualImgUrl, ctx.parentId, createdAt]

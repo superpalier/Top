@@ -1,6 +1,24 @@
 import './style.css';
 import { initAscensionCanvas } from './canvas-bg.js';
 
+const FLAGSHIP_IMAGES = {
+  'entertainment': '/assets/categories/entertainment.png',
+  'tech': '/assets/categories/tech.png',
+  'science': '/assets/categories/science.png',
+  'sports': '/assets/categories/sports.png',
+  'lifestyle': '/assets/categories/lifestyle.png',
+  'business': '/assets/categories/business.png',
+  'art': '/assets/categories/art.png',
+  'knowledge': '/assets/categories/knowledge.png',
+  'society': '/assets/categories/society.png',
+  'nature': '/assets/categories/nature.png'
+};
+
+const getEffectiveImageUrl = (ctx) => {
+  if (FLAGSHIP_IMAGES[ctx.id]) return FLAGSHIP_IMAGES[ctx.id];
+  return ctx.imageUrl || ctx.image_url || '';
+};
+
 // Boot Project Ascension Systems
 initAscensionCanvas();
 
@@ -1261,9 +1279,10 @@ const renderHomeView = (container) => {
           </h3>
           <div class="context-grid">
             ${(() => {
-    const top1 = generatePyramidData(p.id).data[0]?.[0];
-    return `
-              <div class="context-card main-parent-card" data-id="${p.id}" ${p.imageUrl ? `style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(10,0,15,0.95)), url('${p.imageUrl}'); background-size: cover; background-position: center;"` : ''}>
+      const top1 = generatePyramidData(p.id).data[0]?.[0];
+      const pImg = getEffectiveImageUrl(p);
+      return `
+              <div class="context-card main-parent-card" data-id="${p.id}" ${pImg ? `style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(10,0,15,0.95)), url('${pImg}'); background-size: cover; background-position: center;"` : ''}>
                  ${top1 ? `
                    <div class="context-top1-preview">
                      <img src="${top1.img}" alt="${top1.name}">
@@ -1277,13 +1296,14 @@ const renderHomeView = (container) => {
             `;
   })()}
             ${children.map(ctx => {
-    const top1 = generatePyramidData(ctx.id).data[0]?.[0];
-    let bgStyle = '';
-    if (ctx.imageUrl) {
-      bgStyle = `style="background-image: linear-gradient(to top, rgba(5,5,7,0.95) 0%, rgba(10,10,15,0.7) 100%), url('${ctx.imageUrl}'); background-size: cover; background-position: center; min-height: 120px;"`;
-    } else {
-      bgStyle = `style="min-height: 120px;"`;
-    }
+      const top1 = generatePyramidData(ctx.id).data[0]?.[0];
+      const ctxImg = getEffectiveImageUrl(ctx);
+      let bgStyle = '';
+      if (ctxImg) {
+        bgStyle = `style="background-image: linear-gradient(to top, rgba(5,5,7,0.95) 0%, rgba(10,10,15,0.7) 100%), url('${ctxImg}'); background-size: cover; background-position: center; min-height: 120px;"`;
+      } else {
+        bgStyle = `style="min-height: 120px;"`;
+      }
     return `
               <div class="context-card child-card" data-id="${ctx.id}" ${bgStyle}>
                 ${top1 ? `
@@ -1403,8 +1423,9 @@ const renderFamilyView = (container, parentCtx) => {
       <div class="context-grid">
         ${children.map(child => {
     const childTop1 = generatePyramidData(child.id).data[0]?.[0];
-    const bgStyle = child.imageUrl
-      ? `background-image:linear-gradient(to top,rgba(5,5,7,0.95),rgba(10,10,15,0.6)),url('${child.imageUrl}');background-size:cover;background-position:center;`
+    const childImg = getEffectiveImageUrl(child);
+    const bgStyle = childImg
+      ? `background-image:linear-gradient(to top,rgba(5,5,7,0.95),rgba(10,10,15,0.6)),url('${childImg}');background-size:cover;background-position:center;`
       : '';
     return `
             <div class="context-card child-card family-child-card" data-id="${child.id}" style="${bgStyle}position:relative;overflow:hidden;">
