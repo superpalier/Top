@@ -150,6 +150,19 @@ const defaultContexts = [
     { id: 'jazz_vocals', titles: { en: 'Jazz Vocals', es: 'Jazz Vocal', fr: 'Jazz Vocal', de: 'Jazzgesang' }, icon: 'ph-microphone-stage', parentId: 'jazz' }
 ];
 
+const FLAGSHIP_IMAGES = {
+    'entertainment': '/assets/categories/entertainment.png',
+    'tech': '/assets/categories/tech.png',
+    'science': '/assets/categories/science.png',
+    'sports': '/assets/categories/sports.png',
+    'lifestyle': '/assets/categories/lifestyle.png',
+    'business': '/assets/categories/business.png',
+    'art': '/assets/categories/art.png',
+    'knowledge': '/assets/categories/knowledge.png',
+    'society': '/assets/categories/society.png',
+    'nature': '/assets/categories/nature.png'
+};
+
 async function seedContexts() {
     console.log("Connecting to Supabase PostgreSQL...");
     const client = await pool.connect();
@@ -193,8 +206,17 @@ async function seedContexts() {
             const colorStops = neonPalettes[Math.abs(hash) % neonPalettes.length];
             const keywords = seedName.split(' ');
             const mainKeyword = keywords.length > 1 ? keywords.slice(-2).join(',') : keywords[0]; 
-            // Aggressive colorful keywords for high-impact visuals
-            const conceptualImgUrl = `https://loremflickr.com/800/600/${encodeURIComponent(mainKeyword)},vibrant,highquality,professional/all?lock=${Math.abs(hash)}`;
+            
+            // Priority 1: Flagship hardcoded images 
+            // Priority 2: High impact keywords for subcategories
+            let conceptualImgUrl = FLAGSHIP_IMAGES[contextId] || 
+                `https://loremflickr.com/800/600/${encodeURIComponent(mainKeyword)},vibrant,photography,concept/all?lock=${Math.abs(hash)}`;
+            
+            // Clean up paths for deployment
+            if (conceptualImgUrl.startsWith('/')) {
+                // In a production environment, you'd use the full URL or relative path
+                // For Vercel/Public folder, /assets/... works if served correctly.
+            }
 
             const createdAt = new Date().toISOString();
 
