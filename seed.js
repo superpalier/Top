@@ -180,7 +180,11 @@ async function seedContexts() {
                 "00ffcc,ff00cc,ffcc00", "5500ff,ff0055,00ff55", "ff5500,0055ff,55ff00"
             ];
             const colorStops = neonPalettes[Math.abs(hash) % neonPalettes.length];
-            const contextImgUrl = `https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(seedName)}&backgroundColor=f0f4f8&shape1Color=${colorStops}&shape2Color=${colorStops}&shape3Color=${colorStops}`;
+            const keywords = seedName.split(' ');
+            const mainKeyword = keywords[keywords.length - 1]; // Use last word for specificity
+            const contextImgUrl = `https://images.unsplash.com/photo-${Math.abs(hash) % 10000}?auto=format&fit=crop&q=80&w=800&q=80&sig=${Math.abs(hash)}`;
+            // Fallback to a keyword-based placeholder since we don't have direct unsplash photo IDs
+            const conceptualImgUrl = `https://loremflickr.com/800/600/${encodeURIComponent(mainKeyword)}?lock=${Math.abs(hash)}`;
 
             const createdAt = new Date().toISOString();
 
@@ -188,7 +192,7 @@ async function seedContexts() {
                 `INSERT INTO base_contexts (id, titles, icon, participants, image_url, parent_id, created_at)
                  VALUES ($1, $2, $3, $4, $5, $6, $7)
                  ON CONFLICT (id) DO UPDATE SET titles = EXCLUDED.titles, icon = EXCLUDED.icon, image_url = EXCLUDED.image_url, parent_id = EXCLUDED.parent_id`,
-                [contextId, titles, icon, participants, contextImgUrl, ctx.parentId, createdAt]
+                [contextId, titles, icon, participants, conceptualImgUrl, ctx.parentId, createdAt]
             );
 
             console.log(`Successfully wrote ${contextId} to Supabase.`);
