@@ -10,26 +10,27 @@
   --space-8: 80px;
   --space-9: 128px;
 
-  /* ── SOPHISTICATED PROFESSIONAL HSL PALETTE ────────────────── */
-  --h-indigo: 215;   /* Professional Base */
-  --h-emerald: 140;  /* Energetic Accent */
+  /* ── VIBRANT DARK HSL PALETTE ────────────────── */
+  --h-indigo: 225;   /* Deeper Base */
+  --h-emerald: 155;  /* More Cyan-Emerald Accent */
   --h-gold: 42;      /* Achievement Color */
   
-  --bg-dark: hsl(215, 20%, 94%); /* Deeper Indigo-Grey Tint for depth */
-  --bg-card: hsla(0, 0%, 100%, 1); /* Pure white cards for contrast */
-  --border-light: hsla(var(--h-indigo), 20%, 30%, 0.12);
-  --border-glow: hsla(var(--h-emerald), 80%, 45%, 0.4);
+  --bg-dark: hsl(225, 30%, 6%);   /* Deep Night Base */
+  --bg-app: linear-gradient(160deg, #0a0b1e 0%, #161a36 100%);
+  --bg-card: hsla(225, 20%, 12%, 0.7); /* Glassmorphism card */
+  --border-light: hsla(225, 20%, 60%, 0.1);
+  --border-glow: hsla(var(--h-emerald), 100%, 50%, 0.3);
 
-  --text-primary: hsl(var(--h-indigo), 40%, 15%);
-  --text-secondary: hsl(var(--h-indigo), 15%, 45%);
+  --text-primary: hsl(225, 20%, 98%); /* Crystalline White */
+  --text-secondary: hsl(225, 15%, 70%); /* Soft Lavender-Grey */
 
-  --accent-gold: hsl(var(--h-gold), 100%, 45%);
-  --accent-emerald: hsl(var(--h-emerald), 80%, 45%);
-  --accent-indigo: hsl(var(--h-indigo), 70%, 50%);
-  --accent-magenta: hsl(310, 70%, 55%);
+  --accent-gold: hsl(var(--h-gold), 100%, 55%);
+  --accent-emerald: hsl(var(--h-emerald), 100%, 50%);
+  --accent-indigo: hsl(225, 80%, 60%);
+  --accent-magenta: hsl(320, 100%, 65%);
 
-  --glow-emerald: hsla(var(--h-emerald), 80%, 45%, 0.2);
-  --glow-gold: hsla(var(--h-gold), 100%, 45%, 0.3);
+  --glow-emerald: hsla(var(--h-emerald), 100%, 50%, 0.4);
+  --glow-gold: hsla(var(--h-gold), 100%, 55%, 0.4);
 
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
   --font-display: 'Outfit', system-ui, sans-serif;
@@ -95,8 +96,8 @@ input,
   height: 100vh;
   z-index: -2;
   overflow: hidden;
-  /* Muted sophisticated gradient for the stage background */
-  background: linear-gradient(135deg, #f0f4f8, #e8edf3, #f5f7fa, #edf1f7);
+  /* Deep, sophisticated dark gradient for the stage background */
+  background: linear-gradient(135deg, #05070a, #0a0e1a, #05070a);
   background-size: 400% 400%;
   animation: plasmaGlow 20s ease infinite;
   pointer-events: none;
@@ -203,7 +204,7 @@ input,
   position: relative;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, white 0%, hsla(var(--h-indigo), 30%, 97%, 1) 100%); /* Vibrant subtle gradient */
+  background: var(--bg-app); /* Use the new deep gradient */
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -224,7 +225,7 @@ input,
 
 /* Floating Header Pill */
 header {
-  margin: 0; /* Adjusted for #app Stage */
+  margin: 0;
   border-radius: 0;
   padding: var(--space-3) var(--space-5);
   display: flex;
@@ -232,16 +233,16 @@ header {
   align-items: center;
   gap: var(--space-2);
   flex-wrap: nowrap;
-  backdrop-filter: blur(40px) saturate(160%);
-  -webkit-backdrop-filter: blur(40px) saturate(160%);
+  backdrop-filter: blur(50px) saturate(200%);
+  -webkit-backdrop-filter: blur(50px) saturate(200%);
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 3px solid hsla(var(--h-emerald), 80%, 45%, 0.6); /* More present emerald rim */
-  background: hsla(0, 0%, 100%, 0.95);
+  border-bottom: 3px solid var(--accent-emerald);
+  background: hsla(225, 30%, 8%, 0.85); /* Deep glass header */
   box-shadow: 
-    0 10px 30px rgba(0, 0, 0, 0.04),
-    0 0 60px hsla(var(--h-indigo), 40%, 15%, 0.05);
+    0 10px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 hsla(0, 0%, 100%, 0.05);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -491,27 +492,33 @@ header {
 .btn-primary,
 .btn-vote {
   width: 100%;
-  background: var(--accent-indigo);
-  color: white;
+  background: linear-gradient(135deg, var(--accent-emerald), #00d2ff); /* Neon Emerald to Cyan */
+  color: #05070a; /* High contrast black on neon */
   border: none;
   padding: 18px 24px;
-  font-size: 1.05rem;
-  font-weight: 700;
-  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  border-radius: 14px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 15px hsla(var(--h-indigo), 50%, 30%, 0.15);
+  box-shadow: 
+    0 10px 30px var(--glow-emerald),
+    0 0 0 1px hsla(var(--h-emerald), 100%, 50%, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .btn-primary:hover,
 .btn-vote:hover {
-  transform: translateY(-2px);
-  background: hsl(var(--h-indigo), 70%, 45%);
-  box-shadow: 0 10px 25px hsla(var(--h-indigo), 50%, 30%, 0.25);
+  transform: translateY(-3px) scale(1.02);
+  filter: brightness(1.15);
+  box-shadow: 
+    0 15px 40px var(--glow-emerald),
+    0 0 20px var(--glow-emerald);
 }
 
 .btn-primary:active,
@@ -1021,20 +1028,15 @@ main {
 
 /* --- Hierarchy Groups --- */
 .hierarchy-group {
-  background: var(--bg-card);
-  backdrop-filter: blur(48px) saturate(250%);
-  -webkit-backdrop-filter: blur(48px) saturate(250%);
+  background: hsla(225, 30%, 10%, 0.4);
+  backdrop-filter: blur(60px) saturate(180%);
+  -webkit-backdrop-filter: blur(60px) saturate(180%);
   padding: 64px 48px;
-  /* Massive inner padding */
   border-radius: 32px;
-  /* Super smooth corners */
-  border: none;
-  /* Brutalism: No lines */
+  border: 1px solid hsla(0, 0%, 100%, 0.05);
   box-shadow:
-    0 80px 160px rgba(0, 0, 0, 0.95),
-    /* Deep abyss shadow */
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  /* Subtle top light */
+    0 80px 160px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02);
 }
 
 .context-grid {
@@ -1044,10 +1046,10 @@ main {
 }
 
 .context-card {
-  background: white; /* Strong pop against tinted app-container */
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  border: 1px solid var(--border-light);
+  background: hsla(225, 25%, 15%, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid hsla(0, 0%, 100%, 0.08);
   border-radius: var(--radius-md);
   padding: 24px;
   display: flex;
@@ -1060,17 +1062,17 @@ main {
   position: relative;
   overflow: hidden;
   box-shadow: 
-    0 4px 15px rgba(0, 0, 0, 0.03),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 
 .context-card:hover {
-  transform: translateY(-6px) scale(1.01);
-  border-color: var(--accent-indigo);
+  transform: translateY(-8px) scale(1.02);
+  border-color: var(--accent-emerald);
   box-shadow: 
-    0 20px 40px rgba(var(--h-indigo), 20%, 30%, 0.08),
-    0 4px 10px rgba(0, 0, 0, 0.02);
-  background: white;
+    0 30px 60px rgba(0, 0, 0, 0.5),
+    0 0 20px var(--glow-emerald);
+  background: hsla(225, 25%, 20%, 0.8);
 }
 
 .context-card::after {
@@ -1365,12 +1367,12 @@ main {
   position: relative;
   z-index: 3;
   margin-top: 0;
-  background: hsl(215, 20%, 98%); /* Subtle depth for the viewport content area */
+  background: hsla(225, 30%, 4%, 0.6); /* Even deeper for pyramid area */
   border-radius: var(--radius-lg);
   display: block;
   text-align: center;
-  border: 1px solid var(--border-light);
-  box-shadow: inset 0 0 40px rgba(0,0,0,0.03);
+  border: 1px solid hsla(0, 0%, 100%, 0.08);
+  box-shadow: inset 0 0 100px rgba(0,0,0,0.4);
 }
 
 .pyramid-viewport:active {
