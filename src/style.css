@@ -1163,7 +1163,7 @@ main {
   align-items: center;
   gap: 16px;
   margin-top: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 0;
   padding: 8px 16px;
   background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(10px);
@@ -1411,8 +1411,8 @@ main {
   min-width: 100%;
   height: max-content;
   min-height: 100%;
-  /* CRITICAL FIX: The top padding acts as the protective air-gap for the Top 1 Crown. */
-  padding: 120px 20px 100px 20px;
+  /* CRITICAL FIX: The top padding acts as the protective air-gap for the Top 1 Crown. Reduced from 120px. */
+  padding: 60px 20px 80px 20px;
   margin: 0 auto;
   /* Horizontally center within the block viewport */
   display: flex;
