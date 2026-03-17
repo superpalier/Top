@@ -1019,7 +1019,7 @@ const render = () => {
           
           <div class="profile-stats-row" style="display:flex; justify-content:center; gap:20px; margin: 12px 0; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
             <div style="text-align:center;">
-              <div style="font-size:0.7rem; color:var(--text-secondary); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;" id="pm-rank-label">Rank</div>
+              <div style="font-size:0.7rem; color:var(--text-secondary); letter-spacing:0.5px; margin-bottom:4px;" id="pm-rank-label">${t.rank || 'Rank'}</div>
               <div id="pm-rank" style="font-size:1.2rem; font-weight:700; color:var(--accent-cyan);">#1</div>
             </div>
             <div style="text-align:center; border-left: 1px solid rgba(255,255,255,0.1); padding-left:20px;">
@@ -1427,7 +1427,7 @@ const renderFamilyView = (container, parentCtx) => {
 
   const childrenHTML = children.length ? `
     <div style="margin-top:28px;">
-      <h3 style="font-size:1rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;">${t.subcategories || 'Subcategories'}</h3>
+      <h3 style="font-size:1rem;color:var(--text-primary);letter-spacing:0.5px;margin-bottom:16px;">${t.subcategories || 'Subcategories'}</h3>
       <div class="context-grid">
         ${children.map(child => {
     const childTop1 = generatePyramidData(child.id).data[0]?.[0];
