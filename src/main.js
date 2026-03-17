@@ -1419,7 +1419,7 @@ const renderFamilyView = (container, parentCtx) => {
         <span class="family-apex-name">${top1.name}</span>
         <span class="family-apex-votes">★ ${top1.votes} ${t.votesCount}</span>
       </div>
-      <button class="btn-enter-pyramid" id="enter-parent-pyramid-btn">
+      <button class="btn-enter-pyramid" id="enter-parent-pyramid-btn" style="background: white; color: black; border: none; box-shadow: 0 0 20px rgba(255,255,255,0.4); font-weight: 800;">
         <i class="ph ph-hierarchy"></i> ${t.enterContext || 'Enter Pyramid'}
       </button>
     </div>
@@ -1518,7 +1518,7 @@ const renderPyramidView = (container, contextInfo) => {
         <div class="node-rank">#${user.rank}</div>
         <img src="${user.img}" alt="${user.name}">
         <div class="node-overlay">
-          <div class="node-name" style="font-size: 0.65rem; font-weight: 700; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); line-height: 1.1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; text-align: center;">${user.name}</div>
+          <div class="node-name" style="font-size: 0.65rem; font-weight: 700; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 8px rgba(0,0,0,0.8); line-height: 1.1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; text-align: center;">${user.name}</div>
           <div class="node-votes" style="font-size: 0.75rem; font-weight: 700; color: var(--accent-gold); display: flex; align-items: center; gap: 2px;"><i class="ph-fill ph-star"></i> ${user.votes}</div>
         </div>
       </div>
@@ -1599,6 +1599,7 @@ const renderPyramidView = (container, contextInfo) => {
   const pmCloseBtn = document.getElementById('pm-close-btn');
 
   pmCloseBtn.innerText = t.close;
+  pmCloseBtn.style.textTransform = 'none';
 
   if (pmCloseBtn) {
     // clear listeners
@@ -1682,6 +1683,7 @@ const renderPyramidView = (container, contextInfo) => {
       } else {
         vBtn.innerText = t.vote;
         vBtn.className = 'btn-vote';
+        vBtn.style.textTransform = 'none';
         vBtn.disabled = false;
         vBtn.onclick = async () => {
           try {
