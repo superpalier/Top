@@ -993,7 +993,7 @@ main {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
   font-size: 0.85rem;
   color: var(--text-secondary);
   background: hsla(225, 30%, 20%, 0.4); /* Darker solid-feeling background */
@@ -1162,7 +1162,7 @@ main {
   display: flex;
   align-items: center;
   gap: 16px;
-  margin-top: 12px;
+  margin-top: 4px;
   margin-bottom: 0;
   padding: 8px 16px;
   background: rgba(255, 255, 255, 0.4);
@@ -1411,8 +1411,8 @@ main {
   min-width: 100%;
   height: max-content;
   min-height: 100%;
-  /* CRITICAL FIX: The top padding acts as the protective air-gap for the Top 1 Crown. Reduced from 120px. */
-  padding: 60px 20px 80px 20px;
+  /* CRITICAL FIX: The top padding acts as the protective air-gap for the Top 1 Crown. Reduced from 60px. */
+  padding: 40px 20px 80px 20px;
   margin: 0 auto;
   /* Horizontally center within the block viewport */
   display: flex;
