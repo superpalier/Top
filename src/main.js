@@ -11,7 +11,14 @@ const FLAGSHIP_IMAGES = {
   'art': '/assets/categories/art.png',
   'knowledge': '/assets/categories/knowledge.png',
   'society': '/assets/categories/society.png',
-  'nature': '/assets/categories/nature.png'
+  'nature': '/assets/categories/nature.png',
+  // Subcategories
+  'music': '/assets/categories/sub/music.png',
+  'cinema': '/assets/categories/sub/cinema.png',
+  'gaming': '/assets/categories/sub/gaming.png',
+  'ai': '/assets/categories/sub/ai.png',
+  'dev': '/assets/categories/sub/dev.png',
+  'space': '/assets/categories/sub/space.png'
 };
 
 const getEffectiveImageUrl = (ctx) => {
@@ -1300,9 +1307,10 @@ const renderHomeView = (container) => {
       const ctxImg = getEffectiveImageUrl(ctx);
       let bgStyle = '';
       if (ctxImg) {
-        bgStyle = `style="background-image: linear-gradient(to top, rgba(5,5,7,0.95) 0%, rgba(10,10,15,0.7) 100%), url('${ctxImg}'); background-size: cover; background-position: center; min-height: 120px;"`;
+        // Reduced darkness for better vibrancy as requested
+        bgStyle = `style="background-image: linear-gradient(to top, rgba(10,12,18,0.7) 0%, rgba(10,12,18,0.2) 100%), url('${ctxImg}'); background-size: cover; background-position: center; min-height: 120px;"`;
       } else {
-        bgStyle = `style="min-height: 120px;"`;
+        bgStyle = `style="min-height: 120px; background: hsla(225, 30%, 15%, 0.4);"`;
       }
     return `
               <div class="context-card child-card" data-id="${ctx.id}" ${bgStyle}>
