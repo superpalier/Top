@@ -1527,8 +1527,9 @@ main {
   position: absolute;
   top: 0;
   left: 0;
-  background: var(--text-primary);
-  color: white;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  color: #fff;
   font-family: var(--font-display);
   font-weight: 800;
   font-size: 0.75rem;
@@ -1541,7 +1542,7 @@ main {
 
 .tier-0 .node-rank {
   background: var(--accent-gold);
-  color: white;
+  color: #000;
   font-size: 1rem;
   font-weight: 900;
   padding: 6px 12px;
