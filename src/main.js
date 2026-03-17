@@ -86,8 +86,8 @@ const i18n = {
     createAccount: 'Create Account',
     authenticating: 'Authenticating...',
     creatingAccount: 'Creating Account...',
-    heroSubtitle: 'Who rules the Pyramid?<span style="display:block; margin-top:20px; color:var(--accent-cyan);">You decide.</span>',
-    heroSubtitle2: '<span style="display:block; margin-bottom:12px;">Vote anonymously</span><span style="display:block; margin-bottom:12px;">or forge an account</span><span style="display:block;">to seal your legacy.</span>',
+    heroSubtitle: 'Who rules the Pyramid?<span style="display:block; margin-top:16px; font-size:1.4rem; color:var(--accent-cyan); font-weight:700;">You decide.</span>',
+    heroSubtitle2: 'Vote anonymously or forge an account to seal your legacy.',
     rulesModalBtn: 'How does it work? →',
     rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ How Votenaut Works</h2>
 <p style="margin-bottom:12px;">Each <strong>Pyramid</strong> represents a category or context (e.g. Best Musician, Best Athlete). Inside each pyramid, users are ranked from #1 (Apex) to #55 based on votes received.</p>
@@ -204,8 +204,8 @@ const i18n = {
     vote: 'Votar',
     close: 'Cerrar',
     votesCount: 'Votos',
-    prev55: 'Ant 55',
-    next55: 'Sig 55',
+    prev55: 'Anterior 55',
+    next55: 'Siguiente 55',
     top1: 'Top 1',
     suggestCat: 'Sugerir Categoría',
     suggestDesc: '¿Tienes una idea para un nuevo contexto? ¡Envíala para revisión de los administradores!',
@@ -224,8 +224,8 @@ const i18n = {
     createAccount: 'Crear Cuenta',
     authenticating: 'Autenticando...',
     creatingAccount: 'Creando cuenta...',
-    heroSubtitle: '¿Quién domina la Pirámide?<span style="display:block; margin-top:20px; color:var(--accent-cyan);">Tú decides.</span>',
-    heroSubtitle2: '<span style="display:block; margin-bottom:12px;">Vota en el anonimato</span><span style="display:block; margin-bottom:12px;">o forja una cuenta</span><span style="display:block;">para sellar tu legado.</span>',
+    heroSubtitle: '¿Quién domina la pirámide?<span style="display:block; margin-top:16px; font-size:1.4rem; color:var(--accent-cyan); font-weight:700;">Tú decides.</span>',
+    heroSubtitle2: 'Vota en el anonimato o forja una cuenta para sellar tu legado.',
     rulesModalBtn: '¿Cómo funciona? →',
     rulesDetail: `<h2 style="margin-bottom:16px;color:var(--accent-cyan);">🗳️ Cómo funciona Votenaut</h2>
 <p style="margin-bottom:12px;">Cada <strong>Pirámide</strong> es una categoría o contexto (ej. Mejor Músico). Dentro, los usuarios se rankean del #1 (Apex) al #55 según los votos recibidos.</p>
@@ -1016,7 +1016,7 @@ const render = () => {
               <div id="pm-rank" style="font-size:1.2rem; font-weight:700; color:var(--accent-cyan);">#1</div>
             </div>
             <div style="text-align:center; border-left: 1px solid rgba(255,255,255,0.1); padding-left:20px;">
-              <div style="font-size:0.7rem; color:var(--text-secondary); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;" id="pm-votes-label">Votes</div>
+              <div style="font-size:0.7rem; color:var(--text-secondary); letter-spacing:1px; margin-bottom:4px;" id="pm-votes-label">Votos</div>
               <div id="pm-votes" style="font-size:1.2rem; font-weight:700; color:var(--accent-gold);">★ 0</div>
             </div>
           </div>
@@ -1171,7 +1171,7 @@ const renderProfileView = (container) => {
                      </div>
                      <div style="text-align:right; flex-shrink:0;">
                         <div style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:4px;">${new Date(vote.cast_at).toLocaleDateString()}</div>
-                        <span class="badge ${isExpired ? 'bg-expired' : 'bg-active'}" style="font-size:0.6rem; padding: 2px 8px; border-radius:6px; text-transform:uppercase; display:inline-block;">${isExpired ? t.expiredVote : t.activeVote}</span>
+                        <span class="badge ${isExpired ? 'bg-expired' : 'bg-active'}" style="font-size:0.6rem; padding: 2px 8px; border-radius:6px; display:inline-block;">${isExpired ? t.expiredVote : t.activeVote}</span>
                      </div>
                    </div>
                  `;

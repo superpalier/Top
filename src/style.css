@@ -509,7 +509,7 @@ header {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  text-transform: uppercase;
+  /* text-transform: uppercase; Normalized for readability */
   letter-spacing: 0.5px;
 }
 
@@ -559,7 +559,7 @@ header {
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  letter-spacing: 1px;
+  /* letter-spacing: 1px; Reduced for normal case */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -625,10 +625,10 @@ header {
 }
 
 .hero-sub {
-  font-size: 1.15rem;
-  color: var(--text-secondary);
-  max-width: 700px;
-  margin: 0 auto var(--space-5) auto;
+  font-size: 1.3rem; /* Increased from 1.15rem */
+  color: var(--text-primary); /* Full visibility */
+  max-width: 800px;
+  margin: 0 auto var(--space-6) auto;
   line-height: 1.7;
   z-index: 1;
   position: relative;
@@ -1325,7 +1325,7 @@ main {
   color: var(--accent-gold);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  /* letter-spacing: 1px; Reduced for normal case */
 }
 
 .family-apex-name {
@@ -2182,7 +2182,7 @@ main {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 8px 30px rgba(0, 195, 255, 0.3);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  /* letter-spacing: 1px; Reduced for normal case */
 }
 
 .btn-primary:hover,
@@ -2216,7 +2216,7 @@ main {
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   margin-top: var(--space-2);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  /* letter-spacing: 1px; Reduced for normal case */
 }
 
 .btn-secondary:hover,
@@ -2434,7 +2434,7 @@ main {
   font-size: 0.75rem;
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  /* letter-spacing: 1px; Reduced for normal case */
 }
 
 .stat-item.highlight .stat-value {
