@@ -578,21 +578,7 @@ const t_api = (msg) => {
   const mapping = {
     'Daily limit reached': t.dailyLimitLabel,
     'Invalid credentials or user not found': t.credsInvalid,
-    'Email already in use': t.emailInUse,
-    'Missing fields': t.fillAllFields,
-    'Internal server error': t.networkError
-  };
-  return mapping[norm] || msg;
-};
-
-let contexts = [];
-let voteHistoryLedger = [];
-let suggestions = [];
-let notifications = [];
-let initialDataFetched = false;
-
-const defaultContexts = [
-  { id: 'entertainment', titles: { en: 'Entertainment', es: 'Entretenimiento', fr: 'Divertissement', de: 'Unterhaltung' }, icon: 'ph-popcorn', parentId: null, imageUrl: '/categories/entertainment.png' },
+    'Email already in use': t.emailInU  { id: 'entertainment', titles: { en: 'Entertainment', es: 'Entretenimiento', fr: 'Divertissement', de: 'Unterhaltung' }, icon: 'ph-popcorn', parentId: null, imageUrl: '/categories/entertainment.png' },
   { id: 'music', titles: { en: 'Music', es: 'Música', fr: 'Musique', de: 'Musik' }, icon: 'ph-music-notes', parentId: 'entertainment', imageUrl: '/categories/music.png' },
   { id: 'rock', titles: { en: 'Rock', es: 'Rock', fr: 'Rock', de: 'Rock' }, icon: 'ph-guitar', parentId: 'music', imageUrl: '/categories/rock.png' },
   { id: 'classic_rock', titles: { en: 'Classic Rock', es: 'Rock Clásico', fr: 'Rock Classique', de: 'Classic Rock' }, icon: 'ph-vinyl', parentId: 'rock', imageUrl: '/categories/classic_rock.png' },
@@ -604,22 +590,24 @@ const defaultContexts = [
   { id: 'synthwave', titles: { en: 'Synthwave', es: 'Synthwave', fr: 'Synthwave', de: 'Synthwave' }, icon: 'ph-sun-horizon', parentId: 'electronic', imageUrl: '/categories/synthwave.png' },
   { id: 'pop', titles: { en: 'Pop', es: 'Pop', fr: 'Pop', de: 'Pop' }, icon: 'ph-star', parentId: 'music', imageUrl: '/categories/pop.png' },
   { id: 'jazz', titles: { en: 'Jazz', es: 'Jazz', fr: 'Jazz', de: 'Jazz' }, icon: 'ph-trumpet', parentId: 'music', imageUrl: '/categories/jazz.png' },
-  { id: 'hiphop', titles: { en: 'Hip Hop', es: 'Hip Hop', fr: 'Hip Hop', de: 'Hip Hop' }, icon: 'ph-microphone-stage', parentId: 'music' },
-  { id: 'cinema', titles: { en: 'Cinema', es: 'Cine', fr: 'Cinéma', de: 'Kino' }, icon: 'ph-film-strip', parentId: 'entertainment' },
-  { id: 'scifi', titles: { en: 'Sci-Fi', es: 'Ciencia Ficción', fr: 'Sci-Fi', de: 'Sci-Fi' }, icon: 'ph-rocket-launch', parentId: 'cinema' },
-  { id: 'horror', titles: { en: 'Horror', es: 'Terror', fr: 'Horreur', de: 'Horror' }, icon: 'ph-skull', parentId: 'cinema' },
-  { id: 'animation', titles: { en: 'Animation', es: 'Animación', fr: 'Animation', de: 'Animation' }, icon: 'ph-palette', parentId: 'cinema' },
-  { id: 'anime', titles: { en: 'Anime', es: 'Anime', fr: 'Anime', de: 'Anime' }, icon: 'ph-shooting-star', parentId: 'animation' },
-  { id: 'gaming', titles: { en: 'Gaming', es: 'Videojuegos', fr: 'Jeux Vidéo', de: 'Gaming' }, icon: 'ph-game-controller', parentId: 'entertainment' },
-  { id: 'rpg', titles: { en: 'RPG', es: 'RPG', fr: 'RPG', de: 'RPG' }, icon: 'ph-castle-turret', parentId: 'gaming' },
-  { id: 'fps', titles: { en: 'FPS', es: 'FPS', fr: 'FPS', de: 'FPS' }, icon: 'ph-crosshair', parentId: 'gaming' },
-  { id: 'moba', titles: { en: 'MOBA', es: 'MOBA', fr: 'MOBA', de: 'MOBA' }, icon: 'ph-sword', parentId: 'gaming' },
-
-  { id: 'tech', titles: { en: 'Technology', es: 'Tecnología', fr: 'Technologie', de: 'Technologie' }, icon: 'ph-cpu', parentId: null },
-  { id: 'ai', titles: { en: 'Artificial Intelligence', es: 'IA', fr: 'IA', de: 'KI' }, icon: 'ph-robot', parentId: 'tech' },
-  { id: 'genai', titles: { en: 'Generative AI', es: 'IA Generativa', fr: 'IA Générative', de: 'Generative KI' }, icon: 'ph-magic-wand', parentId: 'ai' },
-  { id: 'ml', titles: { en: 'Machine Learning', es: 'Aprendizaje Automático', fr: 'ML', de: 'ML' }, icon: 'ph-brain', parentId: 'ai' },
-  { id: 'robotics', titles: { en: 'Robotics', es: 'Robótica', fr: 'Robotique', de: 'Robotik' }, icon: 'ph-armchair', parentId: 'ai' },
+  { id: 'hiphop', titles: { en: 'Hip Hop', es: 'Hip Hop', fr: 'Hip Hop', de: 'Hip Hop' }, icon: 'ph-microphone-stage', parentId: 'music', imageUrl: '/categories/hiphop.png' },
+  { id: 'cinema', titles: { en: 'Cinema', es: 'Cine', fr: 'Cinéma', de: 'Kino' }, icon: 'ph-film-strip', parentId: 'entertainment', imageUrl: '/categories/cinema.png' },
+  { id: 'scifi', titles: { en: 'Sci-Fi', es: 'Ciencia Ficción', fr: 'Sci-Fi', de: 'Sci-Fi' }, icon: 'ph-rocket-launch', parentId: 'cinema', imageUrl: '/categories/scifi.png' },
+  { id: 'horror', titles: { en: 'Horror', es: 'Terror', fr: 'Horreur', de: 'Horror' }, icon: 'ph-skull', parentId: 'cinema', imageUrl: '/categories/horror.png' },
+  { id: 'animation', titles: { en: 'Animation', es: 'Animación', fr: 'Animation', de: 'Animation' }, icon: 'ph-palette', parentId: 'cinema', imageUrl: '/categories/animation.png' },
+  { id: 'anime', titles: { en: 'Anime', es: 'Anime', fr: 'Anime', de: 'Anime' }, icon: 'ph-shooting-star', parentId: 'animation', imageUrl: '/categories/anime.png' },
+  { id: 'gaming', titles: { en: 'Gaming', es: 'Videojuegos', fr: 'Jeux Vidéo', de: 'Gaming' }, icon: 'ph-game-controller', parentId: 'entertainment', imageUrl: '/categories/gaming.png' },
+  { id: 'rpg', titles: { en: 'RPG', es: 'RPG', fr: 'RPG', de: 'RPG' }, icon: 'ph-castle-turret', parentId: 'gaming', imageUrl: '/categories/rpg.png' },
+  { id: 'fps', titles: { en: 'FPS', es: 'FPS', fr: 'FPS', de: 'FPS' }, icon: 'ph-crosshair', parentId: 'gaming', imageUrl: '/categories/fps.png' },
+  { id: 'moba', titles: { en: 'MOBA', es: 'MOBA', fr: 'MOBA', de: 'MOBA' }, icon: 'ph-sword', parentId: 'gaming', imageUrl: '/categories/moba.png' },
+  { id: 'tech', titles: { en: 'Technology', es: 'Tecnología', fr: 'Technologie', de: 'Technologie' }, icon: 'ph-cpu', parentId: null, imageUrl: '/categories/tech.png' },
+  { id: 'ai', titles: { en: 'Artificial Intelligence', es: 'IA', fr: 'IA', de: 'KI' }, icon: 'ph-robot', parentId: 'tech', imageUrl: '/categories/ai.png' },
+  { id: 'genai', titles: { en: 'Generative AI', es: 'IA Generativa', fr: 'IA Générative', de: 'Generative KI' }, icon: 'ph-magic-wand', parentId: 'ai', imageUrl: '/categories/genai.png' },
+  { id: 'ml', titles: { en: 'Machine Learning', es: 'Aprendizaje Automático', fr: 'ML', de: 'ML' }, icon: 'ph-brain', parentId: 'ai', imageUrl: '/categories/ml.png' },
+  { id: 'robotics', titles: { en: 'Robotics', es: 'Robótica', fr: 'Robotique', de: 'Robotik' }, icon: 'ph-armchair', parentId: 'ai', imageUrl: '/categories/robotics.png' },
+  { id: 'dev', titles: { en: 'Development', es: 'Desarrollo', fr: 'Développement', de: 'Entwicklung' }, icon: 'ph-code', parentId: 'tech', imageUrl: '/categories/dev.png' },
+  { id: 'webdev', titles: { en: 'Web Dev', es: 'Desarrollo Web', fr: 'Dév Web', de: 'Webentwicklung' }, icon: 'ph-browser', parentId: 'dev', imageUrl: '/categories/webdev.png' },
+'ai' },
   { id: 'dev', titles: { en: 'Development', es: 'Desarrollo', fr: 'Développement', de: 'Entwicklung' }, icon: 'ph-code', parentId: 'tech' },
   { id: 'webdev', titles: { en: 'Web Dev', es: 'Desarrollo Web', fr: 'Dév Web', de: 'Webentwicklung' }, icon: 'ph-browser', parentId: 'dev' },
   { id: 'react_dev', titles: { en: 'React', es: 'React', fr: 'React', de: 'React' }, icon: 'ph-atom', parentId: 'webdev' },
@@ -1409,8 +1397,13 @@ const renderFamilyView = (container, parentCtx) => {
   const pyramidObj = generatePyramidData(parentCtx.id);
   const top1 = pyramidObj.data[0]?.[0]; // tier 0, first user
 
+  const parentImg = getEffectiveImageUrl(parentCtx);
+  const bannerStyle = parentImg 
+    ? `background-image:linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.2)), url('${parentImg}'); background-size:cover; background-position:center;`
+    : '';
+
   const top1HTML = top1 ? `
-    <div class="family-apex-card">
+    <div class="family-apex-card" style="${bannerStyle}">
       <div class="family-apex-photo-wrap">
         <img src="${top1.img}" alt="${top1.name}" class="family-apex-photo">
         <span class="family-apex-crown">👑</span>
