@@ -23,7 +23,8 @@ const FLAGSHIP_IMAGES = {
 
 const getEffectiveImageUrl = (ctx) => {
   if (FLAGSHIP_IMAGES[ctx.id]) return FLAGSHIP_IMAGES[ctx.id];
-  return ctx.imageUrl || ctx.image_url || '';
+  const localPath = `/categories/${ctx.id}.png`;
+  return ctx.imageUrl || ctx.image_url || localPath;
 };
 
 // Boot Project Ascension Systems
@@ -591,18 +592,18 @@ let notifications = [];
 let initialDataFetched = false;
 
 const defaultContexts = [
-  { id: 'entertainment', titles: { en: 'Entertainment', es: 'Entretenimiento', fr: 'Divertissement', de: 'Unterhaltung' }, icon: 'ph-popcorn', parentId: null },
-  { id: 'music', titles: { en: 'Music', es: 'Música', fr: 'Musique', de: 'Musik' }, icon: 'ph-music-notes', parentId: 'entertainment' },
-  { id: 'rock', titles: { en: 'Rock', es: 'Rock', fr: 'Rock', de: 'Rock' }, icon: 'ph-guitar', parentId: 'music' },
-  { id: 'classic_rock', titles: { en: 'Classic Rock', es: 'Rock Clásico', fr: 'Rock Classique', de: 'Classic Rock' }, icon: 'ph-vinyl', parentId: 'rock' },
-  { id: 'indie_rock', titles: { en: 'Indie Rock', es: 'Rock Indie', fr: 'Rock Indie', de: 'Indie Rock' }, icon: 'ph-guitar', parentId: 'rock' },
-  { id: 'metal', titles: { en: 'Metal', es: 'Metal', fr: 'Metal', de: 'Metal' }, icon: 'ph-skull', parentId: 'rock' },
-  { id: 'electronic', titles: { en: 'Electronic', es: 'Electrónica', fr: 'Électronique', de: 'Elektronik' }, icon: 'ph-speaker-hifi', parentId: 'music' },
-  { id: 'techno', titles: { en: 'Techno', es: 'Techno', fr: 'Techno', de: 'Techno' }, icon: 'ph-vinyl', parentId: 'electronic' },
-  { id: 'house', titles: { en: 'House', es: 'House', fr: 'House', de: 'House' }, icon: 'ph-waves', parentId: 'electronic' },
-  { id: 'synthwave', titles: { en: 'Synthwave', es: 'Synthwave', fr: 'Synthwave', de: 'Synthwave' }, icon: 'ph-sun-horizon', parentId: 'electronic' },
-  { id: 'pop', titles: { en: 'Pop', es: 'Pop', fr: 'Pop', de: 'Pop' }, icon: 'ph-star', parentId: 'music' },
-  { id: 'jazz', titles: { en: 'Jazz', es: 'Jazz', fr: 'Jazz', de: 'Jazz' }, icon: 'ph-trumpet', parentId: 'music' },
+  { id: 'entertainment', titles: { en: 'Entertainment', es: 'Entretenimiento', fr: 'Divertissement', de: 'Unterhaltung' }, icon: 'ph-popcorn', parentId: null, imageUrl: '/categories/entertainment.png' },
+  { id: 'music', titles: { en: 'Music', es: 'Música', fr: 'Musique', de: 'Musik' }, icon: 'ph-music-notes', parentId: 'entertainment', imageUrl: '/categories/music.png' },
+  { id: 'rock', titles: { en: 'Rock', es: 'Rock', fr: 'Rock', de: 'Rock' }, icon: 'ph-guitar', parentId: 'music', imageUrl: '/categories/rock.png' },
+  { id: 'classic_rock', titles: { en: 'Classic Rock', es: 'Rock Clásico', fr: 'Rock Classique', de: 'Classic Rock' }, icon: 'ph-vinyl', parentId: 'rock', imageUrl: '/categories/classic_rock.png' },
+  { id: 'indie_rock', titles: { en: 'Indie Rock', es: 'Rock Indie', fr: 'Rock Indie', de: 'Indie Rock' }, icon: 'ph-guitar', parentId: 'rock', imageUrl: '/categories/indie_rock.png' },
+  { id: 'metal', titles: { en: 'Metal', es: 'Metal', fr: 'Metal', de: 'Metal' }, icon: 'ph-skull', parentId: 'rock', imageUrl: '/categories/metal.png' },
+  { id: 'electronic', titles: { en: 'Electronic', es: 'Electrónica', fr: 'Électronique', de: 'Elektronik' }, icon: 'ph-speaker-hifi', parentId: 'music', imageUrl: '/categories/electronic.png' },
+  { id: 'techno', titles: { en: 'Techno', es: 'Techno', fr: 'Techno', de: 'Techno' }, icon: 'ph-vinyl', parentId: 'electronic', imageUrl: '/categories/techno.png' },
+  { id: 'house', titles: { en: 'House', es: 'House', fr: 'House', de: 'House' }, icon: 'ph-waves', parentId: 'electronic', imageUrl: '/categories/house.png' },
+  { id: 'synthwave', titles: { en: 'Synthwave', es: 'Synthwave', fr: 'Synthwave', de: 'Synthwave' }, icon: 'ph-sun-horizon', parentId: 'electronic', imageUrl: '/categories/synthwave.png' },
+  { id: 'pop', titles: { en: 'Pop', es: 'Pop', fr: 'Pop', de: 'Pop' }, icon: 'ph-star', parentId: 'music', imageUrl: '/categories/pop.png' },
+  { id: 'jazz', titles: { en: 'Jazz', es: 'Jazz', fr: 'Jazz', de: 'Jazz' }, icon: 'ph-trumpet', parentId: 'music', imageUrl: '/categories/jazz.png' },
   { id: 'hiphop', titles: { en: 'Hip Hop', es: 'Hip Hop', fr: 'Hip Hop', de: 'Hip Hop' }, icon: 'ph-microphone-stage', parentId: 'music' },
   { id: 'cinema', titles: { en: 'Cinema', es: 'Cine', fr: 'Cinéma', de: 'Kino' }, icon: 'ph-film-strip', parentId: 'entertainment' },
   { id: 'scifi', titles: { en: 'Sci-Fi', es: 'Ciencia Ficción', fr: 'Sci-Fi', de: 'Sci-Fi' }, icon: 'ph-rocket-launch', parentId: 'cinema' },
@@ -680,9 +681,9 @@ const defaultContexts = [
   { id: 'wildlife', titles: { en: 'Wildlife', es: 'Vida Silvestre', fr: 'Vie Sauvage', de: 'Wildtiere' }, icon: 'ph-paw-print', parentId: 'nature' },
   { id: 'oceans', titles: { en: 'Oceans', es: 'Océanos', fr: 'Océans', de: 'Ozeane' }, icon: 'ph-waves', parentId: 'nature' },
 
-  { id: 'heavy_metal', titles: { en: 'Heavy Metal', es: 'Heavy Metal', fr: 'Heavy Metal', de: 'Heavy Metal' }, icon: 'ph-skull', parentId: 'metal' },
-  { id: 'psytrance', titles: { en: 'Psytrance', es: 'Psytrance', fr: 'Psytrance', de: 'Psytrance' }, icon: 'ph-eye', parentId: 'electronic' },
-  { id: 'kpop', titles: { en: 'K-Pop', es: 'K-Pop', fr: 'K-Pop', de: 'K-Pop' }, icon: 'ph-heart', parentId: 'pop' },
+  { id: 'heavy_metal', titles: { en: 'Heavy Metal', es: 'Heavy Metal', fr: 'Heavy Metal', de: 'Heavy Metal' }, icon: 'ph-skull', parentId: 'metal', imageUrl: '/categories/heavy_metal.png' },
+  { id: 'psytrance', titles: { en: 'Psytrance', es: 'Psytrance', fr: 'Psytrance', de: 'Psytrance' }, icon: 'ph-eye', parentId: 'electronic', imageUrl: '/categories/psytrance.png' },
+  { id: 'kpop', titles: { en: 'K-Pop', es: 'K-Pop', fr: 'K-Pop', de: 'K-Pop' }, icon: 'ph-heart', parentId: 'pop', imageUrl: '/categories/kpop.png' },
   { id: 'indie_dev', titles: { en: 'Indie Dev', es: 'Desarrollo Indie', fr: 'Dév Indie', de: 'Indie-Entwicklung' }, icon: 'ph-joystick', parentId: 'dev' },
   { id: 'cloud', titles: { en: 'Cloud Computing', es: 'Computación en la Nube', fr: 'Cloud', de: 'Cloud' }, icon: 'ph-cloud', parentId: 'tech' },
   { id: 'smart_home', titles: { en: 'Smart Home', es: 'Hogar Inteligente', fr: 'Maison Connectée', de: 'Smart Home' }, icon: 'ph-house-line', parentId: 'tech' },
