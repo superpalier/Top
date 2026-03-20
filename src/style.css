@@ -35,14 +35,14 @@
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
   --font-display: 'Outfit', system-ui, sans-serif;
 
-  /* Major Third Typographic Scale (1.25) */
-  --fs-xs: 0.8rem;
-  --fs-sm: 1rem;
-  --fs-md: 1.25rem;
-  --fs-lg: 1.563rem;
-  --fs-xl: 1.953rem;
-  --fs-xxl: 2.441rem;
-  --fs-hero: clamp(2.5rem, 8vw, 4rem);
+  /* Major Third Typographic Scale (Fluid via clamp) */
+  --fs-xs: clamp(0.7rem, 2vw, 0.8rem);
+  --fs-sm: clamp(0.85rem, 2.5vw, 1rem);
+  --fs-md: clamp(1rem, 3vw, 1.25rem);
+  --fs-lg: clamp(1.2rem, 4vw, 1.563rem);
+  --fs-xl: clamp(1.5rem, 5vw, 1.953rem);
+  --fs-xxl: clamp(1.8rem, 6vw, 2.441rem);
+  --fs-hero: clamp(2.2rem, 10vw, 4.5rem);
 
   --radius-sm: 8px;
   --radius-md: 16px;
@@ -96,11 +96,47 @@ input,
   height: 100vh;
   z-index: -2;
   overflow: hidden;
-  /* Deep, sophisticated dark gradient for the stage background */
   background: linear-gradient(135deg, #05070a, #0a0e1a, #05070a);
   background-size: 400% 400%;
   animation: plasmaGlow 20s ease infinite;
   pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .family-apex-card {
+    flex-direction: column !important;
+    text-align: center;
+    padding: 24px 16px !important;
+    gap: 16px !important;
+  }
+
+  .family-apex-photo {
+    width: 120px !important;
+    height: 120px !important;
+    margin: 0 auto;
+  }
+
+  .family-apex-info {
+    width: 100%;
+  }
+
+  .family-apex-card .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 2000px) {
+  .context-grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)) !important;
+    gap: 32px !important;
+  }
+
+  #app {
+    max-width: 1800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 @keyframes plasmaGlow {
@@ -812,7 +848,20 @@ header {
   transform: translateX(280px);
 }
 
-@media (min-width: 768px) {
+@media (max-width: 1024px) {
+  .lateral-sidebar {
+    position: fixed;
+    z-index: 1000;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    top: 72px; /* Keep it below the header */
+    left: -280px; /* Keep it off-screen */
+    height: calc(100vh - 72px); /* Full height below header */
+    width: 280px; /* Original mobile width */
+    background: hsla(225, 30%, 15%, 0.9); /* Original mobile background */
+  }
+}
+
+@media (min-width: 1025px) {
   .lateral-sidebar {
     position: static;
     display: flex;
@@ -1166,17 +1215,17 @@ main {
   margin-top: 12px;
   margin-bottom: 24px;
   padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  border: 1px solid var(--border-light);
-  min-height: 56px;
   background: hsla(225, 30%, 15%, 0.8);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-radius: 12px;
-  border: 2px solid var(--accent-emerald);
+  border: 1px solid var(--accent-emerald);
   min-height: 56px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
 }
 
 .back-btn {
@@ -2216,6 +2265,15 @@ main {
   background: hsla(270, 100%, 60%, 0.05);
   color: var(--accent-violet);
   border: 1px solid hsla(270, 100%, 60%, 0.1);
+}
+
+h1 { font-size: var(--fs-xxl); font-family: var(--font-display); line-height: 1.1; letter-spacing: -0.03em; }
+h2 { font-size: var(--fs-xl); font-family: var(--font-display); line-height: 1.2; letter-spacing: -0.02em; }
+h3 { font-size: var(--fs-lg); font-weight: 600; }
+h4 { font-size: var(--fs-md); font-weight: 600; }
+
+.btn-secondary,
+.btn-close {
   padding: var(--space-2);
   border-radius: var(--radius-md);
   font-family: var(--font-display);

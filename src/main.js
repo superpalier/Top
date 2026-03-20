@@ -14,11 +14,19 @@ const FLAGSHIP_IMAGES = {
   'nature': '/assets/categories/nature.png',
   // Subcategories
   'music': '/assets/categories/music.png',
+  'rock': '/assets/categories/rock.png',
+  'pop': '/assets/categories/pop.png',
+  'jazz': '/assets/categories/jazz.png',
+  'metal': '/assets/categories/metal.png',
   'cinema': '/assets/categories/cinema.png',
   'gaming': '/assets/categories/gaming.png',
   'ai': '/assets/categories/ai.png',
   'dev': '/assets/categories/dev.png',
-  'space': '/assets/categories/space.png'
+  'space': '/assets/categories/space.png',
+  'photography': '/assets/categories/photography.png',
+  'physics': '/assets/categories/physics.png',
+  'history': '/assets/categories/history.png',
+  'finance': '/assets/categories/finance.png'
 };
 
 const getEffectiveImageUrl = (ctx) => {
@@ -618,15 +626,15 @@ const defaultContexts = [
   { id: 'hardware', titles: { en: 'Hardware', es: 'Hardware', fr: 'Hardware', de: 'Hardware' }, icon: 'ph-circuit-board', parentId: 'tech' },
   { id: 'gpus', titles: { en: 'GPUs', es: 'GPUs', fr: 'GPUs', de: 'GPUs' }, icon: 'ph-image', parentId: 'hardware' },
 
-  { id: 'science', titles: { en: 'Science', es: 'Ciencia', fr: 'Science', de: 'Wissenschaft' }, icon: 'ph-atom', parentId: null },
+  { id: 'science', titles: { en: 'Science', es: 'Ciencia', fr: 'Science', de: 'Wissenschaft' }, icon: 'ph-atom', parentId: null, imageUrl: '/assets/categories/science.png' },
   { id: 'space', titles: { en: 'Space', es: 'Espacio', fr: 'Espace', de: 'Weltraum' }, icon: 'ph-planet', parentId: 'science' },
   { id: 'astronomy', titles: { en: 'Astronomy', es: 'Astronomía', fr: 'Astronomie', de: 'Astronomie' }, icon: 'ph-telescope', parentId: 'space' },
-  { id: 'physics', titles: { en: 'Physics', es: 'Física', fr: 'Physique', de: 'Physik' }, icon: 'ph-magnet', parentId: 'science' },
+  { id: 'physics', titles: { en: 'Physics', es: 'Física', fr: 'Physique', de: 'Physik' }, icon: 'ph-magnet', parentId: 'science', imageUrl: '/assets/categories/physics.png' },
   { id: 'quantum', titles: { en: 'Quantum Physics', es: 'Física Cuántica', fr: 'Physique Quantique', de: 'Quantenphysik' }, icon: 'ph-sparkle', parentId: 'physics' },
   { id: 'biology', titles: { en: 'Biology', es: 'Biología', fr: 'Biologie', de: 'Biologie' }, icon: 'ph-dna', parentId: 'science' },
   { id: 'genetics', titles: { en: 'Genetics', es: 'Genética', fr: 'Génétique', de: 'Genetik' }, icon: 'ph-fingerprint', parentId: 'biology' },
 
-  { id: 'sports', titles: { en: 'Sports', es: 'Deportes', fr: 'Sports', de: 'Sport' }, icon: 'ph-trophy', parentId: null },
+  { id: 'sports', titles: { en: 'Sports', es: 'Deportes', fr: 'Sports', de: 'Sport' }, icon: 'ph-trophy', parentId: null, imageUrl: '/assets/categories/sports.png' },
   { id: 'football', titles: { en: 'Football', es: 'Fútbol', fr: 'Football', de: 'Fußball' }, icon: 'ph-soccer-ball', parentId: 'sports' },
   { id: 'basketball', titles: { en: 'Basketball', es: 'Baloncesto', fr: 'Basket', de: 'Basketball' }, icon: 'ph-basketball', parentId: 'sports' },
   { id: 'nba', titles: { en: 'NBA', es: 'NBA', fr: 'NBA', de: 'NBA' }, icon: 'ph-crown', parentId: 'basketball' },
@@ -634,7 +642,7 @@ const defaultContexts = [
   { id: 'f1', titles: { en: 'Formula 1', es: 'Fórmula 1', fr: 'F1', de: 'Formel 1' }, icon: 'ph-steering-wheel', parentId: 'sports' },
   { id: 'esports', titles: { en: 'eSports', es: 'eSports', fr: 'eSports', de: 'eSports' }, icon: 'ph-game-controller', parentId: 'sports' },
 
-  { id: 'lifestyle', titles: { en: 'Lifestyle', es: 'Estilo de Vida', fr: 'Mode de vie', de: 'Lifestyle' }, icon: 'ph-heartbeat', parentId: null },
+  { id: 'lifestyle', titles: { en: 'Lifestyle', es: 'Estilo de Vida', fr: 'Mode de vie', de: 'Lifestyle' }, icon: 'ph-heartbeat', parentId: null, imageUrl: '/assets/categories/lifestyle.png' },
   { id: 'travel', titles: { en: 'Travel', es: 'Viajes', fr: 'Voyages', de: 'Reisen' }, icon: 'ph-airplane-tilt', parentId: 'lifestyle' },
   { id: 'gastronomy', titles: { en: 'Gastronomy', es: 'Gastronomía', fr: 'Gastronomie', de: 'Gastronomie' }, icon: 'ph-cooking-pot', parentId: 'lifestyle' },
   { id: 'vegan', titles: { en: 'Vegan', es: 'Vegano', fr: 'Végan', de: 'Vegan' }, icon: 'ph-leaf', parentId: 'gastronomy' },
@@ -643,30 +651,30 @@ const defaultContexts = [
   { id: 'pets', titles: { en: 'Pets', es: 'Mascotas', fr: 'Animaux', de: 'Haustiere' }, icon: 'ph-cat', parentId: 'lifestyle' },
   { id: 'dogs', titles: { en: 'Dogs', es: 'Perros', fr: 'Chiens', de: 'Hunde' }, icon: 'ph-dog', parentId: 'pets' },
 
-  { id: 'business', titles: { en: 'Business', es: 'Negocios', fr: 'Affaires', de: 'Geschäft' }, icon: 'ph-briefcase', parentId: null },
-  { id: 'finance', titles: { en: 'Finance', es: 'Finanzas', fr: 'Finance', de: 'Finanzen' }, icon: 'ph-chart-line-up', parentId: 'business' },
+  { id: 'business', titles: { en: 'Business', es: 'Negocios', fr: 'Affaires', de: 'Geschäft' }, icon: 'ph-briefcase', parentId: null, imageUrl: '/assets/categories/business.png' },
+  { id: 'finance', titles: { en: 'Finance', es: 'Finanzas', fr: 'Finance', de: 'Finanzen' }, icon: 'ph-chart-line-up', parentId: 'business', imageUrl: '/assets/categories/finance.png' },
   { id: 'crypto', titles: { en: 'Crypto', es: 'Cripto', fr: 'Crypto', de: 'Krypto' }, icon: 'ph-currency-eth', parentId: 'finance' },
   { id: 'bitcoin', titles: { en: 'Bitcoin', es: 'Bitcoin', fr: 'Bitcoin', de: 'Bitcoin' }, icon: 'ph-currency-btc', parentId: 'crypto' },
   { id: 'startups', titles: { en: 'Startups', es: 'Startups', fr: 'Startups', de: 'Startups' }, icon: 'ph-rocket', parentId: 'business' },
   { id: 'marketing', titles: { en: 'Marketing', es: 'Marketing', fr: 'Marketing', de: 'Marketing' }, icon: 'ph-megaphone', parentId: 'business' },
 
-  { id: 'art', titles: { en: 'Art', es: 'Arte', fr: 'Art', de: 'Kunst' }, icon: 'ph-palette', parentId: null },
-  { id: 'photography', titles: { en: 'Photography', es: 'Fotografía', fr: 'Photographie', de: 'Fotografie' }, icon: 'ph-camera', parentId: 'art' },
+  { id: 'art', titles: { en: 'Art', es: 'Arte', fr: 'Art', de: 'Kunst' }, icon: 'ph-palette', parentId: null, imageUrl: '/assets/categories/art.png' },
+  { id: 'photography', titles: { en: 'Photography', es: 'Fotografía', fr: 'Photographie', de: 'Fotografie' }, icon: 'ph-camera', parentId: 'art', imageUrl: '/assets/categories/photography.png' },
   { id: 'architecture', titles: { en: 'Architecture', es: 'Arquitectura', fr: 'Architecture', de: 'Architektur' }, icon: 'ph-office-building', parentId: 'art' },
   { id: 'digital_art', titles: { en: 'Digital Art', es: 'Arte Digital', fr: 'Art Numérique', de: 'Digitale Kunst' }, icon: 'ph-pen-nib', parentId: 'art' },
 
-  { id: 'knowledge', titles: { en: 'Knowledge', es: 'Conocimiento', fr: 'Connaissance', de: 'Wissen' }, icon: 'ph-books', parentId: null },
-  { id: 'history', titles: { en: 'History', es: 'Historia', fr: 'Histoire', de: 'Geschichte' }, icon: 'ph-hourglass', parentId: 'knowledge' },
+  { id: 'knowledge', titles: { en: 'Knowledge', es: 'Conocimiento', fr: 'Connaissance', de: 'Wissen' }, icon: 'ph-books', parentId: null, imageUrl: '/assets/categories/knowledge.png' },
+  { id: 'history', titles: { en: 'History', es: 'Historia', fr: 'Histoire', de: 'Geschichte' }, icon: 'ph-hourglass', parentId: 'knowledge', imageUrl: '/assets/categories/history.png' },
   { id: 'philosophy', titles: { en: 'Philosophy', es: 'Filosofía', fr: 'Philosophie', de: 'Philosophie' }, icon: 'ph-brain', parentId: 'knowledge' },
   { id: 'stoicism', titles: { en: 'Stoicism', es: 'Estoicismo', fr: 'Stoïcisme', de: 'Stoizismus' }, icon: 'ph-person', parentId: 'philosophy' },
   { id: 'psychology', titles: { en: 'Psychology', es: 'Psicología', fr: 'Psychologie', de: 'Psychologie' }, icon: 'ph-headset', parentId: 'knowledge' },
   { id: 'languages', titles: { en: 'Languages', es: 'Idiomas', fr: 'Langues', de: 'Sprachen' }, icon: 'ph-translate', parentId: 'knowledge' },
 
-  { id: 'society', titles: { en: 'Society', es: 'Sociedad', fr: 'Société', de: 'Gesellschaft' }, icon: 'ph-users-three', parentId: null },
+  { id: 'society', titles: { en: 'Society', es: 'Sociedad', fr: 'Société', de: 'Gesellschaft' }, icon: 'ph-users-three', parentId: null, imageUrl: '/assets/categories/society.png' },
   { id: 'politics', titles: { en: 'Politics', es: 'Política', fr: 'Politique', de: 'Politik' }, icon: 'ph-gavel', parentId: 'society' },
   { id: 'economics', titles: { en: 'Economics', es: 'Economía', fr: 'Économie', de: 'Wirtschaft' }, icon: 'ph-bank', parentId: 'society' },
 
-  { id: 'nature', titles: { en: 'Nature', es: 'Naturaleza', fr: 'Nature', de: 'Natur' }, icon: 'ph-tree', parentId: null },
+  { id: 'nature', titles: { en: 'Nature', es: 'Naturaleza', fr: 'Nature', de: 'Natur' }, icon: 'ph-tree', parentId: null, imageUrl: '/assets/categories/nature.png' },
   { id: 'environment', titles: { en: 'Environment', es: 'Medio Ambiente', fr: 'Environnement', de: 'Umwelt' }, icon: 'ph-leaf', parentId: 'nature' },
   { id: 'wildlife', titles: { en: 'Wildlife', es: 'Vida Silvestre', fr: 'Vie Sauvage', de: 'Wildtiere' }, icon: 'ph-paw-print', parentId: 'nature' },
   { id: 'oceans', titles: { en: 'Oceans', es: 'Océanos', fr: 'Océans', de: 'Ozeane' }, icon: 'ph-waves', parentId: 'nature' },
